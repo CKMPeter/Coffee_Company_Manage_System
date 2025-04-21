@@ -1,13 +1,13 @@
-﻿namespace CoffeeCompanyMS
+﻿namespace CoffeeCompanyMS.UC
 {
-    partial class Storage
+    partial class StorageNavBar
     {
-        /// <summary>
+        /// <summary> 
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
+        /// <summary> 
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -20,83 +20,34 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
+        #region Component Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
-            this.dgvStrorage = new System.Windows.Forms.DataGridView();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.pbReload = new System.Windows.Forms.PictureBox();
             this.btnHistory = new System.Windows.Forms.Button();
             this.btnStock = new System.Windows.Forms.Button();
-            this.navBar1 = new CoffeeCompanyMS.navBar();
-            this.pbReload = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvStrorage)).BeginInit();
+            this.button1 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbReload)).BeginInit();
             this.SuspendLayout();
             // 
-            // dgvStrorage
-            // 
-            this.dgvStrorage.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvStrorage.Location = new System.Drawing.Point(242, 112);
-            this.dgvStrorage.Name = "dgvStrorage";
-            this.dgvStrorage.RowHeadersWidth = 51;
-            this.dgvStrorage.RowTemplate.Height = 24;
-            this.dgvStrorage.Size = new System.Drawing.Size(728, 529);
-            this.dgvStrorage.TabIndex = 1;
-            // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.pbReload);
             this.panel1.Controls.Add(this.btnHistory);
             this.panel1.Controls.Add(this.btnStock);
-            this.panel1.Location = new System.Drawing.Point(19, 112);
+            this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(207, 529);
-            this.panel1.TabIndex = 2;
-            // 
-            // btnHistory
-            // 
-            this.btnHistory.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnHistory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnHistory.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnHistory.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnHistory.Location = new System.Drawing.Point(12, 95);
-            this.btnHistory.Name = "btnHistory";
-            this.btnHistory.Size = new System.Drawing.Size(183, 75);
-            this.btnHistory.TabIndex = 1;
-            this.btnHistory.Text = "HISTORY";
-            this.btnHistory.UseVisualStyleBackColor = false;
-            this.btnHistory.Click += new System.EventHandler(this.btnHistory_Click);
-            // 
-            // btnStock
-            // 
-            this.btnStock.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnStock.FlatAppearance.BorderColor = System.Drawing.Color.Navy;
-            this.btnStock.FlatAppearance.BorderSize = 5;
-            this.btnStock.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnStock.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnStock.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnStock.Location = new System.Drawing.Point(12, 14);
-            this.btnStock.Name = "btnStock";
-            this.btnStock.Size = new System.Drawing.Size(183, 75);
-            this.btnStock.TabIndex = 0;
-            this.btnStock.Text = "STOCK";
-            this.btnStock.UseVisualStyleBackColor = false;
-            this.btnStock.Click += new System.EventHandler(this.btnStock_Click);
-            // 
-            // navBar1
-            // 
-            this.navBar1.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.navBar1.Location = new System.Drawing.Point(-9, -1);
-            this.navBar1.Name = "navBar1";
-            this.navBar1.Size = new System.Drawing.Size(998, 91);
-            this.navBar1.TabIndex = 0;
+            this.panel1.TabIndex = 3;
             // 
             // pbReload
             // 
@@ -108,19 +59,53 @@
             this.pbReload.TabIndex = 2;
             this.pbReload.TabStop = false;
             // 
-            // Storage
+            // btnHistory
+            // 
+            this.btnHistory.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnHistory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnHistory.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnHistory.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnHistory.Location = new System.Drawing.Point(12, 95);
+            this.btnHistory.Name = "btnHistory";
+            this.btnHistory.Size = new System.Drawing.Size(183, 75);
+            this.btnHistory.TabIndex = 1;
+            this.btnHistory.Text = "Batch Details";
+            this.btnHistory.UseVisualStyleBackColor = false;
+            // 
+            // btnStock
+            // 
+            this.btnStock.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnStock.FlatAppearance.BorderColor = System.Drawing.Color.Navy;
+            this.btnStock.FlatAppearance.BorderSize = 5;
+            this.btnStock.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnStock.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnStock.Location = new System.Drawing.Point(12, 14);
+            this.btnStock.Name = "btnStock";
+            this.btnStock.Size = new System.Drawing.Size(183, 75);
+            this.btnStock.TabIndex = 0;
+            this.btnStock.Text = "Batch Summary";
+            this.btnStock.UseVisualStyleBackColor = false;
+            // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.button1.Location = new System.Drawing.Point(12, 176);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(183, 75);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "Storage History";
+            this.button1.UseVisualStyleBackColor = false;
+            // 
+            // StorageNavBar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ClientSize = new System.Drawing.Size(982, 653);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.dgvStrorage);
-            this.Controls.Add(this.navBar1);
-            this.Name = "Storage";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Storage";
-            ((System.ComponentModel.ISupportInitialize)(this.dgvStrorage)).EndInit();
+            this.Name = "StorageNavBar";
+            this.Size = new System.Drawing.Size(209, 532);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbReload)).EndInit();
             this.ResumeLayout(false);
@@ -129,12 +114,10 @@
 
         #endregion
 
-        private navBar navBar1;
-        private System.Windows.Forms.DataGridView dgvStrorage;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button btnStock;
-        private System.Windows.Forms.Button btnHistory;
+        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.PictureBox pbReload;
+        private System.Windows.Forms.Button btnHistory;
+        private System.Windows.Forms.Button btnStock;
     }
 }
-
