@@ -113,6 +113,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UC\LocationSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\LocationSelector.Designer.cs">
+      <DependentUpon>LocationSelector.cs</DependentUpon>
+    </Compile>
     <Compile Include="UC\navBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -161,6 +167,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="UC\LocationSelector.resx">
+      <DependentUpon>LocationSelector.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UC\navBar.resx">
       <DependentUpon>navBar.cs</DependentUpon>
     </EmbeddedResource>

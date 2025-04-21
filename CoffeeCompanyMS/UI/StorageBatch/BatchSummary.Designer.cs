@@ -28,46 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.navBar1 = new CoffeeCompanyMS.navBar();
-            this.storageNavBar1 = new CoffeeCompanyMS.UC.StorageNavBar();
-            this.label1 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.storageNavBar1 = new CoffeeCompanyMS.UC.StorageNavBar();
+            this.navBar1 = new CoffeeCompanyMS.navBar();
+            this.locationSelector1 = new CoffeeCompanyMS.UC.LocationSelector();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
-            // 
-            // navBar1
-            // 
-            this.navBar1.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.navBar1.Location = new System.Drawing.Point(0, 0);
-            this.navBar1.Name = "navBar1";
-            this.navBar1.Size = new System.Drawing.Size(1000, 95);
-            this.navBar1.TabIndex = 0;
-            // 
-            // storageNavBar1
-            // 
-            this.storageNavBar1.Location = new System.Drawing.Point(0, 92);
-            this.storageNavBar1.Name = "storageNavBar1";
-            this.storageNavBar1.Size = new System.Drawing.Size(209, 532);
-            this.storageNavBar1.TabIndex = 1;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Tai Le", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(215, 113);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(135, 35);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Location:";
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(356, 122);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(283, 24);
-            this.comboBox1.TabIndex = 3;
             // 
             // dataGridView1
             // 
@@ -79,21 +45,41 @@
             this.dataGridView1.Size = new System.Drawing.Size(766, 437);
             this.dataGridView1.TabIndex = 4;
             // 
+            // storageNavBar1
+            // 
+            this.storageNavBar1.Location = new System.Drawing.Point(0, 92);
+            this.storageNavBar1.Name = "storageNavBar1";
+            this.storageNavBar1.Size = new System.Drawing.Size(209, 532);
+            this.storageNavBar1.TabIndex = 1;
+            // 
+            // navBar1
+            // 
+            this.navBar1.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.navBar1.Location = new System.Drawing.Point(0, 0);
+            this.navBar1.Name = "navBar1";
+            this.navBar1.Size = new System.Drawing.Size(1000, 95);
+            this.navBar1.TabIndex = 0;
+            // 
+            // locationSelector1
+            // 
+            this.locationSelector1.Location = new System.Drawing.Point(221, 101);
+            this.locationSelector1.Name = "locationSelector1";
+            this.locationSelector1.Size = new System.Drawing.Size(766, 63);
+            this.locationSelector1.TabIndex = 5;
+            // 
             // BatchSummary
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(999, 619);
+            this.Controls.Add(this.locationSelector1);
             this.Controls.Add(this.dataGridView1);
-            this.Controls.Add(this.comboBox1);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.storageNavBar1);
             this.Controls.Add(this.navBar1);
             this.Name = "BatchSummary";
             this.Text = "BatchSummary";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -101,8 +87,7 @@
 
         private navBar navBar1;
         private UC.StorageNavBar storageNavBar1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private UC.LocationSelector locationSelector1;
     }
 }
