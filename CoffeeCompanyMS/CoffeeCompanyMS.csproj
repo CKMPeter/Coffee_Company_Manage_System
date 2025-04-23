@@ -113,62 +113,181 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UC\LocationSelector.cs">
+    <Compile Include="UC\NavBars\NavButtonStyleUtils.cs" />
+    <Compile Include="UC\NavBars\SubNavManager.cs" />
+    <Compile Include="UC\NavBars\CompanyOwnerNavBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UC\LocationSelector.Designer.cs">
+    <Compile Include="UC\NavBars\CompanyOwnerNavBar.Designer.cs">
+      <DependentUpon>CompanyOwnerNavBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC\NavBars\ExportNavBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\NavBars\ExportNavBar.Designer.cs">
+      <DependentUpon>ExportNavBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC\NavBars\ImportNavBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\NavBars\ImportNavBar.Designer.cs">
+      <DependentUpon>ImportNavBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC\NavBars\InformationNavBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\NavBars\InformationNavBar.Designer.cs">
+      <DependentUpon>InformationNavBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC\OtherComponents\LocationSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\OtherComponents\LocationSelector.Designer.cs">
       <DependentUpon>LocationSelector.cs</DependentUpon>
     </Compile>
-    <Compile Include="UC\navBar.cs">
+    <Compile Include="UC\NavBars\WarehouseNavBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UC\navBar.Designer.cs">
-      <DependentUpon>navBar.cs</DependentUpon>
+    <Compile Include="UC\NavBars\WarehouseNavBar.Designer.cs">
+      <DependentUpon>WarehouseNavBar.cs</DependentUpon>
     </Compile>
-    <Compile Include="UC\StorageNavBar.cs">
+    <Compile Include="UC\NavBars\StorageNavBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UC\StorageNavBar.Designer.cs">
+    <Compile Include="UC\NavBars\StorageNavBar.Designer.cs">
       <DependentUpon>StorageNavBar.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Main.cs">
+    <Compile Include="UC\Pages\Export\ExportOrderDetailsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\Pages\Export\ExportOrderDetailsPage.Designer.cs">
+      <DependentUpon>ExportOrderDetailsPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC\Pages\Export\ExportOrdersPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\Pages\Export\ExportOrdersPage.Designer.cs">
+      <DependentUpon>ExportOrdersPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC\Pages\Export\RecurringExportOrdersPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\Pages\Export\RecurringExportOrdersPage.Designer.cs">
+      <DependentUpon>RecurringExportOrdersPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC\Pages\Import\ImportOrderDetailsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\Pages\Import\ImportOrderDetailsPage.Designer.cs">
+      <DependentUpon>ImportOrderDetailsPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC\Pages\Import\ImportOrdersPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\Pages\Import\ImportOrdersPage.Designer.cs">
+      <DependentUpon>ImportOrdersPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC\Pages\Import\RecurringImportOrdersPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\Pages\Import\RecurringImportOrdersPage.Designer.cs">
+      <DependentUpon>RecurringImportOrdersPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC\Pages\Information\IngredientsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\Pages\Information\IngredientsPage.Designer.cs">
+      <DependentUpon>IngredientsPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC\Pages\Information\LocationsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\Pages\Information\LocationsPage.Designer.cs">
+      <DependentUpon>LocationsPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC\Pages\Information\SuppliersPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\Pages\Information\SuppliersPage.Designer.cs">
+      <DependentUpon>SuppliersPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC\Pages\Storage\BatchDetailsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\Pages\Storage\BatchDetailsPage.Designer.cs">
+      <DependentUpon>BatchDetailsPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC\Pages\Storage\BatchSummaryPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\Pages\Storage\BatchSummaryPage.Designer.cs">
+      <DependentUpon>BatchSummaryPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC\Pages\Storage\StorageHistoryPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\Pages\Storage\StorageHistoryPage.Designer.cs">
+      <DependentUpon>StorageHistoryPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Authentication\ForgotPassword.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\Main.Designer.cs">
+    <Compile Include="Forms\Authentication\ForgotPassword.Designer.cs">
+      <DependentUpon>ForgotPassword.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Authentication\Login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Authentication\Login.Designer.cs">
+      <DependentUpon>Login.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PopupForms\CreateExportOrder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PopupForms\CreateExportOrder.Designer.cs">
+      <DependentUpon>CreateExportOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PopupForms\CreateImportOrders.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PopupForms\CreateImportOrders.Designer.cs">
+      <DependentUpon>CreateImportOrders.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PopupForms\CreateIngredient.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PopupForms\CreateIngredient.Designer.cs">
+      <DependentUpon>CreateIngredient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PopupForms\CreateLocation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PopupForms\CreateLocation.Designer.cs">
+      <DependentUpon>CreateLocation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PopupForms\CreateSupplier.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PopupForms\CreateSupplier.Designer.cs">
+      <DependentUpon>CreateSupplier.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PopupForms\UpdateSupplier.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PopupForms\UpdateSupplier.Designer.cs">
+      <DependentUpon>UpdateSupplier.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Main.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Order.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Order.Designer.cs">
-      <DependentUpon>Order.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Storage.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Storage.Designer.cs">
-      <DependentUpon>Storage.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UI\StorageBatch\BatchDetail.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\StorageBatch\BatchDetail.Designer.cs">
-      <DependentUpon>BatchDetail.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\StorageBatch\BatchSummary.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\StorageBatch\BatchSummary.Designer.cs">
-      <DependentUpon>BatchSummary.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\StorageBatch\StorageHistory.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\StorageBatch\StorageHistory.Designer.cs">
-      <DependentUpon>StorageHistory.cs</DependentUpon>
-    </Compile>
+    <EmbeddedResource Include="Forms\Authentication\Login.resx">
+      <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -179,32 +298,65 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="UC\LocationSelector.resx">
+    <EmbeddedResource Include="UC\NavBars\CompanyOwnerNavBar.resx">
+      <DependentUpon>CompanyOwnerNavBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC\OtherComponents\LocationSelector.resx">
       <DependentUpon>LocationSelector.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UC\navBar.resx">
-      <DependentUpon>navBar.cs</DependentUpon>
+    <EmbeddedResource Include="UC\NavBars\ExportNavBar.resx">
+      <DependentUpon>ExportNavBar.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UC\StorageNavBar.resx">
+    <EmbeddedResource Include="UC\NavBars\ImportNavBar.resx">
+      <DependentUpon>ImportNavBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC\NavBars\InformationNavBar.resx">
+      <DependentUpon>InformationNavBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC\NavBars\WarehouseNavBar.resx">
+      <DependentUpon>WarehouseNavBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC\NavBars\StorageNavBar.resx">
       <DependentUpon>StorageNavBar.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Main.resx">
+    <EmbeddedResource Include="Forms\Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Order.resx">
-      <DependentUpon>Order.cs</DependentUpon>
+    <EmbeddedResource Include="UC\Pages\Export\ExportOrderDetailsPage.resx">
+      <DependentUpon>ExportOrderDetailsPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Storage.resx">
-      <DependentUpon>Storage.cs</DependentUpon>
+    <EmbeddedResource Include="UC\Pages\Export\ExportOrdersPage.resx">
+      <DependentUpon>ExportOrdersPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\StorageBatch\BatchDetail.resx">
-      <DependentUpon>BatchDetail.cs</DependentUpon>
+    <EmbeddedResource Include="UC\Pages\Export\RecurringExportOrdersPage.resx">
+      <DependentUpon>RecurringExportOrdersPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\StorageBatch\BatchSummary.resx">
-      <DependentUpon>BatchSummary.cs</DependentUpon>
+    <EmbeddedResource Include="UC\Pages\Import\ImportOrderDetailsPage.resx">
+      <DependentUpon>ImportOrderDetailsPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\StorageBatch\StorageHistory.resx">
-      <DependentUpon>StorageHistory.cs</DependentUpon>
+    <EmbeddedResource Include="UC\Pages\Import\ImportOrdersPage.resx">
+      <DependentUpon>ImportOrdersPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC\Pages\Import\RecurringImportOrdersPage.resx">
+      <DependentUpon>RecurringImportOrdersPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC\Pages\Information\IngredientsPage.resx">
+      <DependentUpon>IngredientsPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC\Pages\Information\LocationsPage.resx">
+      <DependentUpon>LocationsPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC\Pages\Information\SuppliersPage.resx">
+      <DependentUpon>SuppliersPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC\Pages\Storage\BatchDetailsPage.resx">
+      <DependentUpon>BatchDetailsPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC\Pages\Storage\BatchSummaryPage.resx">
+      <DependentUpon>BatchSummaryPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC\Pages\Storage\StorageHistoryPage.resx">
+      <DependentUpon>StorageHistoryPage.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -250,5 +402,9 @@
   <ItemGroup>
     <None Include="Resources\refresh.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\product-management.png" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
