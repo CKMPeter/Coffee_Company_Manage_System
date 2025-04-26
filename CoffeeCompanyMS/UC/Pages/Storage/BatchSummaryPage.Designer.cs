@@ -28,19 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
             this.locationSelector1 = new CoffeeCompanyMS.UC.LocationSelector();
+            this.dataGridViewBatchSummary = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBatchSummary)).BeginInit();
             this.SuspendLayout();
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(260, 242);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(214, 32);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "Batch Summary";
             // 
             // locationSelector1
             // 
@@ -50,23 +41,33 @@
             this.locationSelector1.Size = new System.Drawing.Size(411, 63);
             this.locationSelector1.TabIndex = 5;
             // 
+            // dataGridViewBatchSummary
+            // 
+            this.dataGridViewBatchSummary.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewBatchSummary.Location = new System.Drawing.Point(20, 83);
+            this.dataGridViewBatchSummary.Name = "dataGridViewBatchSummary";
+            this.dataGridViewBatchSummary.RowHeadersWidth = 51;
+            this.dataGridViewBatchSummary.RowTemplate.Height = 24;
+            this.dataGridViewBatchSummary.Size = new System.Drawing.Size(756, 419);
+            this.dataGridViewBatchSummary.TabIndex = 6;
+            // 
             // BatchSummaryPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.dataGridViewBatchSummary);
             this.Controls.Add(this.locationSelector1);
-            this.Controls.Add(this.label1);
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "BatchSummaryPage";
             this.Size = new System.Drawing.Size(791, 529);
+            this.Load += new System.EventHandler(this.BatchSummaryPage_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBatchSummary)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Label label1;
         private LocationSelector locationSelector1;
+        private System.Windows.Forms.DataGridView dataGridViewBatchSummary;
     }
 }

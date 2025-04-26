@@ -14,6 +14,7 @@ namespace CoffeeCompanyMS.UC
     public partial class LocationSelector : UserControl
     {
         public event EventHandler<string> SelectedItemChanged;
+        private string[] locationids;
 
         public LocationSelector()
         {
@@ -26,16 +27,18 @@ namespace CoffeeCompanyMS.UC
 
         private void cbbLocation_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cbbLocation.SelectedItem != null)
+            if (cbbLocation.SelectedIndex >= 0 && locationids != null && locationids.Length > cbbLocation.SelectedIndex)
             {
-                SelectedItemChanged?.Invoke(this, cbbLocation.SelectedItem.ToString());
+                string selectedLocationId = locationids[cbbLocation.SelectedIndex];
+                SelectedItemChanged?.Invoke(this, selectedLocationId);
             }
         }
 
-        public void SetLocations(IEnumerable<string> locations)
+        public void SetLocations(IEnumerable<string> locations, IEnumerable<string> locationids)
         {
             cbbLocation.Items.Clear();
             cbbLocation.Items.AddRange(locations.ToArray());
+            this.locationids = locationids.ToArray();
         }
 
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,9 +13,97 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
 {
     public partial class BatchSummaryPage : UserControl
     {
+        private string selectedLocationId;
+        private string connectionString = "Data Source=LAPTOP-CRUATNF8;Initial Catalog=CoffeeCompany;Integrated Security=True;Connect Timeout=30;Encrypt=False";
+
         public BatchSummaryPage()
         {
             InitializeComponent();
+            locationSelector1.SelectedItemChanged += (s, value) =>
+            {
+                if (Guid.TryParse(value, out Guid locationId))
+                {
+                    selectedLocationId = value; // lưu nếu cần
+                    LoadIngredients(locationId); // gọi hàm load ingredients luôn
+                }
+                else
+                {
+                    MessageBox.Show("Location ID không hợp lệ.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            };
         }
+
+        private void BatchSummaryPage_Load(object sender, EventArgs e)
+        {
+            LoadLocations();
+        }
+
+        private void LoadLocations()
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    
+                    string query = "SELECT LocationID, LocationName FROM dbo.GetLocations()";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            List<string> locations = new List<string>();
+                            List<string> locationids = new List<string>();
+                            while (reader.Read())
+                            {
+                                locations.Add(reader["LocationName"].ToString());
+                                locationids.Add(reader["LocationID"].ToString());
+                            }
+
+                           
+                            locationSelector1.SetLocations(locations,locationids);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tải dữ liệu Location: " + ex.Message);
+            }
+        }
+
+        private void LoadIngredients(Guid locationId)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("GetIngredients", conn))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                        // THAY ĐOẠN NÀY
+                        cmd.Parameters.Add("@LocationID", SqlDbType.UniqueIdentifier).Value = locationId;
+
+                        using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                        {
+                            DataTable dt = new DataTable();
+                            adapter.Fill(dt);
+
+                            dataGridViewBatchSummary.DataSource = dt;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tải danh sách nguyên liệu: " + ex.Message);
+            }
+        }
+
+
     }
 }
