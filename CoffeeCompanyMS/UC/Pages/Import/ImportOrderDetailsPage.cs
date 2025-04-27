@@ -12,9 +12,16 @@ namespace CoffeeCompanyMS.UC.Pages.Import
 {
     public partial class ImportOrderDetailsPage : UserControl
     {
+        private string orderID;
         public ImportOrderDetailsPage()
         {
             InitializeComponent();
+            orderID = string.Empty;
+        }
+        public ImportOrderDetailsPage(string orderID)
+        {
+            InitializeComponent();
+            this.orderID = orderID;
         }
     }
 }

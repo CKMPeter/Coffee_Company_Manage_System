@@ -28,34 +28,49 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            this.dataGridViewImportOrder = new System.Windows.Forms.DataGridView();
+            this.locationSelector1 = new CoffeeCompanyMS.UC.LocationSelector();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewImportOrder)).BeginInit();
             this.SuspendLayout();
             // 
-            // label1
+            // dataGridViewImportOrder
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(280, 245);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(186, 32);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Import Orders";
+            this.dataGridViewImportOrder.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewImportOrder.Location = new System.Drawing.Point(27, 87);
+            this.dataGridViewImportOrder.Name = "dataGridViewImportOrder";
+            this.dataGridViewImportOrder.RowHeadersWidth = 51;
+            this.dataGridViewImportOrder.RowTemplate.Height = 24;
+            this.dataGridViewImportOrder.Size = new System.Drawing.Size(738, 405);
+            this.dataGridViewImportOrder.TabIndex = 5;
+            this.dataGridViewImportOrder.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewImportOrder_CellDoubleClick);
+            this.dataGridViewImportOrder.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewImportOrder_CellValueChanged);
             // 
-            // ImportOrders
+            // locationSelector1
+            // 
+            this.locationSelector1.Location = new System.Drawing.Point(190, 21);
+            this.locationSelector1.Margin = new System.Windows.Forms.Padding(0);
+            this.locationSelector1.Name = "locationSelector1";
+            this.locationSelector1.Size = new System.Drawing.Size(411, 63);
+            this.locationSelector1.TabIndex = 4;
+            // 
+            // ImportOrdersPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.dataGridViewImportOrder);
+            this.Controls.Add(this.locationSelector1);
             this.Margin = new System.Windows.Forms.Padding(0);
-            this.Name = "ImportOrders";
+            this.Name = "ImportOrdersPage";
             this.Size = new System.Drawing.Size(791, 529);
+            this.Load += new System.EventHandler(this.ImportOrdersPage_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewImportOrder)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
+        private LocationSelector locationSelector1;
+        private System.Windows.Forms.DataGridView dataGridViewImportOrder;
     }
 }
