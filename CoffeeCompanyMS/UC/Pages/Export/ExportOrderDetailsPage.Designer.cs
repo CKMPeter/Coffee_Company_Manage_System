@@ -41,14 +41,15 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Export Order Details";
             // 
-            // ExportOrderDetails
+            // ExportOrderDetailsPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.label1);
             this.Margin = new System.Windows.Forms.Padding(0);
-            this.Name = "ExportOrderDetails";
+            this.Name = "ExportOrderDetailsPage";
             this.Size = new System.Drawing.Size(791, 529);
+            this.Load += new System.EventHandler(this.ExportOrderDetailsPage_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

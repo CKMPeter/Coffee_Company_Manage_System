@@ -12,9 +12,21 @@ namespace CoffeeCompanyMS.UC.Pages.Export
 {
     public partial class ExportOrderDetailsPage : UserControl
     {
+        private string orderID;
+        public ExportOrderDetailsPage(string orderID)
+        {
+            InitializeComponent();
+            this.orderID = orderID;
+        }
         public ExportOrderDetailsPage()
         {
             InitializeComponent();
+            this.orderID = "";
+        }
+
+        private void ExportOrderDetailsPage_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
