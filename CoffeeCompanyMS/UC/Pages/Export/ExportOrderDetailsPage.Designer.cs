@@ -28,35 +28,73 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblDestinationName = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.lblDestinationAddress = new System.Windows.Forms.Label();
+            this.dgvExportItems = new System.Windows.Forms.DataGridView();
+            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvExportItems)).BeginInit();
             this.SuspendLayout();
             // 
-            // label1
+            // lblDestinationName
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(249, 235);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(270, 32);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Export Order Details";
+            this.lblDestinationName.AutoSize = true;
+            this.lblDestinationName.Location = new System.Drawing.Point(54, 18);
+            this.lblDestinationName.Name = "lblDestinationName";
+            this.lblDestinationName.Size = new System.Drawing.Size(114, 16);
+            this.lblDestinationName.TabIndex = 0;
+            this.lblDestinationName.Text = "Destination Name";
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.lblDestinationAddress);
+            this.panel1.Controls.Add(this.lblDestinationName);
+            this.panel1.Location = new System.Drawing.Point(67, 37);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(656, 136);
+            this.panel1.TabIndex = 2;
+            // 
+            // lblDestinationAddress
+            // 
+            this.lblDestinationAddress.AutoSize = true;
+            this.lblDestinationAddress.Location = new System.Drawing.Point(54, 48);
+            this.lblDestinationAddress.Name = "lblDestinationAddress";
+            this.lblDestinationAddress.Size = new System.Drawing.Size(128, 16);
+            this.lblDestinationAddress.TabIndex = 2;
+            this.lblDestinationAddress.Text = "Destination Address\t";
+            // 
+            // dgvExportItems
+            // 
+            this.dgvExportItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvExportItems.Location = new System.Drawing.Point(67, 179);
+            this.dgvExportItems.Name = "dgvExportItems";
+            this.dgvExportItems.RowHeadersWidth = 51;
+            this.dgvExportItems.RowTemplate.Height = 24;
+            this.dgvExportItems.Size = new System.Drawing.Size(656, 313);
+            this.dgvExportItems.TabIndex = 3;
             // 
             // ExportOrderDetailsPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.dgvExportItems);
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "ExportOrderDetailsPage";
             this.Size = new System.Drawing.Size(791, 529);
             this.Load += new System.EventHandler(this.ExportOrderDetailsPage_Load);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvExportItems)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblDestinationName;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label lblDestinationAddress;
+        private System.Windows.Forms.DataGridView dgvExportItems;
     }
 }

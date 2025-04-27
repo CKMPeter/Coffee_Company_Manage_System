@@ -16,5 +16,10 @@ namespace CoffeeCompanyMS.UI.Export
         {
             InitializeComponent();
         }
+
+        private void CreateExportOrder_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

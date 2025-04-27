@@ -16,7 +16,7 @@ namespace CoffeeCompanyMS.UC.Pages.Export
     public partial class ExportOrdersPage : UserControl
     {
         private string selectedLocationId;
-        private string connectionString = "Data Source=DUONG\\SQLEXPRESS;Initial Catalog=CoffeeCompany;Integrated Security=True;Encrypt=False\r\n";
+        private string connectionString = "Data Source=LAPTOP-CRUATNF8;Initial Catalog=CoffeeCompany;Integrated Security=True;Connect Timeout=30;Encrypt=False\r\n";
         public ExportOrdersPage()
         {
             InitializeComponent();
