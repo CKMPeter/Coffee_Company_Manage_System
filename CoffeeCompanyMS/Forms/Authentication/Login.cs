@@ -40,5 +40,10 @@ namespace CoffeeCompanyMS.UI.Authentication
         {
             Application.Exit();
         }
+
+        private void Login_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
