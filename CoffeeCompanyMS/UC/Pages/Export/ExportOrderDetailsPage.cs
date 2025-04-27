@@ -14,7 +14,7 @@ namespace CoffeeCompanyMS.UC.Pages.Export
     public partial class ExportOrderDetailsPage : UserControl
     {
         private string orderID;
-        private string connectionString = "Data Source=LAPTOP-CRUATNF8;Initial Catalog=CoffeeCompany;Integrated Security=True;Connect Timeout=30;Encrypt=False\r\n"; // <-- Update SQL connection string here
+        private string connectionString = "Data Source=LAPTOP-CRUATNF8;Initial Catalog=CoffeeCompany;Integrated Security=True;Connect Timeout=30;Encrypt=False"; // <-- Update SQL connection string here
 
         // Constructor with Order ID parameter
         public ExportOrderDetailsPage(string orderID)
@@ -48,6 +48,9 @@ namespace CoffeeCompanyMS.UC.Pages.Export
         {
             try
             {
+                // Debug: Check if orderID is valid
+                MessageBox.Show("Loading details for Order ID: " + orderID);
+
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
@@ -55,12 +58,14 @@ namespace CoffeeCompanyMS.UC.Pages.Export
                     // Retrieve destination information using the stored function 'GetExportDestinationInfo'
                     string destinationQuery = "SELECT DestinationName, DestinationAddress FROM dbo.GetExportDestinationInfo(@OrderID)";
                     SqlCommand destinationCommand = new SqlCommand(destinationQuery, connection);
-                    destinationCommand.Parameters.AddWithValue("@OrderID", new Guid(orderID));
+                    destinationCommand.Parameters.AddWithValue("@OrderID", new Guid(orderID));  // Ensure GUID is used
 
                     using (SqlDataReader reader = destinationCommand.ExecuteReader())
                     {
                         if (reader.Read())  // Check if data is found
                         {
+                            // Debug: Show the retrieved destination
+                            MessageBox.Show("Found destination: " + reader["DestinationName"].ToString());
                             lblDestinationName.Text = "Destination: " + reader["DestinationName"].ToString();
                             lblDestinationAddress.Text = "Address: " + reader["DestinationAddress"].ToString();
                         }
@@ -77,6 +82,16 @@ namespace CoffeeCompanyMS.UC.Pages.Export
 
                     DataTable itemsTable = new DataTable();
                     adapter.Fill(itemsTable);  // Load data into the DataTable
+
+                    // Debug: Check the number of items
+                    if (itemsTable.Rows.Count > 0)
+                    {
+                        MessageBox.Show("Found " + itemsTable.Rows.Count + " items.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("No export items found.");
+                    }
 
                     // Display items in the DataGridView
                     dgvExportItems.DataSource = itemsTable;
