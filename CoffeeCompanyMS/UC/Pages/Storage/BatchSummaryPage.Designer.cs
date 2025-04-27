@@ -50,6 +50,7 @@
             this.dataGridViewBatchSummary.RowTemplate.Height = 24;
             this.dataGridViewBatchSummary.Size = new System.Drawing.Size(756, 419);
             this.dataGridViewBatchSummary.TabIndex = 6;
+            this.dataGridViewBatchSummary.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewBatchSummary_CellDoubleClick);
             // 
             // BatchSummaryPage
             // 

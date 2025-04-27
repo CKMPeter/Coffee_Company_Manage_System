@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoffeeCompanyMS.Navigations;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -31,6 +32,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
                     MessageBox.Show("Location ID không hợp lệ.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             };
+            dataGridViewBatchSummary.CellDoubleClick += dataGridViewBatchSummary_CellDoubleClick;
         }
 
         private void BatchSummaryPage_Load(object sender, EventArgs e)
@@ -104,6 +106,17 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
             }
         }
 
+        private void dataGridViewBatchSummary_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                var selectedRow = dataGridViewBatchSummary.Rows[e.RowIndex];
+                string ingredientName = selectedRow.Cells["IngredientName"].Value.ToString();
+                SubNavManager.ShowPage(new BatchDetailsPage(selectedLocationId, ingredientName));
+                
+                
+            }
 
+        }
     }
 }
