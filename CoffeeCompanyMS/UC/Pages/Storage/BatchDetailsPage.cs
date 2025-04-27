@@ -1,4 +1,5 @@
-﻿using Google.Protobuf.WellKnownTypes;
+﻿using CoffeeCompanyMS.UI;
+using Google.Protobuf.WellKnownTypes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,7 +16,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
 {
     public partial class BatchDetailsPage : UserControl
     {
-        private string connectionString = "Data Source=LAPTOP-CRUATNF8;Initial Catalog=CoffeeCompany;Integrated Security=True;Connect Timeout=30;Encrypt=False";
+        private string connectionString = Main.connectionstring;
         private string LocationID;
         private string IngredientName;
         private Guid currentLocationId; // Biến này bạn gán sau khi chọn Location

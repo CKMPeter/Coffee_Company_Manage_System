@@ -10,13 +10,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using CoffeeCompanyMS.Navigations;
 using CoffeeCompanyMS.UC.Pages.Storage;
+using CoffeeCompanyMS.UI;
 
 namespace CoffeeCompanyMS.UC.Pages.Import
 {
     public partial class ImportOrdersPage : UserControl
     {
         private string selectedLocationId;
-        private string connectionString = "Data Source=LAPTOP-OTSFUV31;Initial Catalog=CoffeeCompany;Integrated Security=True;Encrypt=False";
+        private string connectionString = Main.connectionstring;
 
         public ImportOrdersPage()
         {

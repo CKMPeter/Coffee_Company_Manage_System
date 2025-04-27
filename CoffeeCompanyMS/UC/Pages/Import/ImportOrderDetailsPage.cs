@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoffeeCompanyMS.UI;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,7 +15,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
     public partial class ImportOrderDetailsPage : UserControl
     {
         private string orderID;
-        private string connectionString = "Data Source=LAPTOP-OTSFUV31;Initial Catalog=CoffeeCompany;Integrated Security=True;Encrypt=False";
+        private string connectionString = Main.connectionstring;
 
         public ImportOrderDetailsPage()
         {

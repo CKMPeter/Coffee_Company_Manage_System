@@ -1,4 +1,5 @@
-﻿using CoffeeCompanyMS.UI.Export;
+﻿using CoffeeCompanyMS.UI;
+using CoffeeCompanyMS.UI.Export;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,7 +10,7 @@ namespace CoffeeCompanyMS.UC.Pages.Export
 {
     public partial class RecurringExportOrdersPage : UserControl
     {
-        private string connectionString = "Data Source=LAPTOP-CRUATNF8;Initial Catalog=CoffeeCompany;Integrated Security=True;Connect Timeout=30;Encrypt=False"; // Connection string
+        private string connectionString = Main.connectionstring; // Connection string
         private string selectedLocationID;  // Keep it as string
 
         public RecurringExportOrdersPage()

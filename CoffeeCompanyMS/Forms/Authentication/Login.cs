@@ -32,6 +32,7 @@ namespace CoffeeCompanyMS.UI.Authentication
         private bool CheckLogin()
         {
             connectionstring = "Data Source=LAPTOP-CRUATNF8;User ID=" + textBoxGmail.Text + ";Password=" + textBoxPassword.Text + ";Connect Timeout=30;Encrypt=False";
+            //connectionstring = Main.connectionstring;
             // Do login by connecting to database using SQLConnection
             // If success, get LocationID of the user, then assign it to Main.LocationID
             try

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CoffeeCompanyMS.UI;
 using CoffeeCompanyMS.UI.Import;
 
 namespace CoffeeCompanyMS.UC.Pages.Import
@@ -14,7 +15,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
     public partial class RecurringImportOrdersPage : UserControl
     {
         private string selectedLocationId;
-        private string connectionString = "Data Source=LAPTOP-OTSFUV31;Initial Catalog=CoffeeCompany;Integrated Security=True;Encrypt=False";
+        private string connectionString = Main.connectionstring;
 
         public RecurringImportOrdersPage()
         {

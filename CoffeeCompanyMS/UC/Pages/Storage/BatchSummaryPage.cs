@@ -1,4 +1,5 @@
 ﻿using CoffeeCompanyMS.Navigations;
+using CoffeeCompanyMS.UI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,7 +16,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
     public partial class BatchSummaryPage : UserControl
     {
         public string selectedLocationId;
-        private string connectionString = "Data Source=LAPTOP-CRUATNF8;Initial Catalog=CoffeeCompany;Integrated Security=True;Connect Timeout=30;Encrypt=False";
+        private string connectionString = Main.connectionstring;
 
         public BatchSummaryPage()
         {

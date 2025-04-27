@@ -1,5 +1,6 @@
 ﻿using CoffeeCompanyMS.Navigations;
 using CoffeeCompanyMS.UC.Pages.Import;
+using CoffeeCompanyMS.UI;
 using System;
 using System.Data;
 using System.Data.SqlClient;
@@ -14,7 +15,7 @@ namespace CoffeeCompanyMS.UC.Pages.Export
     public partial class ExportOrderDetailsPage : UserControl
     {
         private string orderID;
-        private string connectionString = "Data Source=LAPTOP-CRUATNF8;Initial Catalog=CoffeeCompany;Integrated Security=True;Connect Timeout=30;Encrypt=False"; // <-- Update SQL connection string here
+        private string connectionString = Main.connectionstring; // <-- Update SQL connection string here
 
         // Constructor with Order ID parameter
         public ExportOrderDetailsPage(string orderID)
