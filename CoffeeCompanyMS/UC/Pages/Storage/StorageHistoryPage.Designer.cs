@@ -28,34 +28,47 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            this.dataGridViewStorageHistory = new System.Windows.Forms.DataGridView();
+            this.locationSelector1 = new CoffeeCompanyMS.UC.LocationSelector();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStorageHistory)).BeginInit();
             this.SuspendLayout();
             // 
-            // label1
+            // dataGridViewStorageHistory
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(270, 246);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(209, 32);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Storage History";
+            this.dataGridViewStorageHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewStorageHistory.Location = new System.Drawing.Point(17, 62);
+            this.dataGridViewStorageHistory.Name = "dataGridViewStorageHistory";
+            this.dataGridViewStorageHistory.RowHeadersWidth = 51;
+            this.dataGridViewStorageHistory.RowTemplate.Height = 24;
+            this.dataGridViewStorageHistory.Size = new System.Drawing.Size(755, 453);
+            this.dataGridViewStorageHistory.TabIndex = 1;
             // 
-            // StorageHistory
+            // locationSelector1
+            // 
+            this.locationSelector1.Location = new System.Drawing.Point(0, 0);
+            this.locationSelector1.Margin = new System.Windows.Forms.Padding(0);
+            this.locationSelector1.Name = "locationSelector1";
+            this.locationSelector1.Size = new System.Drawing.Size(411, 63);
+            this.locationSelector1.TabIndex = 0;
+            // 
+            // StorageHistoryPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.dataGridViewStorageHistory);
+            this.Controls.Add(this.locationSelector1);
             this.Margin = new System.Windows.Forms.Padding(0);
-            this.Name = "StorageHistory";
+            this.Name = "StorageHistoryPage";
             this.Size = new System.Drawing.Size(791, 529);
+            this.Load += new System.EventHandler(this.StorageHistoryPage_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStorageHistory)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
+        private LocationSelector locationSelector1;
+        private System.Windows.Forms.DataGridView dataGridViewStorageHistory;
     }
 }
