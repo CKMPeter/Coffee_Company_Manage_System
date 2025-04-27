@@ -17,6 +17,8 @@ namespace CoffeeCompanyMS.UC
         public event EventHandler<string> SelectedItemChanged;
         private string[] locationids;
 
+        public byte[] SelectedValue { get; internal set; }
+
         public LocationSelector()
         {
             InitializeComponent();

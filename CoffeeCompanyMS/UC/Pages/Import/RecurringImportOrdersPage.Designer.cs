@@ -28,19 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
             this.btnCreate = new System.Windows.Forms.Button();
+            this.dataGridViewRecurringOrders = new System.Windows.Forms.DataGridView();
+            this.locationSelector1 = new CoffeeCompanyMS.UC.LocationSelector();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRecurringOrders)).BeginInit();
             this.SuspendLayout();
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(239, 252);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(316, 32);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Recurring Import Orders";
             // 
             // btnCreate
             // 
@@ -53,24 +45,43 @@
             this.btnCreate.UseVisualStyleBackColor = true;
             this.btnCreate.Click += new System.EventHandler(this.btnCreate_Click);
             // 
+            // dataGridViewRecurringOrders
+            // 
+            this.dataGridViewRecurringOrders.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewRecurringOrders.Location = new System.Drawing.Point(43, 199);
+            this.dataGridViewRecurringOrders.Name = "dataGridViewRecurringOrders";
+            this.dataGridViewRecurringOrders.RowHeadersWidth = 51;
+            this.dataGridViewRecurringOrders.RowTemplate.Height = 24;
+            this.dataGridViewRecurringOrders.Size = new System.Drawing.Size(712, 304);
+            this.dataGridViewRecurringOrders.TabIndex = 4;
+            // 
+            // locationSelector1
+            // 
+            this.locationSelector1.Location = new System.Drawing.Point(207, 20);
+            this.locationSelector1.Margin = new System.Windows.Forms.Padding(0);
+            this.locationSelector1.Name = "locationSelector1";
+            this.locationSelector1.Size = new System.Drawing.Size(411, 63);
+            this.locationSelector1.TabIndex = 5;
+            // 
             // RecurringImportOrdersPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.locationSelector1);
+            this.Controls.Add(this.dataGridViewRecurringOrders);
             this.Controls.Add(this.btnCreate);
-            this.Controls.Add(this.label1);
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "RecurringImportOrdersPage";
             this.Size = new System.Drawing.Size(791, 529);
             this.Load += new System.EventHandler(this.RecurringImportOrders_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRecurringOrders)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnCreate;
+        private System.Windows.Forms.DataGridView dataGridViewRecurringOrders;
+        private LocationSelector locationSelector1;
     }
 }
