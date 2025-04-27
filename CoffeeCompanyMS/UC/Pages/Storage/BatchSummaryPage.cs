@@ -14,7 +14,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
 {
     public partial class BatchSummaryPage : UserControl
     {
-        private string selectedLocationId;
+        public string selectedLocationId;
         private string connectionString = "Data Source=LAPTOP-CRUATNF8;Initial Catalog=CoffeeCompany;Integrated Security=True;Connect Timeout=30;Encrypt=False";
 
         public BatchSummaryPage()

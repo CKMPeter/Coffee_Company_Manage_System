@@ -15,10 +15,10 @@ namespace CoffeeCompanyMS.UC
 {
     public partial class StorageNavBar : UserControl
     {
-        private Button[] _buttons;
-        private BatchSummaryPage _batchSummaryPage;
-        private BatchDetailsPage _batchDetailsPage;
-        private StorageHistoryPage _storageHistoryPage;
+        private static Button[] _buttons;
+        private static BatchSummaryPage _batchSummaryPage;
+        private static BatchDetailsPage _batchDetailsPage;
+        private static StorageHistoryPage _storageHistoryPage;
 
         public StorageNavBar()
         {
@@ -54,7 +54,7 @@ namespace CoffeeCompanyMS.UC
             SubNavManager.ShowPage(_storageHistoryPage);
         }
 
-        private void resetStyle()
+        private static void resetStyle()
         {
             NavButtonStyleUtils.ResetButtonsStyle(_buttons);
         }
@@ -64,6 +64,18 @@ namespace CoffeeCompanyMS.UC
             _batchSummaryPage = new BatchSummaryPage();
             _batchDetailsPage = new BatchDetailsPage();
             _storageHistoryPage = new StorageHistoryPage();
+        }
+
+        public static void BatchSummaryDoubleClick(string ingredientName)
+        {
+            
+            SubNavManager.ShowPage(_batchDetailsPage);
+
+            // Sau đó set dữ liệu Ingredient vào BatchDetailsPage
+            if (Guid.TryParse(_batchSummaryPage.selectedLocationId, out Guid locationId))
+            {
+                _batchDetailsPage.SetLocationAndIngredient(locationId, ingredientName);
+            }
         }
     }
 }
