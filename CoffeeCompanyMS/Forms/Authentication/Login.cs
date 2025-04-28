@@ -13,10 +13,27 @@ namespace CoffeeCompanyMS.UI.Authentication
 {
     public partial class Login : Form
     {
-        private string connectionstring; 
+        private string connectionstring;
+
+        private string serverKhoa = "Data Source=LAPTOP-VM3SPQFB\\ASUSSQL;Initial Catalog=CoffeeCompany;Persist Security Info=True;";
+        private string serverDuong = "";
+        private string serverKien = "";
+        private string serverManh = "";
+        private string mainServer;
+
+        Dictionary<string, string> serversMap;
+
         public Login()
         {
             InitializeComponent();
+            serversMap = new Dictionary<string, string>
+            {
+                { "Server Khoa", serverKhoa },
+                { "Server Duong", serverDuong },
+                { "Server Kien", serverKien },
+                { "Server Manh", serverManh },
+            };
+            comboBoxServers.Items.AddRange(serversMap.Keys.ToArray());
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
@@ -31,36 +48,48 @@ namespace CoffeeCompanyMS.UI.Authentication
 
         private bool CheckLogin()
         {
-            connectionstring = "Data Source=LAPTOP-CRUATNF8;User ID=" + textBoxGmail.Text + ";Password=" + textBoxPassword.Text + ";Connect Timeout=30;Encrypt=False";
-            //connectionstring = Main.connectionstring;
-            // Do login by connecting to database using SQLConnection
-            // If success, get LocationID of the user, then assign it to Main.LocationID
+
+            Main.connectionstring = mainServer + "User ID=" + textBoxGmail.Text + ";Password=" + textBoxPassword.Text + ";Encrypt=False";
+            connectionstring = Main.connectionstring;
+
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionstring))
                 {
-                    conn.Open(); // 👉 thử mở kết nối
-                    MessageBox.Show("Kết nối thành công!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return true;
-                    // Nếu mở thành công, gọi function GetLocationIDByEmail
-                    string query = "SELECT LocationID FROM dbo.Users WHERE Email = @Email";
+                    conn.Open(); // thử mở kết nối
+                    MessageBox.Show("Login success!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
 
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    try
                     {
-                        cmd.Parameters.AddWithValue("@Email", textBoxGmail.Text);
+                        string query = @"SELECT dbo.GetLocationIDByEmail(@Email)";
+                        using (SqlCommand cmd = new SqlCommand(query, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@Email", textBoxGmail.Text);
+                            object result = cmd.ExecuteScalar();
 
-                        object result = cmd.ExecuteScalar();
-
-                        Guid locationId = (Guid)result;
-                        MessageBox.Show("Kết nối thành công!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        return true;
+                            if (result != DBNull.Value)
+                            {
+                                Main.locationID = result.ToString();
+                            }
+                            else
+                            {
+                                Main.locationID = null;
+                            }
+                            MessageBox.Show("LocationID = " + Main.locationID, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
                     }
+                    catch (SqlException ex)
+                    {
+                        MessageBox.Show("Login failed! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+                    return true;
                 }
             }
             catch (SqlException ex)
             {
-                MessageBox.Show("Login failed! " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Login failed! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
             
@@ -77,6 +106,15 @@ namespace CoffeeCompanyMS.UI.Authentication
         private void Login_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void comboBoxServers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxServers.SelectedIndex >= 0)
+            {
+                string selectedKey = comboBoxServers.SelectedItem.ToString();
+                mainServer = serversMap[selectedKey];
+            }
         }
     }
 }

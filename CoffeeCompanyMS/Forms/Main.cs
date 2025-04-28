@@ -15,7 +15,7 @@ namespace CoffeeCompanyMS.UI
     public partial class Main : Form
     {
         public static string locationID = null;
-        public static string connectionstring = "Data Source=LAPTOP-CRUATNF8;Integrated Security=True;Connect Timeout=30;Encrypt=False";
+        public static string connectionstring; //= "Data Source=LAPTOP-VM3SPQFB\\ASUSSQL;Initial Catalog=CoffeeCompany;Integrated Security=True;Encrypt=False";
         public Main()
         {
             InitializeComponent();

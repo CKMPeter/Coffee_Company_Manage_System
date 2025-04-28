@@ -18,8 +18,6 @@ namespace CoffeeCompanyMS
 {
     public partial class WarehouseNavBar : UserControl
     {
-        //variables
-        Main mainForm = Program.mainForm;
         public WarehouseNavBar()
         {
             InitializeComponent();

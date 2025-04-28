@@ -34,6 +34,7 @@
             this.textBoxGmail = new System.Windows.Forms.TextBox();
             this.labelPassword = new System.Windows.Forms.Label();
             this.textBoxPassword = new System.Windows.Forms.TextBox();
+            this.comboBoxServers = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // btnLogin
@@ -51,7 +52,7 @@
             // 
             this.labelGmail.AutoSize = true;
             this.labelGmail.Font = new System.Drawing.Font("Microsoft Tai Le", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelGmail.Location = new System.Drawing.Point(12, 106);
+            this.labelGmail.Location = new System.Drawing.Point(183, 128);
             this.labelGmail.Name = "labelGmail";
             this.labelGmail.Size = new System.Drawing.Size(108, 35);
             this.labelGmail.TabIndex = 1;
@@ -69,16 +70,17 @@
             // 
             // textBoxGmail
             // 
-            this.textBoxGmail.Location = new System.Drawing.Point(169, 115);
+            this.textBoxGmail.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxGmail.Location = new System.Drawing.Point(340, 129);
             this.textBoxGmail.Name = "textBoxGmail";
-            this.textBoxGmail.Size = new System.Drawing.Size(226, 22);
+            this.textBoxGmail.Size = new System.Drawing.Size(226, 34);
             this.textBoxGmail.TabIndex = 3;
             // 
             // labelPassword
             // 
             this.labelPassword.AutoSize = true;
             this.labelPassword.Font = new System.Drawing.Font("Microsoft Tai Le", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelPassword.Location = new System.Drawing.Point(12, 164);
+            this.labelPassword.Location = new System.Drawing.Point(183, 186);
             this.labelPassword.Name = "labelPassword";
             this.labelPassword.Size = new System.Drawing.Size(154, 35);
             this.labelPassword.TabIndex = 4;
@@ -86,17 +88,28 @@
             // 
             // textBoxPassword
             // 
-            this.textBoxPassword.Location = new System.Drawing.Point(169, 173);
+            this.textBoxPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxPassword.Location = new System.Drawing.Point(340, 187);
             this.textBoxPassword.Name = "textBoxPassword";
             this.textBoxPassword.PasswordChar = '*';
-            this.textBoxPassword.Size = new System.Drawing.Size(226, 22);
+            this.textBoxPassword.Size = new System.Drawing.Size(226, 34);
             this.textBoxPassword.TabIndex = 5;
+            // 
+            // comboBoxServers
+            // 
+            this.comboBoxServers.FormattingEnabled = true;
+            this.comboBoxServers.Location = new System.Drawing.Point(524, 55);
+            this.comboBoxServers.Name = "comboBoxServers";
+            this.comboBoxServers.Size = new System.Drawing.Size(169, 24);
+            this.comboBoxServers.TabIndex = 6;
+            this.comboBoxServers.SelectedIndexChanged += new System.EventHandler(this.comboBoxServers_SelectedIndexChanged);
             // 
             // Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.comboBoxServers);
             this.Controls.Add(this.textBoxPassword);
             this.Controls.Add(this.labelPassword);
             this.Controls.Add(this.textBoxGmail);
@@ -120,5 +133,6 @@
         private System.Windows.Forms.TextBox textBoxGmail;
         private System.Windows.Forms.Label labelPassword;
         private System.Windows.Forms.TextBox textBoxPassword;
+        private System.Windows.Forms.ComboBox comboBoxServers;
     }
 }
