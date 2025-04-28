@@ -20,6 +20,10 @@ namespace CoffeeCompanyMS.UC
         public CompanyOwnerNavBar()
         {
             InitializeComponent();
+        }
+
+        private void CompanyOwnerNavBar_Load(object sender, EventArgs e)
+        {
             SubNavManager.ShowSubNav(new StorageNavBar());
             SubNavManager.ShowPage(new BatchSummaryPage());
         }
@@ -58,7 +62,8 @@ namespace CoffeeCompanyMS.UC
 
         private void pbLogOut_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            Program.mainForm.Hide();
+            Program.loginForm.Show();
         }
     }
 }

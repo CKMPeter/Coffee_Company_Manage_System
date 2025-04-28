@@ -122,6 +122,7 @@
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "CompanyOwnerNavBar";
             this.Size = new System.Drawing.Size(998, 91);
+            this.Load += new System.EventHandler(this.CompanyOwnerNavBar_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pbStorage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbExport)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbImport)).EndInit();

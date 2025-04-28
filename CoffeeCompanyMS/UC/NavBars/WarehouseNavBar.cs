@@ -25,7 +25,8 @@ namespace CoffeeCompanyMS
 
         private void navBar_Load(object sender, EventArgs e)
         {
-
+            SubNavManager.ShowSubNav(new StorageNavBar());
+            SubNavManager.ShowPage(new BatchSummaryPage());
         }
 
         private void pbStorage_Click(object sender, EventArgs e)
@@ -54,7 +55,8 @@ namespace CoffeeCompanyMS
 
         private void pbLogOut_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            Program.mainForm.Hide();
+            Program.loginForm.Show();
         }
     }
 }

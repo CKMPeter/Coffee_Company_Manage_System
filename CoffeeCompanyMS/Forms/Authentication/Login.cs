@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CoffeeCompanyMS.Forms.Authentication;
 
 namespace CoffeeCompanyMS.UI.Authentication
 {
@@ -28,7 +29,7 @@ namespace CoffeeCompanyMS.UI.Authentication
             InitializeComponent();
             serversMap = new Dictionary<string, string>
             {
-                { "Server Khoa", serverKhoa },
+                { "Server Khoa", "Data Source=LAPTOP-VM3SPQFB\\ASUSSQL;Initial Catalog=CoffeeCompany;Persist Security Info=True;" },
                 { "Server Duong", serverDuong },
                 { "Server Kien", serverKien },
                 { "Server Manh", serverManh },
@@ -38,74 +39,69 @@ namespace CoffeeCompanyMS.UI.Authentication
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            if (CheckLogin())
-            {
-                this.Hide();
-                Main mainForm = new Main();
-                mainForm.Show();
-            }
+            if (!CheckLogin()) return;
+            GetLocationID();
+            this.Hide();
+            Program.mainForm.Show();
         }
 
         private bool CheckLogin()
         {
-
-            Main.connectionstring = mainServer + "User ID=" + textBoxGmail.Text + ";Password=" + textBoxPassword.Text + ";Encrypt=False";
-            connectionstring = Main.connectionstring;
+            SQLConnector.connectionString = mainServer + "User ID=" + textBoxGmail.Text + ";Password=" + textBoxPassword.Text + ";Encrypt=False";
 
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionstring))
+                using (SqlConnection conn = SQLConnector.GetSqlConnection())
                 {
-                    conn.Open(); // thử mở kết nối
+                    conn.Open();
                     MessageBox.Show("Login success!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-
-                    try
-                    {
-                        string query = @"SELECT dbo.GetLocationIDByEmail(@Email)";
-                        using (SqlCommand cmd = new SqlCommand(query, conn))
-                        {
-                            cmd.Parameters.AddWithValue("@Email", textBoxGmail.Text);
-                            object result = cmd.ExecuteScalar();
-
-                            if (result != DBNull.Value)
-                            {
-                                Main.locationID = result.ToString();
-                            }
-                            else
-                            {
-                                Main.locationID = null;
-                            }
-                            MessageBox.Show("LocationID = " + Main.locationID, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                    }
-                    catch (SqlException ex)
-                    {
-                        MessageBox.Show("Login failed! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-
                     return true;
                 }
             }
             catch (SqlException ex)
             {
-                MessageBox.Show("Login failed! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error in connecting to database: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Login failed! Please try again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
-            
+        }
 
+        private bool GetLocationID()
+        {
+            try
+            {
+                using (SqlConnection conn = SQLConnector.GetSqlConnection())
+                {
+                    conn.Open();
+                    string query = @"SELECT dbo.GetLocationIDByEmail(@Email)";
 
-            // If fail, annouce login failed and let user try again
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Email", textBoxGmail.Text);
+
+                        object result = cmd.ExecuteScalar();
+
+                        if (result != DBNull.Value)
+                        {
+                            Main.locationID = result.ToString();
+                        }
+                        else
+                        {
+                            Main.locationID = null;
+                        }
+                        MessageBox.Show("LocationID = " + Main.locationID, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Error in getting LocationID: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Login_FormClosed(object sender, FormClosedEventArgs e)
         {
             Application.Exit();
-        }
-
-        private void Login_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void comboBoxServers_SelectedIndexChanged(object sender, EventArgs e)

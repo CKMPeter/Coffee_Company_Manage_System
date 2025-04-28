@@ -11,6 +11,7 @@ namespace CoffeeCompanyMS
     internal static class Program
     {
         public static Login loginForm;
+        public static Main mainForm;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -21,6 +22,7 @@ namespace CoffeeCompanyMS
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             loginForm = new Login();
+            mainForm = new Main();
             Application.Run(loginForm);
         }
     }
