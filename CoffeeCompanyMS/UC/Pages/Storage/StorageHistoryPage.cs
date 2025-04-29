@@ -76,7 +76,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = SQLConnector.GetSqlConnection())
                 {
                     conn.Open();
 

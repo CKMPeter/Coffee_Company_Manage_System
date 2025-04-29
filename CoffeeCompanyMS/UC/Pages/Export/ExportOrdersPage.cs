@@ -1,4 +1,5 @@
-﻿using CoffeeCompanyMS.Navigations;
+﻿using CoffeeCompanyMS.Forms.Authentication;
+using CoffeeCompanyMS.Navigations;
 using CoffeeCompanyMS.UC.Pages.Import;
 using CoffeeCompanyMS.UI;
 using System;
@@ -17,7 +18,7 @@ namespace CoffeeCompanyMS.UC.Pages.Export
     public partial class ExportOrdersPage : UserControl
     {
         private string selectedLocationId;
-        private string connectionString = Main.connectionstring;
+
         public ExportOrdersPage()
         {
             InitializeComponent();
@@ -43,7 +44,7 @@ namespace CoffeeCompanyMS.UC.Pages.Export
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = SQLConnector.GetSqlConnection())
                 {
                     conn.Open();
 
@@ -77,7 +78,7 @@ namespace CoffeeCompanyMS.UC.Pages.Export
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlConnection connection = SQLConnector.GetSqlConnection())
                 {
                     connection.Open();
 
@@ -203,7 +204,7 @@ namespace CoffeeCompanyMS.UC.Pages.Export
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlConnection connection = SQLConnector.GetSqlConnection())
                 {
                     connection.Open();
 

@@ -1,4 +1,5 @@
-﻿using CoffeeCompanyMS.Navigations;
+﻿using CoffeeCompanyMS.Forms.Authentication;
+using CoffeeCompanyMS.Navigations;
 using CoffeeCompanyMS.UI;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,6 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
     public partial class BatchSummaryPage : UserControl
     {
         public string selectedLocationId;
-        private string connectionString = Main.connectionstring;
 
         public BatchSummaryPage()
         {
@@ -45,7 +45,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = SQLConnector.GetSqlConnection())
                 {
                     conn.Open();
 
@@ -80,7 +80,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = SQLConnector.GetSqlConnection())
                 {
                     conn.Open();
 

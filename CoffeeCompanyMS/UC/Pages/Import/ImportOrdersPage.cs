@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CoffeeCompanyMS.Forms.Authentication;
 using CoffeeCompanyMS.Navigations;
 using CoffeeCompanyMS.UC.Pages.Storage;
 using CoffeeCompanyMS.UI;
@@ -17,7 +18,6 @@ namespace CoffeeCompanyMS.UC.Pages.Import
     public partial class ImportOrdersPage : UserControl
     {
         private string selectedLocationId;
-        private string connectionString = Main.connectionstring;
 
         public ImportOrdersPage()
         {
@@ -46,7 +46,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = SQLConnector.GetSqlConnection())
                 {
                     conn.Open();
 
@@ -80,7 +80,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlConnection connection = SQLConnector.GetSqlConnection())
                 {
                     connection.Open();
 
@@ -208,7 +208,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlConnection connection = SQLConnector.GetSqlConnection())
                 {
                     connection.Open();
 

@@ -1,4 +1,5 @@
-﻿using CoffeeCompanyMS.UI;
+﻿using CoffeeCompanyMS.Forms.Authentication;
+using CoffeeCompanyMS.UI;
 using Google.Protobuf.WellKnownTypes;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,6 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
 {
     public partial class BatchDetailsPage : UserControl
     {
-        private string connectionString = Main.connectionstring;
         private string LocationID;
         private string IngredientName;
         private Guid currentLocationId; // Biến này bạn gán sau khi chọn Location
@@ -72,7 +72,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = SQLConnector.GetSqlConnection())
                 {
                     conn.Open();
 
@@ -123,7 +123,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = SQLConnector.GetSqlConnection())
                 {
                     conn.Open();
 
@@ -163,7 +163,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
             // Kết nối với database
             
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = SQLConnector.GetSqlConnection())
             {
                 // Tạo SqlCommand để gọi function GetBatches
                 string query = "SELECT * FROM dbo.GetBatches(@IngredientName)";

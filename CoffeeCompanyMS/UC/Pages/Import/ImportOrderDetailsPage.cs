@@ -1,4 +1,5 @@
-﻿using CoffeeCompanyMS.UI;
+﻿using CoffeeCompanyMS.Forms.Authentication;
+using CoffeeCompanyMS.UI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,7 +16,6 @@ namespace CoffeeCompanyMS.UC.Pages.Import
     public partial class ImportOrderDetailsPage : UserControl
     {
         private string orderID;
-        private string connectionString = Main.connectionstring;
 
         public ImportOrderDetailsPage()
         {
@@ -35,7 +35,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = SQLConnector.GetSqlConnection())
                 {
                     conn.Open();
                     string query = @"
@@ -77,7 +77,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = SQLConnector.GetSqlConnection())
                 {
                     conn.Open();
                     string query = "SELECT * FROM dbo.GetImportItemList(@OrderID)";

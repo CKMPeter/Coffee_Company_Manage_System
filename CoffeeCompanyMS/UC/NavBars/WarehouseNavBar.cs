@@ -13,6 +13,7 @@ using System.Windows.Forms;
 using CoffeeCompanyMS.UC.Pages.Storage;
 using CoffeeCompanyMS.UC.Pages.Import;
 using CoffeeCompanyMS.UC.Pages.Export;
+using CoffeeCompanyMS.Forms.Authentication;
 
 namespace CoffeeCompanyMS
 {
@@ -55,6 +56,7 @@ namespace CoffeeCompanyMS
 
         private void pbLogOut_Click(object sender, EventArgs e)
         {
+            SQLConnector.ResetConnectionString();
             Program.mainForm.Hide();
             Program.loginForm.Show();
         }

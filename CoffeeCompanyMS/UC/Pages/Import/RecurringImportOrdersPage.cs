@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CoffeeCompanyMS.Forms.Authentication;
 using CoffeeCompanyMS.UI;
 using CoffeeCompanyMS.UI.Import;
 
@@ -15,7 +16,6 @@ namespace CoffeeCompanyMS.UC.Pages.Import
     public partial class RecurringImportOrdersPage : UserControl
     {
         private string selectedLocationId;
-        private string connectionString = Main.connectionstring;
 
         public RecurringImportOrdersPage()
         {
@@ -43,7 +43,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = SQLConnector.GetSqlConnection())
                 {
                     conn.Open();
 
@@ -95,7 +95,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
                     return;
                 }
 
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = SQLConnector.GetSqlConnection())
                 {
                     conn.Open();
 

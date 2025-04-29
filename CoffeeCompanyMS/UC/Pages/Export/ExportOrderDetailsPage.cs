@@ -1,4 +1,5 @@
-﻿using CoffeeCompanyMS.Navigations;
+﻿using CoffeeCompanyMS.Forms.Authentication;
+using CoffeeCompanyMS.Navigations;
 using CoffeeCompanyMS.UC.Pages.Import;
 using CoffeeCompanyMS.UI;
 using System;
@@ -15,7 +16,6 @@ namespace CoffeeCompanyMS.UC.Pages.Export
     public partial class ExportOrderDetailsPage : UserControl
     {
         private string orderID;
-        private string connectionString = Main.connectionstring; // <-- Update SQL connection string here
 
         // Constructor with Order ID parameter
         public ExportOrderDetailsPage(string orderID)
@@ -52,7 +52,7 @@ namespace CoffeeCompanyMS.UC.Pages.Export
                 // Debug: Check if orderID is valid
                 MessageBox.Show("Loading details for Order ID: " + orderID);
 
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlConnection connection = SQLConnector.GetSqlConnection())
                 {
                     connection.Open();
 

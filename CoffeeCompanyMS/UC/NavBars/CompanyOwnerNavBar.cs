@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CoffeeCompanyMS.Forms.Authentication;
 using CoffeeCompanyMS.Navigations;
 using CoffeeCompanyMS.UC.Pages.Export;
 using CoffeeCompanyMS.UC.Pages.Import;
@@ -62,6 +63,7 @@ namespace CoffeeCompanyMS.UC
 
         private void pbLogOut_Click(object sender, EventArgs e)
         {
+            SQLConnector.ResetConnectionString();
             Program.mainForm.Hide();
             Program.loginForm.Show();
         }

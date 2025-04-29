@@ -16,11 +16,6 @@ namespace CoffeeCompanyMS.Models
 
         public void GetAccountByEmail(string email)
         {
-            _email = email;
-            try
-            {
-                
-            }
         }
     }
 }

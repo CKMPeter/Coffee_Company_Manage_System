@@ -10,7 +10,7 @@ namespace CoffeeCompanyMS.Forms.Authentication
 {
     internal class SQLConnector
     {
-        private static string connectionString;
+        private static string connectionString = null;
 
         public static void SetConnectionString(string serverName, string email, string password)
         {
@@ -22,7 +22,7 @@ namespace CoffeeCompanyMS.Forms.Authentication
             return new SqlConnection(connectionString);
         }
 
-        public static void ResetConnectionString(string serverName, string email, string password)
+        public static void ResetConnectionString()
         {
             connectionString = null;
         }

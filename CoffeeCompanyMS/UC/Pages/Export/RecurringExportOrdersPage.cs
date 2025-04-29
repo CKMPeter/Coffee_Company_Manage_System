@@ -1,4 +1,5 @@
-﻿using CoffeeCompanyMS.UI;
+﻿using CoffeeCompanyMS.Forms.Authentication;
+using CoffeeCompanyMS.UI;
 using CoffeeCompanyMS.UI.Export;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,6 @@ namespace CoffeeCompanyMS.UC.Pages.Export
 {
     public partial class RecurringExportOrdersPage : UserControl
     {
-        private string connectionString = Main.connectionstring; // Connection string
         private string selectedLocationID;  // Keep it as string
 
         public RecurringExportOrdersPage()
@@ -32,13 +32,12 @@ namespace CoffeeCompanyMS.UC.Pages.Export
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlConnection connection = SQLConnector.GetSqlConnection())
                 {
                     connection.Open();
 
                     // SQL query to call the function GetActiveRecurringExportOrders, filtering by LocationID
-                    string query = "SELECT RecurrenceID, DestinationName, RecurrencePeriod, LastOrderDate, EstimatedNextOrderDate " +
-                                   "FROM dbo.GetActiveRecurringExportOrders(@LocationID)";
+                    string query = "SELECT dbo.GetActiveRecurringExportOrders(@LocationID)";
 
                     SqlCommand command = new SqlCommand(query, connection);
                     command.Parameters.AddWithValue("@LocationID", locationID);  // Using string
@@ -65,7 +64,7 @@ namespace CoffeeCompanyMS.UC.Pages.Export
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = SQLConnector.GetSqlConnection())
                 {
                     conn.Open();
 

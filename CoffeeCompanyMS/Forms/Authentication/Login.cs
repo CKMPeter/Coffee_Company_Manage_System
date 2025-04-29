@@ -14,26 +14,20 @@ namespace CoffeeCompanyMS.UI.Authentication
 {
     public partial class Login : Form
     {
-        private string connectionstring;
+        private string mainServerName;
 
-        private string serverKhoa = "Data Source=LAPTOP-VM3SPQFB\\ASUSSQL";
-        private string serverDuong = "";
-        private string serverKien = "";
-        private string serverManh = "Data Source=LAPTOP-CRUATNF8;";
-        private string mainServer;
-
-        Dictionary<string, string> serversMap;
+        Dictionary<string, string> serversMap = new Dictionary<string, string>
+            {
+                { "Server Khoa", "Data Source=LAPTOP-VM3SPQFB\\ASUSSQL;Initial Catalog=CoffeeCompany;Persist Security Info=True;" },
+                { "Server Duong", "" },
+                { "Server Kien", "" },
+                { "Server Manh", "Data Source=LAPTOP-CRUATNF8;" },
+            };
 
         public Login()
         {
             InitializeComponent();
-            serversMap = new Dictionary<string, string>
-            {
-                { "Server Khoa", "Data Source=LAPTOP-VM3SPQFB\\ASUSSQL;Initial Catalog=CoffeeCompany;Persist Security Info=True;" },
-                { "Server Duong", serverDuong },
-                { "Server Kien", serverKien },
-                { "Server Manh", serverManh },
-            };
+            
             comboBoxServers.Items.AddRange(serversMap.Keys.ToArray());
         }
 
@@ -47,7 +41,7 @@ namespace CoffeeCompanyMS.UI.Authentication
 
         private bool CheckLogin(string email, string password)
         {
-            SQLConnector.SetConnectionString(mainServer, email, password);
+            SQLConnector.SetConnectionString(mainServerName, email, password);
 
             try
             {
@@ -109,7 +103,7 @@ namespace CoffeeCompanyMS.UI.Authentication
             if (comboBoxServers.SelectedIndex >= 0)
             {
                 string selectedKey = comboBoxServers.SelectedItem.ToString();
-                mainServer = serversMap[selectedKey];
+                mainServerName = serversMap[selectedKey];
             }
         }
     }
