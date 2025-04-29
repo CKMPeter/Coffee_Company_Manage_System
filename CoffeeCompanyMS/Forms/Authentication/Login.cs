@@ -15,10 +15,10 @@ namespace CoffeeCompanyMS.UI.Authentication
     {
         private string connectionstring;
 
-        private string serverKhoa = "Data Source=LAPTOP-VM3SPQFB\\ASUSSQL;Initial Catalog=CoffeeCompany;Persist Security Info=True;";
+        private string serverKhoa = "Data Source=LAPTOP-VM3SPQFB\\ASUSSQL";
         private string serverDuong = "";
         private string serverKien = "";
-        private string serverManh = "";
+        private string serverManh = "Data Source=LAPTOP-CRUATNF8;";
         private string mainServer;
 
         Dictionary<string, string> serversMap;
@@ -49,7 +49,7 @@ namespace CoffeeCompanyMS.UI.Authentication
         private bool CheckLogin()
         {
 
-            Main.connectionstring = mainServer + "User ID=" + textBoxGmail.Text + ";Password=" + textBoxPassword.Text + ";Encrypt=False";
+            Main.connectionstring = mainServer + ";Initial Catalog=CoffeeCompany;Persist Security Info=True;User ID=" + textBoxGmail.Text + ";Password=" + textBoxPassword.Text + ";Encrypt=False";
             connectionstring = Main.connectionstring;
 
             try
