@@ -1,4 +1,5 @@
-﻿using CoffeeCompanyMS.UI;
+﻿using CoffeeCompanyMS.Forms.Authentication;
+using CoffeeCompanyMS.UI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,7 +16,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
     public partial class StorageHistoryPage : UserControl
     {
         private string selectedLocationId;
-        private string connectionString = Main.connectionstring;
+
         public StorageHistoryPage()
         {
             InitializeComponent();
@@ -42,7 +43,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = SQLConnector.GetSqlConnection())
                 {
                     conn.Open();
                     string query = "SELECT LocationID, LocationName FROM dbo.GetLocations()";

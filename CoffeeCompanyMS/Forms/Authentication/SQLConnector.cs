@@ -10,32 +10,21 @@ namespace CoffeeCompanyMS.Forms.Authentication
 {
     internal class SQLConnector
     {
-        public static string connectionString;
-        private static SqlConnection conn;
+        private static string connectionString;
+
+        public static void SetConnectionString(string serverName, string email, string password)
+        {
+            connectionString = serverName + "User ID=" + email + ";Password=" + password + ";Encrypt=False";
+        }
 
         public static SqlConnection GetSqlConnection()
         {
             return new SqlConnection(connectionString);
         }
 
-        public static bool Connect()
+        public static void ResetConnectionString(string serverName, string email, string password)
         {
-            try
-            {
-                conn = new SqlConnection(connectionString);
-                conn.Open();
-                return true;
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show("Error in connecting to database: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-        }
-
-        public static SqlCommand GetCommand(string query)
-        {
-            return new SqlCommand(query, conn);
+            connectionString = null;
         }
     }
 }

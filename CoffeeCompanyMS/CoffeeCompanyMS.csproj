@@ -113,6 +113,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\Authentication\SQLConnector.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="UC\NavBars\NavButtonStyleUtils.cs" />
     <Compile Include="UC\NavBars\SubNavManager.cs" />
     <Compile Include="UC\NavBars\CompanyOwnerNavBar.cs">

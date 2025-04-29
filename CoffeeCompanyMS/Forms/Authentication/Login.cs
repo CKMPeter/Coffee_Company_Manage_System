@@ -39,15 +39,15 @@ namespace CoffeeCompanyMS.UI.Authentication
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            if (!CheckLogin()) return;
+            if (!CheckLogin(textBoxGmail.Text, textBoxPassword.Text)) return;
             GetLocationID();
             this.Hide();
             Program.mainForm.Show();
         }
 
-        private bool CheckLogin()
+        private bool CheckLogin(string email, string password)
         {
-            SQLConnector.connectionString = mainServer + "User ID=" + textBoxGmail.Text + ";Password=" + textBoxPassword.Text + ";Encrypt=False";
+            SQLConnector.SetConnectionString(mainServer, email, password);
 
             try
             {
@@ -66,7 +66,7 @@ namespace CoffeeCompanyMS.UI.Authentication
             }
         }
 
-        private bool GetLocationID()
+        private void GetLocationID()
         {
             try
             {
