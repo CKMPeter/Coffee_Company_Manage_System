@@ -177,17 +177,8 @@ namespace CoffeeCompanyMS.UC.Pages.Import
 
         private void btnCreate_Click(object sender, EventArgs e)
         {
-            if (locationSelector1 != null && locationSelector1.SelectedValue != null)
-            {
-                CreateImportOrders createImportOrders = new CreateImportOrders();
-                createImportOrders.ShowDialog();
-
-                LoadRecurringImportOrders(new Guid(locationSelector1.SelectedValue.ToString()));
-            }
-            else
-            {
-                MessageBox.Show("Please select a location first.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+            CreateImportOrders createImportOrders = new CreateImportOrders();
+            createImportOrders.ShowDialog();
         }
     }
 }

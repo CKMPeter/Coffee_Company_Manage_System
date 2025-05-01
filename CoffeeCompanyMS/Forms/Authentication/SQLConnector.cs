@@ -14,7 +14,7 @@ namespace CoffeeCompanyMS.Forms.Authentication
 
         public static void SetConnectionString(string serverName, string email, string password)
         {
-            connectionString = serverName + "User ID=" + email + ";Password=" + password + ";Encrypt=False";
+            connectionString = serverName + ";Initial Catalog=CoffeeCompany;Persist Security Info=True;"+ "User ID=" + email + ";Password=" + password + ";Encrypt=False";
         }
 
         public static SqlConnection GetSqlConnection()

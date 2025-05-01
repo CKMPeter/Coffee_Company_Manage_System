@@ -18,10 +18,10 @@ namespace CoffeeCompanyMS.UI.Authentication
 
         Dictionary<string, string> serversMap = new Dictionary<string, string>
             {
-                { "Server Khoa", "Data Source=LAPTOP-VM3SPQFB\\ASUSSQL;Initial Catalog=CoffeeCompany;Persist Security Info=True;" },
+                { "Server Khoa", "Data Source=LAPTOP-VM3SPQFB\\ASUSSQL" },
                 { "Server Duong", "" },
                 { "Server Kien", "" },
-                { "Server Manh", "Data Source=LAPTOP-CRUATNF8;" },
+                { "Server Manh", "Data Source=LAPTOP-CRUATNF8" },
             };
 
         public Login()

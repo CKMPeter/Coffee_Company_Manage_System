@@ -16,5 +16,10 @@ namespace CoffeeCompanyMS.UI.Import
         {
             InitializeComponent();
         }
+
+        private void DTPDeliveryDate_ValueChanged(object sender, EventArgs e)
+        {
+            labeldate.Text = DTPDeliveryDate.Value.ToString("yyyy-MM-dd");
+        }
     }
 }

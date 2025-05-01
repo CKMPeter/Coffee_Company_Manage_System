@@ -290,6 +290,12 @@
     <EmbeddedResource Include="Forms\Authentication\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PopupForms\CreateExportOrder.resx">
+      <DependentUpon>CreateExportOrder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PopupForms\CreateImportOrders.resx">
+      <DependentUpon>CreateImportOrders.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
