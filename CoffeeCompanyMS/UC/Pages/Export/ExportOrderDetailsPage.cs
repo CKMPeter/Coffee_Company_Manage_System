@@ -52,7 +52,7 @@ namespace CoffeeCompanyMS.UC.Pages.Export
                 // Debug: Check if orderID is valid
                 MessageBox.Show("Loading details for Order ID: " + orderID);
 
-                using (SqlConnection connection = SQLConnector.GetSqlConnection())
+                using (SqlConnection connection = UserSession.Instance.connectionFactory.CreateConnection())
                 {
                     connection.Open();
 

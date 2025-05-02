@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CoffeeCompanyMS.Forms.Authentication;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace CoffeeCompanyMS.UI.Authentication
 {
@@ -18,10 +19,10 @@ namespace CoffeeCompanyMS.UI.Authentication
 
         Dictionary<string, string> serversMap = new Dictionary<string, string>
             {
-                { "Server Khoa", "Data Source=LAPTOP-VM3SPQFB\\ASUSSQL" },
+                { "Server Khoa", "LAPTOP-VM3SPQFB\\ASUSSQL" },
                 { "Server Duong", "" },
                 { "Server Kien", "" },
-                { "Server Manh", "Data Source=LAPTOP-CRUATNF8" },
+                { "Server Manh", "LAPTOP-CRUATNF8" },
             };
 
         public Login()
@@ -33,66 +34,18 @@ namespace CoffeeCompanyMS.UI.Authentication
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            if (!CheckLogin(textBoxGmail.Text, textBoxPassword.Text)) return;
-            GetLocationID();
-            this.Hide();
+            bool result = UserSession.Instance.Start(mainServerName, textBoxGmail.Text, textBoxPassword.Text);
+            if (!result) return;
+
+            comboBoxServers.SelectedIndex = 0;
+            textBoxGmail.Text = string.Empty;
+            textBoxPassword.Text = string.Empty;
+            Hide();
+
+            Program.mainForm = new Main();
             Program.mainForm.Show();
         }
-
-        private bool CheckLogin(string email, string password)
-        {
-            SQLConnector.SetConnectionString(mainServerName, email, password);
-
-            try
-            {
-                using (SqlConnection conn = SQLConnector.GetSqlConnection())
-                {
-                    conn.Open();
-                    MessageBox.Show("Login success!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return true;
-                }
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show("Error in connecting to database: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                MessageBox.Show("Login failed! Please try again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-        }
-
-        private void GetLocationID()
-        {
-            try
-            {
-                using (SqlConnection conn = SQLConnector.GetSqlConnection())
-                {
-                    conn.Open();
-                    string query = @"SELECT dbo.GetLocationIDByEmail(@Email)";
-
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@Email", textBoxGmail.Text);
-
-                        object result = cmd.ExecuteScalar();
-
-                        if (result != DBNull.Value)
-                        {
-                            Main.locationID = result.ToString();
-                        }
-                        else
-                        {
-                            Main.locationID = null;
-                        }
-                        MessageBox.Show("LocationID = " + Main.locationID, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                }
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show("Error in getting LocationID: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
+        
         private void Login_FormClosed(object sender, FormClosedEventArgs e)
         {
             Application.Exit();

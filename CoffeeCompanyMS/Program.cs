@@ -22,7 +22,6 @@ namespace CoffeeCompanyMS
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             loginForm = new Login();
-            mainForm = new Main();
             Application.Run(loginForm);
         }
     }

@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using CoffeeCompanyMS.Navigations;
 using CoffeeCompanyMS.UC;
+using CoffeeCompanyMS.Models;
+using CoffeeCompanyMS.Forms.Authentication;
 
 namespace CoffeeCompanyMS.UI
 {
@@ -31,13 +33,21 @@ namespace CoffeeCompanyMS.UI
         private void LoadMainNav()
         {
             UserControl mainNav;
-            if (locationID == null)
+            User user = UserSession.Instance.loggedInUser;
+
+            if (user == null) return;
+
+            switch (user.Role)
             {
-                mainNav = new CompanyOwnerNavBar();
-            }
-            else
-            {
-                mainNav = new WarehouseNavBar();
+                case "WarehouseManager":
+                    mainNav = new WarehouseNavBar();
+                    break;
+                case "CompanyOwner":
+                    mainNav = new CompanyOwnerNavBar();
+                    break;
+                case "Admin":
+                default:
+                    throw new Exception("Page Not Found");
             }
             mainNav.Dock = DockStyle.Fill;
             navBarPanel.Controls.Add(mainNav);

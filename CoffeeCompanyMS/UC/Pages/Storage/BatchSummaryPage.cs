@@ -45,7 +45,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
         {
             try
             {
-                using (SqlConnection conn = SQLConnector.GetSqlConnection())
+                using (SqlConnection conn = UserSession.Instance.connectionFactory.CreateConnection())
                 {
                     conn.Open();
 
@@ -80,7 +80,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
         {
             try
             {
-                using (SqlConnection conn = SQLConnector.GetSqlConnection())
+                using (SqlConnection conn = UserSession.Instance.connectionFactory.CreateConnection())
                 {
                     conn.Open();
 

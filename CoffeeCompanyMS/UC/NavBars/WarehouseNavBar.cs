@@ -56,8 +56,8 @@ namespace CoffeeCompanyMS
 
         private void pbLogOut_Click(object sender, EventArgs e)
         {
-            SQLConnector.ResetConnectionString();
-            Program.mainForm.Hide();
+            UserSession.Instance.End();
+            Program.mainForm.Close();
             Program.loginForm.Show();
         }
     }

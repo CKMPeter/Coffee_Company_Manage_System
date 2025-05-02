@@ -38,12 +38,12 @@
             this.label3 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.dataGridViewIngredients = new System.Windows.Forms.DataGridView();
-            this.label4 = new System.Windows.Forms.Label();
             this.IngredientColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.UnitColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.UnitPriceColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.QuantityColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ActionColumn = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewIngredients)).BeginInit();
             this.SuspendLayout();
@@ -52,7 +52,7 @@
             // 
             this.checkBox1.AutoSize = true;
             this.checkBox1.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox1.Location = new System.Drawing.Point(12, 80);
+            this.checkBox1.Location = new System.Drawing.Point(12, 69);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(201, 30);
             this.checkBox1.TabIndex = 1;
@@ -73,7 +73,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Tai Le", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(12, 150);
+            this.label2.Location = new System.Drawing.Point(12, 152);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(208, 22);
             this.label2.TabIndex = 3;
@@ -81,24 +81,27 @@
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(227, 149);
+            this.numericUpDown1.Font = new System.Drawing.Font("Microsoft Tai Le", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown1.Location = new System.Drawing.Point(414, 150);
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(196, 22);
+            this.numericUpDown1.Size = new System.Drawing.Size(118, 29);
             this.numericUpDown1.TabIndex = 5;
+            this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // DTPDeliveryDate
             // 
             this.DTPDeliveryDate.CustomFormat = "yyyy-MM-dd";
-            this.DTPDeliveryDate.Location = new System.Drawing.Point(223, 117);
+            this.DTPDeliveryDate.Font = new System.Drawing.Font("Microsoft Tai Le", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DTPDeliveryDate.Location = new System.Drawing.Point(259, 112);
             this.DTPDeliveryDate.Name = "DTPDeliveryDate";
-            this.DTPDeliveryDate.Size = new System.Drawing.Size(200, 22);
+            this.DTPDeliveryDate.Size = new System.Drawing.Size(273, 29);
             this.DTPDeliveryDate.TabIndex = 6;
             this.DTPDeliveryDate.ValueChanged += new System.EventHandler(this.DTPDeliveryDate_ValueChanged);
             // 
             // labeldate
             // 
             this.labeldate.AutoSize = true;
-            this.labeldate.Location = new System.Drawing.Point(438, 122);
+            this.labeldate.Location = new System.Drawing.Point(564, 120);
             this.labeldate.Name = "labeldate";
             this.labeldate.Size = new System.Drawing.Size(44, 16);
             this.labeldate.TabIndex = 7;
@@ -106,7 +109,7 @@
             // 
             // locationSelector1
             // 
-            this.locationSelector1.Location = new System.Drawing.Point(173, -8);
+            this.locationSelector1.Location = new System.Drawing.Point(182, -8);
             this.locationSelector1.Margin = new System.Windows.Forms.Padding(0);
             this.locationSelector1.Name = "locationSelector1";
             this.locationSelector1.Size = new System.Drawing.Size(411, 63);
@@ -124,10 +127,11 @@
             // 
             // comboBox1
             // 
+            this.comboBox1.Font = new System.Drawing.Font("Microsoft Tai Le", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(223, 184);
+            this.comboBox1.Location = new System.Drawing.Point(259, 190);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(200, 24);
+            this.comboBox1.Size = new System.Drawing.Size(273, 30);
             this.comboBox1.TabIndex = 9;
             // 
             // dataGridViewIngredients
@@ -145,16 +149,6 @@
             this.dataGridViewIngredients.RowTemplate.Height = 24;
             this.dataGridViewIngredients.Size = new System.Drawing.Size(756, 150);
             this.dataGridViewIngredients.TabIndex = 10;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Tai Le", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(12, 9);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(167, 35);
-            this.label4.TabIndex = 11;
-            this.label4.Text = "Destination";
             // 
             // IngredientColumn
             // 
@@ -192,6 +186,16 @@
             this.ActionColumn.MinimumWidth = 6;
             this.ActionColumn.Name = "ActionColumn";
             this.ActionColumn.Width = 125;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Tai Le", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(12, 9);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(167, 35);
+            this.label4.TabIndex = 11;
+            this.label4.Text = "Destination";
             // 
             // CreateImportOrders
             // 

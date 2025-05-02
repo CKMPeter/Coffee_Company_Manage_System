@@ -35,7 +35,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
         {
             try
             {
-                using (SqlConnection conn = SQLConnector.GetSqlConnection())
+                using (SqlConnection conn = UserSession.Instance.connectionFactory.CreateConnection())
                 {
                     conn.Open();
                     string query = @"
@@ -77,7 +77,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
         {
             try
             {
-                using (SqlConnection conn = SQLConnector.GetSqlConnection())
+                using (SqlConnection conn = UserSession.Instance.connectionFactory.CreateConnection())
                 {
                     conn.Open();
                     string query = "SELECT * FROM dbo.GetImportItemList(@OrderID)";

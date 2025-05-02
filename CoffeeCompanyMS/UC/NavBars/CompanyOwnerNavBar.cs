@@ -63,9 +63,9 @@ namespace CoffeeCompanyMS.UC
 
         private void pbLogOut_Click(object sender, EventArgs e)
         {
-            SQLConnector.ResetConnectionString();
-            Program.mainForm.Hide();
+            UserSession.Instance.End();
             Program.loginForm.Show();
+            Program.mainForm.Hide();
         }
     }
 }

@@ -72,7 +72,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
         {
             try
             {
-                using (SqlConnection conn = SQLConnector.GetSqlConnection())
+                using (SqlConnection conn = UserSession.Instance.connectionFactory.CreateConnection())
                 {
                     conn.Open();
 
@@ -123,7 +123,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
         {
             try
             {
-                using (SqlConnection conn = SQLConnector.GetSqlConnection())
+                using (SqlConnection conn = UserSession.Instance.connectionFactory.CreateConnection())
                 {
                     conn.Open();
 
@@ -163,7 +163,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
             // Kết nối với database
             
 
-            using (SqlConnection connection = SQLConnector.GetSqlConnection())
+            using (SqlConnection connection = UserSession.Instance.connectionFactory.CreateConnection())
             {
                 // Tạo SqlCommand để gọi function GetBatches
                 string query = "SELECT * FROM dbo.GetBatches(@IngredientName)";
