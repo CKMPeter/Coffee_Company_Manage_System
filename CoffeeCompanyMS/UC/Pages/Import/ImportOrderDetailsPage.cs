@@ -27,6 +27,10 @@ namespace CoffeeCompanyMS.UC.Pages.Import
         {
             InitializeComponent();
             this.orderID = orderID;
+        }
+
+        private void ImportOrderDetailsPage_Load(object sender, EventArgs e)
+        {
             LoadOrderSummary();
             LoadOrderItems();
         }
@@ -38,14 +42,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
                 using (SqlConnection conn = UserSession.Instance.connectionFactory.CreateConnection())
                 {
                     conn.Open();
-                    string query = @"
-                        SELECT 
-                            t.ID AS OrderID,
-                            dbo.GetImportSupplierName(t.ID) AS SupplierName,
-                            dbo.GetOrderItemCount(t.ID) AS ItemCount
-                        FROM TransferOrder t
-                        WHERE t.ID = @OrderID
-                    ";
+                    string query = @"SELECT * FROM dbo.GetImportOrderSummary(@OrderID)";
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
@@ -59,17 +56,13 @@ namespace CoffeeCompanyMS.UC.Pages.Import
                                 label4.Text = reader["SupplierName"].ToString();
                                 label6.Text = reader["ItemCount"].ToString();
                             }
-                            else
-                            {
-                                MessageBox.Show("Không tìm thấy đơn nhập.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            }
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi tải thông tin đơn hàng: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error getting order summary: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -94,11 +87,9 @@ namespace CoffeeCompanyMS.UC.Pages.Import
 
                             if (dataGridViewItems.Columns.Count > 0)
                             {
-                                dataGridViewItems.Columns["IngredientName"].HeaderText = "Nguyên liệu";
-                                dataGridViewItems.Columns["Quantity"].HeaderText = "Số lượng";
-                                dataGridViewItems.Columns["Unit"].HeaderText = "Đơn vị";
-                                dataGridViewItems.Columns["UnitPrice"].HeaderText = "Giá nhập";
-                                dataGridViewItems.Columns["ExpirationDate"].HeaderText = "Hạn sử dụng";
+                                dataGridViewItems.Columns["IngredientName"].HeaderText = "Ingredient Name";
+                                dataGridViewItems.Columns["UnitPrice"].HeaderText = "Unit Price ($)";
+                                dataGridViewItems.Columns["ExpirationDate"].HeaderText = "Expiration Date";
                             }
                         }
                     }
@@ -106,7 +97,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi tải danh sách sản phẩm: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error getting order summary: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

@@ -35,29 +35,32 @@ namespace CoffeeCompanyMS.UC
 
 
             _batchSummaryPage.MoveToDetaisPage = DoubleClick_ToDetailsPage;
+        }
 
-            SubNavManager.ShowPage(_batchSummaryPage);
+        private void StorageNavBar_Load(object sender, EventArgs e)
+        {
+            NavigationManager.ShowPage(_batchSummaryPage);
         }
 
         private void btnBatchSummary_Click(object sender, EventArgs e)
         {
             resetStyle();
             NavButtonStyleUtils.SetChosenButtonStyle(btnBatchSummary);
-            SubNavManager.ShowPage(_batchSummaryPage);
+            NavigationManager.ShowPage(_batchSummaryPage);
         }
 
         private void btnBatchDetails_Click(object sender, EventArgs e)
         {
             resetStyle();
             NavButtonStyleUtils.SetChosenButtonStyle(btnBatchDetails);
-            SubNavManager.ShowPage(_batchDetailsPage);
+            NavigationManager.ShowPage(_batchDetailsPage);
         }
 
         private void btnStorageHistory_Click(object sender, EventArgs e)
         {
             resetStyle();
             NavButtonStyleUtils.SetChosenButtonStyle(btnStorageHistory);
-            SubNavManager.ShowPage(_storageHistoryPage);
+            NavigationManager.ShowPage(_storageHistoryPage);
         }
 
         private static void resetStyle()
@@ -70,13 +73,15 @@ namespace CoffeeCompanyMS.UC
             _batchSummaryPage = new BatchSummaryPage();
             _batchDetailsPage = new BatchDetailsPage();
             _storageHistoryPage = new StorageHistoryPage();
+
+            _batchSummaryPage.MoveToDetaisPage = DoubleClick_ToDetailsPage;
         }
 
         private void DoubleClick_ToDetailsPage(string locationID, string ingredientName)
         {
             resetStyle();
             NavButtonStyleUtils.SetChosenButtonStyle(btnBatchDetails);
-            SubNavManager.ShowPage(new BatchDetailsPage(locationID, ingredientName));
+            NavigationManager.ShowPage(new BatchDetailsPage(locationID, ingredientName));
         }
     }
 }

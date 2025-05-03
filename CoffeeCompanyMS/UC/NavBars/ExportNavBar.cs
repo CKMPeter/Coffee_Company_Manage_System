@@ -36,28 +36,28 @@ namespace CoffeeCompanyMS.UC
 
         private void ExportNavBar_Load(object sender, EventArgs e)
         {
-            SubNavManager.ShowPage(new ExportOrdersPage());
+            NavigationManager.ShowPage(new ExportOrdersPage());
         }
 
         private void btnExportOrders_Click(object sender, EventArgs e)
         {
             resetStyle();
             NavButtonStyleUtils.SetChosenButtonStyle(btnExportOrders);
-            SubNavManager.ShowPage(_exportOrderPages);
+            NavigationManager.ShowPage(_exportOrderPages);
         }
 
         private void btnOrderDetails_Click(object sender, EventArgs e)
         {
             resetStyle();
             NavButtonStyleUtils.SetChosenButtonStyle(btnOrderDetails);
-            SubNavManager.ShowPage(_exportOrderDetailsPage);
+            NavigationManager.ShowPage(_exportOrderDetailsPage);
         }
 
         private void btnRecurringOrders_Click(object sender, EventArgs e)
         {
             resetStyle();
             NavButtonStyleUtils.SetChosenButtonStyle(btnRecurringOrders);
-            SubNavManager.ShowPage(_recurringExportOrdersPage);
+            NavigationManager.ShowPage(_recurringExportOrdersPage);
         }
 
         private void resetStyle()

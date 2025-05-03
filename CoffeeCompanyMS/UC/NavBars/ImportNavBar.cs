@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using CoffeeCompanyMS.Navigations;
 using CoffeeCompanyMS.UC.NavBars;
 using CoffeeCompanyMS.UC.Pages.Import;
+using CoffeeCompanyMS.UC.Pages.Storage;
 
 namespace CoffeeCompanyMS.UC
 {
@@ -17,7 +18,6 @@ namespace CoffeeCompanyMS.UC
     {
         private Button[] _buttons;
         private ImportOrdersPage _importOrderPage;
-        private ImportOrderDetailsPage _importOrderDetailsPage;
         private RecurringImportOrdersPage _recurringImportOrdersPage;
 
         public ImportNavBar()
@@ -29,34 +29,29 @@ namespace CoffeeCompanyMS.UC
                 btnRecurringOrders
             };
             _importOrderPage = new ImportOrdersPage();
-            _importOrderDetailsPage = new ImportOrderDetailsPage();
             _recurringImportOrdersPage = new RecurringImportOrdersPage();
+
+            _importOrderPage.MoveToDetaisPage += DoubleClick_ToDetailsPage;
+            _recurringImportOrdersPage.MoveToDetaisPage += DoubleClick_ToDetailsPage;
         }
 
         private void ImportNavBar_Load(object sender, EventArgs e)
         {
-            SubNavManager.ShowPage(new ImportOrdersPage());
+            NavigationManager.ShowPage(_importOrderPage);
         }
 
         private void btnImportOrders_Click(object sender, EventArgs e)
         {
             resetStyle();
             NavButtonStyleUtils.SetChosenButtonStyle(btnImportOrders);
-            SubNavManager.ShowPage(_importOrderPage);
-        }
-
-        private void btnOrderDetails_Click(object sender, EventArgs e)
-        {
-            resetStyle();
-            NavButtonStyleUtils.SetChosenButtonStyle(btnOrderDetails);
-            SubNavManager.ShowPage(_importOrderDetailsPage);
+            NavigationManager.ShowPage(_importOrderPage);
         }
 
         private void btnRecurringOrders_Click(object sender, EventArgs e)
         {
             resetStyle();
             NavButtonStyleUtils.SetChosenButtonStyle(btnRecurringOrders);
-            SubNavManager.ShowPage(_recurringImportOrdersPage);
+            NavigationManager.ShowPage(_recurringImportOrdersPage);
         }
 
         private void resetStyle()
@@ -67,8 +62,17 @@ namespace CoffeeCompanyMS.UC
         private void pbReload_Click(object sender, EventArgs e)
         {
             _importOrderPage = new ImportOrdersPage();
-            _importOrderDetailsPage = new ImportOrderDetailsPage();
             _recurringImportOrdersPage = new RecurringImportOrdersPage();
+
+            _importOrderPage.MoveToDetaisPage += DoubleClick_ToDetailsPage;
+            _recurringImportOrdersPage.MoveToDetaisPage += DoubleClick_ToDetailsPage;
+        }
+
+        private void DoubleClick_ToDetailsPage(string orderID)
+        {
+            resetStyle();
+            NavButtonStyleUtils.SetChosenButtonStyle(btnOrderDetails);
+            NavigationManager.ShowPage(new ImportOrderDetailsPage(orderID));
         }
     }
 }

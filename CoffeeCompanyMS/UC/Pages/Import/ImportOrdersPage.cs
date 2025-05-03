@@ -9,75 +9,60 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CoffeeCompanyMS.Forms.Authentication;
+using CoffeeCompanyMS.Models;
 using CoffeeCompanyMS.Navigations;
 using CoffeeCompanyMS.UC.Pages.Storage;
 using CoffeeCompanyMS.UI;
+using static Google.Protobuf.Reflection.SourceCodeInfo.Types;
 
 namespace CoffeeCompanyMS.UC.Pages.Import
 {
     public partial class ImportOrdersPage : UserControl
     {
-        private string selectedLocationId;
+        private string selectedLocationID;
+        public Action<string> MoveToDetaisPage { get; set; }
 
         public ImportOrdersPage()
         {
             InitializeComponent();
+            selectedLocationID = "";
+
             locationSelector1.SelectedItemChanged += (s, value) =>
             {
-                if (Guid.TryParse(value, out Guid locationId))
-                {
-                    selectedLocationId = value;
-                    LoadImportOrders(locationId);
-                }
-                else
-                {
-                    MessageBox.Show("Location ID không hợp lệ.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                selectedLocationID = value;
+                LoadImportOrders();
             };
-            //dataGridViewImportOrder.CellValueChanged += dataGridViewImportOrder_CellValueChanged;
         }
 
         private void ImportOrdersPage_Load(object sender, EventArgs e)
         {
-            LoadLocations();
+            locationSelector1.LoadLocations();
+
+            User user = UserSession.Instance.loggedInUser;
+
+            // Check whether the logged-in user is a Warehouse Manager
+            if (user != null && user.LocationID != String.Empty)
+            {
+                selectedLocationID = user.LocationID;
+                locationSelector1.Disable();
+            }
+
+            if (selectedLocationID == String.Empty) return;
+            locationSelector1.SetSelectedLocationId(selectedLocationID);
+
+            LoadImportOrders();
         }
 
-        private void LoadLocations()
+        private void LoadImportOrders()
         {
-            try
+            Guid locationId;
+
+            if (!Guid.TryParse(selectedLocationID, out locationId))
             {
-                using (SqlConnection conn = UserSession.Instance.connectionFactory.CreateConnection())
-                {
-                    conn.Open();
-
-                    string query = "SELECT LocationID, LocationName FROM dbo.GetLocations()";
-
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        using (SqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            List<string> locations = new List<string>();
-                            List<string> locationIds = new List<string>();
-
-                            while (reader.Read())
-                            {
-                                locations.Add(reader["LocationName"].ToString());
-                                locationIds.Add(reader["LocationID"].ToString());
-                            }
-
-                            locationSelector1.SetLocations(locations, locationIds);
-                        }
-                    }
-                }
+                MessageBox.Show("Invalid Location ID.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi khi tải dữ liệu Location: " + ex.Message);
-            }
-        }
 
-        private void LoadImportOrders(Guid locationId)
-        {
             try
             {
                 using (SqlConnection connection = UserSession.Instance.connectionFactory.CreateConnection())
@@ -97,7 +82,6 @@ namespace CoffeeCompanyMS.UC.Pages.Import
 
                             dataGridViewImportOrder.DataSource = dataTable;
 
-                            // Đổi tên các cột
                             if (dataGridViewImportOrder.Columns.Count > 0)
                             {
                                 dataGridViewImportOrder.Columns["OrderID"].HeaderText = "Order ID";
@@ -106,9 +90,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
                                 dataGridViewImportOrder.Columns["OrderDate"].HeaderText = "Order Date";
                                 dataGridViewImportOrder.Columns["EstimatedDeliveryDate"].HeaderText = "Estimated Delivery";
                                 dataGridViewImportOrder.Columns["ActualDeliveryDate"].HeaderText = "Actual Delivery";
-                                dataGridViewImportOrder.Columns["Status"].HeaderText = "Status";
 
-                                // Thay thế Status thành ComboBox
                                 ReplaceStatusColumnWithComboBox();
                             }
                         }
@@ -117,7 +99,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error loading import orders: " + ex.Message);
+                MessageBox.Show("Error loading import orders: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -125,18 +107,17 @@ namespace CoffeeCompanyMS.UC.Pages.Import
         {
             try
             {
+                // Remove current Status column with the combobox column
                 int statusColumnIndex = dataGridViewImportOrder.Columns["Status"].Index;
 
-                // Xóa cột Text cũ
                 dataGridViewImportOrder.Columns.Remove("Status");
 
-                // Tạo ComboBoxColumn mới
                 DataGridViewComboBoxColumn comboBoxColumn = new DataGridViewComboBoxColumn
                 {
                     Name = "Status",
                     HeaderText = "Status",
-                    DataPropertyName = "Status", // để tự động bind data
-                    FlatStyle = FlatStyle.Flat // nhìn combo box đẹp hơn
+                    DataPropertyName = "Status",
+                    FlatStyle = FlatStyle.Flat
                 };
 
                 comboBoxColumn.Items.AddRange(new object[]
@@ -144,10 +125,10 @@ namespace CoffeeCompanyMS.UC.Pages.Import
                     "Pending", "Delayed", "Delivered", "Confirmed"
                 });
 
-                // Thêm lại cột ComboBox vào đúng vị trí
                 dataGridViewImportOrder.Columns.Insert(statusColumnIndex, comboBoxColumn);
 
-                // Set giá trị cho từng dòng
+
+                // Set the selected values for each comboboxes
                 foreach (DataGridViewRow row in dataGridViewImportOrder.Rows)
                 {
                     if (row.Cells["Status"] is DataGridViewComboBoxCell cell && row.DataBoundItem != null)
@@ -240,9 +221,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
             {
                 var selectedRow = dataGridViewImportOrder.Rows[e.RowIndex];
                 string orderID = selectedRow.Cells["OrderID"].Value.ToString();
-                SubNavManager.ShowPage(new ImportOrderDetailsPage(orderID));
-
-
+                MoveToDetaisPage(orderID);
             }
         }
     }

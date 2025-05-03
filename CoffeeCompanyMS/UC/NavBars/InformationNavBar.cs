@@ -35,28 +35,28 @@ namespace CoffeeCompanyMS.UC
 
         private void InformationNavBar_Load(object sender, EventArgs e)
         {
-            SubNavManager.ShowPage(_suppliersPage);
+            NavigationManager.ShowPage(_suppliersPage);
         }
 
         private void btnSuppliers_Click(object sender, EventArgs e)
         {
             resetStyle();
             NavButtonStyleUtils.SetChosenButtonStyle(btnSuppliers);
-            SubNavManager.ShowPage(_suppliersPage);
+            NavigationManager.ShowPage(_suppliersPage);
         }
 
         private void btnIngredients_Click(object sender, EventArgs e)
         {
             resetStyle();
             NavButtonStyleUtils.SetChosenButtonStyle(btnIngredients);
-            SubNavManager.ShowPage(_ingredientsPage);
+            NavigationManager.ShowPage(_ingredientsPage);
         }
 
         private void btnLocations_Click(object sender, EventArgs e)
         {
             resetStyle();
             NavButtonStyleUtils.SetChosenButtonStyle(btnLocations);
-            SubNavManager.ShowPage(_locationsPage);
+            NavigationManager.ShowPage(_locationsPage);
         }
 
         private void resetStyle()

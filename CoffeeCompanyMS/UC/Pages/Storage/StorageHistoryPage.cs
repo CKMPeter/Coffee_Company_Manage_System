@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Google.Protobuf.Reflection.SourceCodeInfo.Types;
 
 namespace CoffeeCompanyMS.UC.Pages.Storage
 {
@@ -25,15 +26,8 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
 
             locationSelector1.SelectedItemChanged += (s, value) =>
             {
-                if (Guid.TryParse(value, out Guid locationId))
-                {
-                    selectedLocationID = value;
-                    LoadStorageHistory(locationId);
-                }
-                else
-                {
-                    MessageBox.Show("Location ID không hợp lệ.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                selectedLocationID = value;
+                LoadStorageHistory();
             };
         }
 
@@ -53,17 +47,10 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
             if (selectedLocationID == "") return;
             locationSelector1.SetSelectedLocationId(selectedLocationID);
 
-            if (Guid.TryParse(selectedLocationID, out Guid locationId))
-            {
-                LoadStorageHistory(locationId);
-            }
-            else
-            {
-                MessageBox.Show("Invalid Location ID.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            LoadStorageHistory();
         }
 
-        private void LoadStorageHistory(Guid locationId)
+        private void LoadStorageHistory()
         {
             try
             {
@@ -75,7 +62,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
-                        cmd.Parameters.Add("@LocationID", SqlDbType.UniqueIdentifier).Value = locationId;
+                        cmd.Parameters.AddWithValue("@LocationID", selectedLocationID);
 
                         using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
                         {

@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CoffeeCompanyMS.Models;
+using Google.Protobuf.WellKnownTypes;
 
 namespace CoffeeCompanyMS.UC.Pages.Storage
 {
@@ -27,17 +28,9 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
 
             locationSelector1.SelectedItemChanged += (s, value) =>
             {
-                if (Guid.TryParse(value, out Guid locationId))
-                {
-                    selectedLocationID = value;
-                    LoadIngredients(locationId);
-                }
-                else
-                {
-                    MessageBox.Show("Invalid Location ID.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                selectedLocationID = value;
+                LoadIngredients();
             };
-            dataGridViewBatchSummary.CellDoubleClick += dataGridViewBatchSummary_CellDoubleClick;
         }
 
         private void BatchSummaryPage_Load(object sender, EventArgs e)
@@ -56,17 +49,10 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
             if (selectedLocationID == String.Empty) return;
             locationSelector1.SetSelectedLocationId(selectedLocationID);
 
-            if (Guid.TryParse(selectedLocationID, out Guid locationId))
-            {
-                LoadIngredients(locationId);
-            }
-            else
-            {
-                MessageBox.Show("Invalid Location ID.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            LoadIngredients();
         }
 
-        private void LoadIngredients(Guid locationId)
+        private void LoadIngredients()
         {
             try
             {
@@ -78,7 +64,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
-                        cmd.Parameters.Add("@LocationID", SqlDbType.UniqueIdentifier).Value = locationId;
+                        cmd.Parameters.AddWithValue("@LocationID", selectedLocationID);
 
                         using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
                         {

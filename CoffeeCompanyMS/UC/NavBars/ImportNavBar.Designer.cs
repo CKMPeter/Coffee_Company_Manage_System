@@ -54,16 +54,16 @@
             // btnOrderDetails
             // 
             this.btnOrderDetails.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnOrderDetails.Enabled = false;
             this.btnOrderDetails.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOrderDetails.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnOrderDetails.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnOrderDetails.Location = new System.Drawing.Point(12, 118);
+            this.btnOrderDetails.Location = new System.Drawing.Point(12, 230);
             this.btnOrderDetails.Name = "btnOrderDetails";
             this.btnOrderDetails.Size = new System.Drawing.Size(183, 85);
             this.btnOrderDetails.TabIndex = 2;
             this.btnOrderDetails.Text = "Order Details";
             this.btnOrderDetails.UseVisualStyleBackColor = false;
-            this.btnOrderDetails.Click += new System.EventHandler(this.btnOrderDetails_Click);
             // 
             // btnRecurringOrders
             // 
@@ -71,7 +71,7 @@
             this.btnRecurringOrders.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRecurringOrders.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRecurringOrders.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnRecurringOrders.Location = new System.Drawing.Point(12, 220);
+            this.btnRecurringOrders.Location = new System.Drawing.Point(12, 122);
             this.btnRecurringOrders.Name = "btnRecurringOrders";
             this.btnRecurringOrders.Size = new System.Drawing.Size(183, 85);
             this.btnRecurringOrders.TabIndex = 4;

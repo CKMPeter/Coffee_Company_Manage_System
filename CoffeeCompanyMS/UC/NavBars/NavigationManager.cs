@@ -9,7 +9,7 @@ using CoffeeCompanyMS.UC.Pages.Storage;
 
 namespace CoffeeCompanyMS.Navigations
 {
-    public static class SubNavManager
+    public static class NavigationManager
     {
         private static Panel _subNavPanel;
         private static Panel _pagePanel;

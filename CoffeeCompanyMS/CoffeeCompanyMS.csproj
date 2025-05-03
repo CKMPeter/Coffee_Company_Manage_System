@@ -117,7 +117,7 @@
     <Compile Include="Forms\Authentication\UserSession.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="UC\NavBars\NavButtonStyleUtils.cs" />
-    <Compile Include="UC\NavBars\SubNavManager.cs" />
+    <Compile Include="UC\NavBars\NavigationManager.cs" />
     <Compile Include="UC\NavBars\CompanyOwnerNavBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -184,7 +184,9 @@
     <Compile Include="UC\Pages\Import\ImportOrderDetailsPage.Designer.cs">
       <DependentUpon>ImportOrderDetailsPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="UC\Pages\Import\ImportOrdersPage.cs" />
+    <Compile Include="UC\Pages\Import\ImportOrdersPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UC\Pages\Import\ImportOrdersPage.Designer.cs">
       <DependentUpon>ImportOrdersPage.cs</DependentUpon>
     </Compile>

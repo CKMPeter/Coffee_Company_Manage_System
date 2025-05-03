@@ -21,7 +21,7 @@ namespace CoffeeCompanyMS.UI
         public Main()
         {
             InitializeComponent();
-            SubNavManager.Initialize(this.subNavPanel, this.pageAreaPanel);
+            NavigationManager.Initialize(this.subNavPanel, this.pageAreaPanel);
             LoadMainNav();
         }
         

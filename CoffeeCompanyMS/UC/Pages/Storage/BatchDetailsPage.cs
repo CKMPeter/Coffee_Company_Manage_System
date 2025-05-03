@@ -35,15 +35,8 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
             this.selectedIngredientName = "";
             locationSelector1.SelectedItemChanged += (s, value) =>
             {
-                if (Guid.TryParse(value, out Guid locationId))
-                {
-                    selectedLocationID = value;
-                    LoadIngredients(locationId);
-                }
-                else
-                {
-                    MessageBox.Show("Invalid Location ID.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                selectedLocationID = value;
+                LoadIngredients();
             };
         }
 
@@ -73,25 +66,15 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
             if (selectedLocationID == "") return;
             locationSelector1.SetSelectedLocationId(selectedLocationID);
 
-            if (Guid.TryParse(selectedLocationID, out Guid locationId))
-            {
-                LoadIngredients(locationId);
-            }
-            else
-            {
-                MessageBox.Show("Invalid Location ID.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            LoadIngredients();
 
             if (selectedIngredientName == "") return;
-            int index = comboBoxIngredient.Items.IndexOf(selectedIngredientName);
-            if (index >= 0 && index < comboBoxIngredient.Items.Count)
-            {
-                comboBoxIngredient.SelectedIndex = index;
-            }
+            comboBoxIngredient.SelectedValue = selectedIngredientName;
+
             LoadBatchDetails(selectedIngredientName);
         }
 
-        public void LoadIngredients(Guid locationId)
+        public void LoadIngredients()
         {
             try
             {
@@ -103,7 +86,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
-                        cmd.Parameters.Add("@LocationID", SqlDbType.UniqueIdentifier).Value = locationId;
+                        cmd.Parameters.AddWithValue("@LocationID", selectedLocationID);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {

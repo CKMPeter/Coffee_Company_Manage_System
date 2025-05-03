@@ -25,36 +25,36 @@ namespace CoffeeCompanyMS.UC
 
         private void CompanyOwnerNavBar_Load(object sender, EventArgs e)
         {
-            SubNavManager.ShowSubNav(new StorageNavBar());
+            NavigationManager.ShowSubNav(new StorageNavBar());
         }
 
         private void pbStorage_Click(object sender, EventArgs e)
         {
             if (lbMode.Text == "STORAGE") return;
             lbMode.Text = "STORAGE";
-            SubNavManager.ShowSubNav(new StorageNavBar());
+            NavigationManager.ShowSubNav(new StorageNavBar());
         }
 
         private void pbImport_Click(object sender, EventArgs e)
         {
             if (lbMode.Text == "IMPORT") return;
             lbMode.Text = "IMPORT";
-            SubNavManager.ShowSubNav(new ImportNavBar());
+            NavigationManager.ShowSubNav(new ImportNavBar());
         }
 
         private void pbExport_Click(object sender, EventArgs e)
         {
             if (lbMode.Text == "EXPORT") return;
             lbMode.Text = "EXPORT";
-            SubNavManager.ShowSubNav(new ExportNavBar());
-            SubNavManager.ShowPage(new ExportOrdersPage());
+            NavigationManager.ShowSubNav(new ExportNavBar());
+            NavigationManager.ShowPage(new ExportOrdersPage());
         }
 
         private void pbInformation_Click(object sender, EventArgs e)
         {
             if (lbMode.Text == "INFORMATION") return;
             lbMode.Text = "INFORMATION";
-            SubNavManager.ShowSubNav(new InformationNavBar());
+            NavigationManager.ShowSubNav(new InformationNavBar());
         }
 
         private void pbLogOut_Click(object sender, EventArgs e)

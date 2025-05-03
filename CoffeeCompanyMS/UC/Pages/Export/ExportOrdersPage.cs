@@ -236,7 +236,7 @@ namespace CoffeeCompanyMS.UC.Pages.Export
             {
                 var selectedRow = dataGridViewExportOrder.Rows[e.RowIndex];
                 string orderID = selectedRow.Cells["OrderID"].Value.ToString();
-                SubNavManager.ShowPage(new ExportOrderDetailsPage(orderID));
+                NavigationManager.ShowPage(new ExportOrderDetailsPage(orderID));
             }
         }
     }
