@@ -94,6 +94,7 @@
             this.textBoxPassword.PasswordChar = '*';
             this.textBoxPassword.Size = new System.Drawing.Size(226, 34);
             this.textBoxPassword.TabIndex = 5;
+            this.textBoxPassword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxPassword_KeyDown);
             // 
             // comboBoxServers
             // 

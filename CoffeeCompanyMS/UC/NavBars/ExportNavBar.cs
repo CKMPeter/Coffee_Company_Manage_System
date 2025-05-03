@@ -34,6 +34,11 @@ namespace CoffeeCompanyMS.UC
             _recurringExportOrdersPage = new RecurringExportOrdersPage();
         }
 
+        private void ExportNavBar_Load(object sender, EventArgs e)
+        {
+            SubNavManager.ShowPage(new ExportOrdersPage());
+        }
+
         private void btnExportOrders_Click(object sender, EventArgs e)
         {
             resetStyle();

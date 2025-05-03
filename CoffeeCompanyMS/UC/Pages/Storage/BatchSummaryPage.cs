@@ -11,26 +11,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CoffeeCompanyMS.Models;
 
 namespace CoffeeCompanyMS.UC.Pages.Storage
 {
     public partial class BatchSummaryPage : UserControl
     {
-        public string selectedLocationId;
+        public string selectedLocationID;
+        public Action<string, string> MoveToDetaisPage {  get; set; }
 
         public BatchSummaryPage()
         {
             InitializeComponent();
+            selectedLocationID = "";
+
             locationSelector1.SelectedItemChanged += (s, value) =>
             {
                 if (Guid.TryParse(value, out Guid locationId))
                 {
-                    selectedLocationId = value; // lưu nếu cần
-                    LoadIngredients(locationId); // gọi hàm load ingredients luôn
+                    selectedLocationID = value;
+                    LoadIngredients(locationId);
                 }
                 else
                 {
-                    MessageBox.Show("Location ID không hợp lệ.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Invalid Location ID.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             };
             dataGridViewBatchSummary.CellDoubleClick += dataGridViewBatchSummary_CellDoubleClick;
@@ -38,41 +42,27 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
 
         private void BatchSummaryPage_Load(object sender, EventArgs e)
         {
-            LoadLocations();
-        }
+            locationSelector1.LoadLocations();
 
-        private void LoadLocations()
-        {
-            try
+            User user = UserSession.Instance.loggedInUser;
+
+            // Check whether the logged-in user is a Warehouse Manager
+            if (user != null && user.LocationID != String.Empty)
             {
-                using (SqlConnection conn = UserSession.Instance.connectionFactory.CreateConnection())
-                {
-                    conn.Open();
-
-                    
-                    string query = "SELECT LocationID, LocationName FROM dbo.GetLocations()";
-
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        using (SqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            List<string> locations = new List<string>();
-                            List<string> locationids = new List<string>();
-                            while (reader.Read())
-                            {
-                                locations.Add(reader["LocationName"].ToString());
-                                locationids.Add(reader["LocationID"].ToString());
-                            }
-
-                           
-                            locationSelector1.SetLocations(locations,locationids);
-                        }
-                    }
-                }
+                selectedLocationID = user.LocationID;
+                locationSelector1.Disable();
             }
-            catch (Exception ex)
+
+            if (selectedLocationID == String.Empty) return;
+            locationSelector1.SetSelectedLocationId(selectedLocationID);
+
+            if (Guid.TryParse(selectedLocationID, out Guid locationId))
             {
-                MessageBox.Show("Lỗi khi tải dữ liệu Location: " + ex.Message);
+                LoadIngredients(locationId);
+            }
+            else
+            {
+                MessageBox.Show("Invalid Location ID.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -88,7 +78,6 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
-                        // THAY ĐOẠN NÀY
                         cmd.Parameters.Add("@LocationID", SqlDbType.UniqueIdentifier).Value = locationId;
 
                         using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
@@ -97,13 +86,21 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
                             adapter.Fill(dt);
 
                             dataGridViewBatchSummary.DataSource = dt;
+
+                            if (dataGridViewBatchSummary.Columns.Count > 0)
+                            {
+                                dataGridViewBatchSummary.Columns["IngredientName"].HeaderText = "Ingredient Name";
+                                dataGridViewBatchSummary.Columns["NumberOfBatches"].HeaderText = "Number Of Batches";
+                                dataGridViewBatchSummary.Columns["TotalQuantity"].HeaderText = "Total Quantity";
+                                dataGridViewBatchSummary.Columns["ClosestExpirationDate"].HeaderText = "Closest Expiration Date";
+                            }
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi tải danh sách nguyên liệu: " + ex.Message);
+                MessageBox.Show("Error getting Ingredients: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -113,11 +110,8 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
             {
                 var selectedRow = dataGridViewBatchSummary.Rows[e.RowIndex];
                 string ingredientName = selectedRow.Cells["IngredientName"].Value.ToString();
-                SubNavManager.ShowPage(new BatchDetailsPage(selectedLocationId, ingredientName));
-                
-                
+                MoveToDetaisPage(selectedLocationID, ingredientName);
             }
-
         }
     }
 }

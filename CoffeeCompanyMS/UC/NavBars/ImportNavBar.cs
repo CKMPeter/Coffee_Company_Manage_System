@@ -33,6 +33,11 @@ namespace CoffeeCompanyMS.UC
             _recurringImportOrdersPage = new RecurringImportOrdersPage();
         }
 
+        private void ImportNavBar_Load(object sender, EventArgs e)
+        {
+            SubNavManager.ShowPage(new ImportOrdersPage());
+        }
+
         private void btnImportOrders_Click(object sender, EventArgs e)
         {
             resetStyle();

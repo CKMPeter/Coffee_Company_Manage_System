@@ -28,13 +28,32 @@ namespace CoffeeCompanyMS.UI.Authentication
         public Login()
         {
             InitializeComponent();
-            
+
+            mainServerName = "";
             comboBoxServers.Items.AddRange(serversMap.Keys.ToArray());
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            bool result = UserSession.Instance.Start(mainServerName, textBoxGmail.Text, textBoxPassword.Text);
+            handleLogin();
+        }
+
+        private void handleLogin()
+        {
+            if (comboBoxServers.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please choose the server name", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            string email = textBoxGmail.Text, password = textBoxPassword.Text;
+            if (email == "" || password == "")
+            {
+                MessageBox.Show("Please fill all text boxes", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            bool result = UserSession.Instance.Start(mainServerName, email, password);
             if (!result) return;
 
             comboBoxServers.SelectedIndex = 0;
@@ -57,6 +76,15 @@ namespace CoffeeCompanyMS.UI.Authentication
             {
                 string selectedKey = comboBoxServers.SelectedItem.ToString();
                 mainServerName = serversMap[selectedKey];
+            }
+        }
+
+        private void textBoxPassword_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.Handled = true;
+                handleLogin();
             }
         }
     }

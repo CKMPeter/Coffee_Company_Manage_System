@@ -27,7 +27,6 @@ namespace CoffeeCompanyMS
         private void navBar_Load(object sender, EventArgs e)
         {
             SubNavManager.ShowSubNav(new StorageNavBar());
-            SubNavManager.ShowPage(new BatchSummaryPage());
         }
 
         private void pbStorage_Click(object sender, EventArgs e)
@@ -35,7 +34,6 @@ namespace CoffeeCompanyMS
             if (lbMode.Text == "STORAGE") return;
             lbMode.Text = "STORAGE";
             SubNavManager.ShowSubNav(new StorageNavBar());
-            SubNavManager.ShowPage(new BatchSummaryPage());
         }
 
         private void pbImport_Click(object sender, EventArgs e)
@@ -43,7 +41,6 @@ namespace CoffeeCompanyMS
             if (lbMode.Text == "IMPORT") return;
             lbMode.Text = "IMPORT";
             SubNavManager.ShowSubNav(new ImportNavBar());
-            SubNavManager.ShowPage(new ImportOrdersPage());
         }
 
         private void pbExport_Click(object sender, EventArgs e)
@@ -51,13 +48,12 @@ namespace CoffeeCompanyMS
             if (lbMode.Text == "EXPORT") return;
             lbMode.Text = "EXPORT";
             SubNavManager.ShowSubNav(new ExportNavBar());
-            SubNavManager.ShowPage(new ExportOrdersPage());
         }
 
         private void pbLogOut_Click(object sender, EventArgs e)
         {
             UserSession.Instance.End();
-            Program.mainForm.Close();
+            Program.mainForm.Hide();
             Program.loginForm.Show();
         }
     }

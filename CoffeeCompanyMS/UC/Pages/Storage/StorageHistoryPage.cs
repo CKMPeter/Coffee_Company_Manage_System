@@ -1,4 +1,5 @@
 ﻿using CoffeeCompanyMS.Forms.Authentication;
+using CoffeeCompanyMS.Models;
 using CoffeeCompanyMS.UI;
 using System;
 using System.Collections.Generic;
@@ -15,16 +16,18 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
 {
     public partial class StorageHistoryPage : UserControl
     {
-        private string selectedLocationId;
+        private string selectedLocationID;
 
         public StorageHistoryPage()
         {
             InitializeComponent();
+            selectedLocationID = "";
+
             locationSelector1.SelectedItemChanged += (s, value) =>
             {
                 if (Guid.TryParse(value, out Guid locationId))
                 {
-                    selectedLocationId = value;
+                    selectedLocationID = value;
                     LoadStorageHistory(locationId);
                 }
                 else
@@ -36,39 +39,27 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
 
         private void StorageHistoryPage_Load(object sender, EventArgs e)
         {
-            LoadLocations();
-        }
+            locationSelector1.LoadLocations();
 
-        private void LoadLocations()
-        {
-            try
+            User user = UserSession.Instance.loggedInUser;
+
+            // Check whether the logged-in user is a Warehouse Manager
+            if (user != null && user.LocationID != String.Empty)
             {
-                using (SqlConnection conn = UserSession.Instance.connectionFactory.CreateConnection())
-                {
-                    conn.Open();
-                    string query = "SELECT LocationID, LocationName FROM dbo.GetLocations()";
-
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        using (SqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            List<string> locations = new List<string>();
-                            List<string> locationIds = new List<string>();
-
-                            while (reader.Read())
-                            {
-                                locations.Add(reader["LocationName"].ToString());
-                                locationIds.Add(reader["LocationID"].ToString());
-                            }
-
-                            locationSelector1.SetLocations(locations, locationIds);
-                        }
-                    }
-                }
+                selectedLocationID = user.LocationID;
+                locationSelector1.Disable();
             }
-            catch (Exception ex)
+
+            if (selectedLocationID == "") return;
+            locationSelector1.SetSelectedLocationId(selectedLocationID);
+
+            if (Guid.TryParse(selectedLocationID, out Guid locationId))
             {
-                MessageBox.Show("Lỗi khi tải dữ liệu Location: " + ex.Message);
+                LoadStorageHistory(locationId);
+            }
+            else
+            {
+                MessageBox.Show("Invalid Location ID.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -93,17 +84,14 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
 
                             dataGridViewStorageHistory.DataSource = dataTable;
 
-                            dataGridViewStorageHistory.Columns["Date"].HeaderText = "Date";
-                            dataGridViewStorageHistory.Columns["EventType"].HeaderText = "EventType";
-                            dataGridViewStorageHistory.Columns["Ingredient"].HeaderText = "Ingredient";
-                            dataGridViewStorageHistory.Columns["Quantity"].HeaderText = "Quantity";
+                            dataGridViewStorageHistory.Columns["EventType"].HeaderText = "Event Type";
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi tải lịch sử kho: " + ex.Message);
+                MessageBox.Show("Error loading Storage History: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

@@ -33,6 +33,11 @@ namespace CoffeeCompanyMS.UC
             _locationsPage = new LocationsPage();
         }
 
+        private void InformationNavBar_Load(object sender, EventArgs e)
+        {
+            SubNavManager.ShowPage(_suppliersPage);
+        }
+
         private void btnSuppliers_Click(object sender, EventArgs e)
         {
             resetStyle();

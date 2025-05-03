@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CoffeeCompanyMS.UC;
+using CoffeeCompanyMS.UC.Pages.Storage;
 
 namespace CoffeeCompanyMS.Navigations
 {
@@ -41,5 +43,4 @@ namespace CoffeeCompanyMS.Navigations
             _pagePanel.Controls.Add(page);
         }
     }
-
 }

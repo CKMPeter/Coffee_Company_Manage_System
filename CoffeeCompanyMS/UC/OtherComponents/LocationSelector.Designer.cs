@@ -44,10 +44,11 @@
             // 
             // cbbLocation
             // 
+            this.cbbLocation.Font = new System.Drawing.Font("Microsoft Tai Le", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbbLocation.FormattingEnabled = true;
-            this.cbbLocation.Location = new System.Drawing.Point(144, 26);
+            this.cbbLocation.Location = new System.Drawing.Point(144, 17);
             this.cbbLocation.Name = "cbbLocation";
-            this.cbbLocation.Size = new System.Drawing.Size(241, 24);
+            this.cbbLocation.Size = new System.Drawing.Size(241, 30);
             this.cbbLocation.TabIndex = 1;
             this.cbbLocation.SelectedIndexChanged += new System.EventHandler(this.cbbLocation_SelectedIndexChanged);
             // 
@@ -60,7 +61,6 @@
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "LocationSelector";
             this.Size = new System.Drawing.Size(411, 63);
-            this.Load += new System.EventHandler(this.LocationSelector_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

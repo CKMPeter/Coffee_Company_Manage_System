@@ -102,6 +102,7 @@
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "ExportNavBar";
             this.Size = new System.Drawing.Size(207, 529);
+            this.Load += new System.EventHandler(this.ExportNavBar_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pbReload)).EndInit();
             this.ResumeLayout(false);
 

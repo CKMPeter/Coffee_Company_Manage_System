@@ -15,7 +15,7 @@ namespace CoffeeCompanyMS.UC
 {
     public partial class StorageNavBar : UserControl
     {
-        private static Button[] _buttons;
+        public static Button[] buttons;
         private static BatchSummaryPage _batchSummaryPage;
         private static BatchDetailsPage _batchDetailsPage;
         private static StorageHistoryPage _storageHistoryPage;
@@ -23,7 +23,8 @@ namespace CoffeeCompanyMS.UC
         public StorageNavBar()
         {
             InitializeComponent();
-            _buttons = new Button[] { 
+
+            buttons = new Button[] { 
                 btnBatchSummary, 
                 btnBatchDetails, 
                 btnStorageHistory 
@@ -31,6 +32,11 @@ namespace CoffeeCompanyMS.UC
             _batchSummaryPage = new BatchSummaryPage();
             _batchDetailsPage = new BatchDetailsPage();
             _storageHistoryPage = new StorageHistoryPage();
+
+
+            _batchSummaryPage.MoveToDetaisPage = DoubleClick_ToDetailsPage;
+
+            SubNavManager.ShowPage(_batchSummaryPage);
         }
 
         private void btnBatchSummary_Click(object sender, EventArgs e)
@@ -56,7 +62,7 @@ namespace CoffeeCompanyMS.UC
 
         private static void resetStyle()
         {
-            NavButtonStyleUtils.ResetButtonsStyle(_buttons);
+            NavButtonStyleUtils.ResetButtonsStyle(buttons);
         }
 
         private void pbReload_Click(object sender, EventArgs e)
@@ -66,16 +72,11 @@ namespace CoffeeCompanyMS.UC
             _storageHistoryPage = new StorageHistoryPage();
         }
 
-        public static void BatchSummaryDoubleClick(string ingredientName)
+        private void DoubleClick_ToDetailsPage(string locationID, string ingredientName)
         {
-            
-            SubNavManager.ShowPage(_batchDetailsPage);
-
-            // Sau đó set dữ liệu Ingredient vào BatchDetailsPage
-            if (Guid.TryParse(_batchSummaryPage.selectedLocationId, out Guid locationId))
-            {
-                _batchDetailsPage.SetLocationAndIngredient(locationId, ingredientName);
-            }
+            resetStyle();
+            NavButtonStyleUtils.SetChosenButtonStyle(btnBatchDetails);
+            SubNavManager.ShowPage(new BatchDetailsPage(locationID, ingredientName));
         }
     }
 }
