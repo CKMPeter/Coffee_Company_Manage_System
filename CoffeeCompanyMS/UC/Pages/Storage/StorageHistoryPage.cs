@@ -27,7 +27,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
             locationSelector1.SelectedItemChanged += (s, value) =>
             {
                 selectedLocationID = value;
-                LoadStorageHistory();
+                LoadStorageHistory(selectedLocationID);
             };
         }
 
@@ -47,10 +47,10 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
             if (selectedLocationID == "") return;
             locationSelector1.SetSelectedLocationId(selectedLocationID);
 
-            LoadStorageHistory();
+            LoadStorageHistory(selectedLocationID);
         }
 
-        private void LoadStorageHistory()
+        private void LoadStorageHistory(string locationID)
         {
             try
             {
@@ -58,11 +58,10 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
                 {
                     conn.Open();
 
-                    string query = "EXEC GetIngredientEvents @LocationID";
-
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    using (SqlCommand cmd = new SqlCommand("GetIngredientEvents", conn))
                     {
-                        cmd.Parameters.AddWithValue("@LocationID", selectedLocationID);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@LocationID", locationID);
 
                         using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
                         {

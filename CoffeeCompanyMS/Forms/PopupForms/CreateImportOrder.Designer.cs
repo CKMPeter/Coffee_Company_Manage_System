@@ -1,6 +1,6 @@
 ﻿namespace CoffeeCompanyMS.UI.Import
 {
-    partial class CreateImportOrders
+    partial class CreateImportOrder
     {
         /// <summary>
         /// Required designer variable.
@@ -28,6 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -136,6 +139,15 @@
             // 
             // dataGridViewIngredients
             // 
+            this.dataGridViewIngredients.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Tai Le", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewIngredients.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewIngredients.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewIngredients.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.IngredientColumn,
@@ -143,8 +155,24 @@
             this.UnitPriceColumn,
             this.QuantityColumn,
             this.ActionColumn});
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Tai Le", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewIngredients.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewIngredients.Location = new System.Drawing.Point(16, 234);
             this.dataGridViewIngredients.Name = "dataGridViewIngredients";
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Tai Le", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewIngredients.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewIngredients.RowHeadersWidth = 51;
             this.dataGridViewIngredients.RowTemplate.Height = 24;
             this.dataGridViewIngredients.Size = new System.Drawing.Size(756, 150);
@@ -155,7 +183,7 @@
             this.IngredientColumn.HeaderText = "Ingredient Name";
             this.IngredientColumn.MinimumWidth = 6;
             this.IngredientColumn.Name = "IngredientColumn";
-            this.IngredientColumn.Width = 125;
+            this.IngredientColumn.Width = 137;
             // 
             // UnitColumn
             // 
@@ -163,7 +191,7 @@
             this.UnitColumn.MinimumWidth = 6;
             this.UnitColumn.Name = "UnitColumn";
             this.UnitColumn.ReadOnly = true;
-            this.UnitColumn.Width = 125;
+            this.UnitColumn.Width = 73;
             // 
             // UnitPriceColumn
             // 
@@ -171,21 +199,21 @@
             this.UnitPriceColumn.MinimumWidth = 6;
             this.UnitPriceColumn.Name = "UnitPriceColumn";
             this.UnitPriceColumn.ReadOnly = true;
-            this.UnitPriceColumn.Width = 125;
+            this.UnitPriceColumn.Width = 112;
             // 
             // QuantityColumn
             // 
             this.QuantityColumn.HeaderText = "Quantity";
             this.QuantityColumn.MinimumWidth = 6;
             this.QuantityColumn.Name = "QuantityColumn";
-            this.QuantityColumn.Width = 125;
+            this.QuantityColumn.Width = 109;
             // 
             // ActionColumn
             // 
             this.ActionColumn.HeaderText = "Action";
             this.ActionColumn.MinimumWidth = 6;
             this.ActionColumn.Name = "ActionColumn";
-            this.ActionColumn.Width = 125;
+            this.ActionColumn.Width = 68;
             // 
             // label4
             // 
@@ -197,7 +225,7 @@
             this.label4.TabIndex = 11;
             this.label4.Text = "Destination";
             // 
-            // CreateImportOrders
+            // CreateImportOrder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -213,7 +241,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.locationSelector1);
-            this.Name = "CreateImportOrders";
+            this.Name = "CreateImportOrder";
             this.Text = "CreateImportOrders";
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewIngredients)).EndInit();

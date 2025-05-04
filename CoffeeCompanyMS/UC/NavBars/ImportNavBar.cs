@@ -28,6 +28,10 @@ namespace CoffeeCompanyMS.UC
                 btnOrderDetails,
                 btnRecurringOrders
             };
+        }
+
+        private void LoadPages()
+        {
             _importOrderPage = new ImportOrdersPage();
             _recurringImportOrdersPage = new RecurringImportOrdersPage();
 

@@ -10,9 +10,13 @@ using System.Windows.Forms;
 
 namespace CoffeeCompanyMS.UI.Import
 {
-    public partial class CreateImportOrders : Form
+    public partial class CreateImportOrder : Form
     {
-        public CreateImportOrders()
+        public bool isRecurrence;
+        public string deliveryDate;
+        public DataTable ingredientTable;
+
+        public CreateImportOrder()
         {
             InitializeComponent();
         }

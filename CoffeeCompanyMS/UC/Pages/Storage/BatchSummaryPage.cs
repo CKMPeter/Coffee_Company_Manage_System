@@ -29,7 +29,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
             locationSelector1.SelectedItemChanged += (s, value) =>
             {
                 selectedLocationID = value;
-                LoadIngredients();
+                LoadIngredients(selectedLocationID);
             };
         }
 
@@ -49,10 +49,10 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
             if (selectedLocationID == String.Empty) return;
             locationSelector1.SetSelectedLocationId(selectedLocationID);
 
-            LoadIngredients();
+            LoadIngredients(selectedLocationID);
         }
 
-        private void LoadIngredients()
+        private void LoadIngredients(string locationID)
         {
             try
             {
@@ -62,9 +62,9 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
 
                     using (SqlCommand cmd = new SqlCommand("GetIngredients", conn))
                     {
-                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.CommandType = CommandType.StoredProcedure;
 
-                        cmd.Parameters.AddWithValue("@LocationID", selectedLocationID);
+                        cmd.Parameters.AddWithValue("@LocationID", locationID);
 
                         using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
                         {

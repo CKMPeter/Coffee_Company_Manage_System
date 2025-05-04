@@ -30,7 +30,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
             locationSelector1.SelectedItemChanged += (s, value) =>
             {
                 selectedLocationID = value;
-                LoadImportOrders();
+                LoadImportOrders(selectedLocationID);
             };
         }
 
@@ -50,19 +50,11 @@ namespace CoffeeCompanyMS.UC.Pages.Import
             if (selectedLocationID == String.Empty) return;
             locationSelector1.SetSelectedLocationId(selectedLocationID);
 
-            LoadImportOrders();
+            LoadImportOrders(selectedLocationID);
         }
 
-        private void LoadImportOrders()
+        private void LoadImportOrders(string locationID)
         {
-            Guid locationId;
-
-            if (!Guid.TryParse(selectedLocationID, out locationId))
-            {
-                MessageBox.Show("Invalid Location ID.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
             try
             {
                 using (SqlConnection connection = UserSession.Instance.connectionFactory.CreateConnection())
@@ -73,7 +65,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
 
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@LocationID", locationId);
+                        command.Parameters.AddWithValue("@LocationID", locationID);
 
                         using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                         {
@@ -169,11 +161,9 @@ namespace CoffeeCompanyMS.UC.Pages.Import
 
                         if (orderIdObj != null && newStatusObj != null)
                         {
-                            if (Guid.TryParse(orderIdObj.ToString(), out Guid orderId))
-                            {
-                                string newStatus = newStatusObj.ToString();
-                                UpdateOrderStatus(orderId, newStatus);
-                            }
+                            string orderId = orderIdObj.ToString();
+                            string newStatus = newStatusObj.ToString();
+                            UpdateOrderStatus(orderId, newStatus);
                         }
                     }
                 }
@@ -184,8 +174,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
             }
         }
 
-        // Hàm cập nhật trạng thái Import Order
-        private void UpdateOrderStatus(Guid orderId, string newStatus)
+        private void UpdateOrderStatus(string orderId, string newStatus)
         {
             try
             {

@@ -15,27 +15,27 @@ namespace CoffeeCompanyMS.UC.Pages.Import
 {
     public partial class ImportOrderDetailsPage : UserControl
     {
-        private string orderID;
+        private string selectedOrderID;
 
         public ImportOrderDetailsPage()
         {
             InitializeComponent();
-            orderID = string.Empty;
+            selectedOrderID = string.Empty;
         }
 
         public ImportOrderDetailsPage(string orderID)
         {
             InitializeComponent();
-            this.orderID = orderID;
+            this.selectedOrderID = orderID;
         }
 
         private void ImportOrderDetailsPage_Load(object sender, EventArgs e)
         {
-            LoadOrderSummary();
-            LoadOrderItems();
+            LoadOrderSummary(selectedOrderID);
+            LoadOrderItems(selectedOrderID);
         }
 
-        private void LoadOrderSummary()
+        private void LoadOrderSummary(string orderID)
         {
             try
             {
@@ -66,7 +66,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
             }
         }
 
-        private void LoadOrderItems()
+        private void LoadOrderItems(string orderID)
         {
             try
             {

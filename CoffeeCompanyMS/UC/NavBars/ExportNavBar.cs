@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using CoffeeCompanyMS.Navigations;
 using CoffeeCompanyMS.UC.NavBars;
 using CoffeeCompanyMS.UC.Pages.Export;
+using CoffeeCompanyMS.UC.Pages.Import;
 using CoffeeCompanyMS.UC.Pages.Storage;
 
 namespace CoffeeCompanyMS.UC
@@ -29,14 +30,21 @@ namespace CoffeeCompanyMS.UC
                 btnOrderDetails,
                 btnRecurringOrders
             };
+        }
+
+        private void LoadPages()
+        {
             _exportOrderPages = new ExportOrdersPage();
-            _exportOrderDetailsPage = new ExportOrderDetailsPage();
             _recurringExportOrdersPage = new RecurringExportOrdersPage();
+
+            _exportOrderPages.MoveToDetaisPage += DoubleClick_ToDetailsPage;
+            _recurringExportOrdersPage.MoveToDetaisPage += DoubleClick_ToDetailsPage;
         }
 
         private void ExportNavBar_Load(object sender, EventArgs e)
         {
-            NavigationManager.ShowPage(new ExportOrdersPage());
+            LoadPages();
+            NavigationManager.ShowPage(_exportOrderPages);
         }
 
         private void btnExportOrders_Click(object sender, EventArgs e)
@@ -44,13 +52,6 @@ namespace CoffeeCompanyMS.UC
             resetStyle();
             NavButtonStyleUtils.SetChosenButtonStyle(btnExportOrders);
             NavigationManager.ShowPage(_exportOrderPages);
-        }
-
-        private void btnOrderDetails_Click(object sender, EventArgs e)
-        {
-            resetStyle();
-            NavButtonStyleUtils.SetChosenButtonStyle(btnOrderDetails);
-            NavigationManager.ShowPage(_exportOrderDetailsPage);
         }
 
         private void btnRecurringOrders_Click(object sender, EventArgs e)
@@ -67,9 +68,14 @@ namespace CoffeeCompanyMS.UC
 
         private void pbReload_Click(object sender, EventArgs e)
         {
-            _exportOrderPages = new ExportOrdersPage();
-            _exportOrderDetailsPage = new ExportOrderDetailsPage();
-            _recurringExportOrdersPage = new RecurringExportOrdersPage();
+            LoadPages();
+        }
+
+        private void DoubleClick_ToDetailsPage(string orderID)
+        {
+            resetStyle();
+            NavButtonStyleUtils.SetChosenButtonStyle(btnOrderDetails);
+            NavigationManager.ShowPage(new ExportOrderDetailsPage(orderID));
         }
     }
 }

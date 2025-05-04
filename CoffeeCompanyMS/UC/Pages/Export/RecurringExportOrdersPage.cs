@@ -1,4 +1,5 @@
 ﻿using CoffeeCompanyMS.Forms.Authentication;
+using CoffeeCompanyMS.Models;
 using CoffeeCompanyMS.UI;
 using CoffeeCompanyMS.UI.Export;
 using System;
@@ -11,23 +12,40 @@ namespace CoffeeCompanyMS.UC.Pages.Export
 {
     public partial class RecurringExportOrdersPage : UserControl
     {
-        private string selectedLocationID;  // Keep it as string
+        private string selectedLocationID;
+        public Action<string> MoveToDetaisPage { get; set; }
 
         public RecurringExportOrdersPage()
         {
             InitializeComponent();
+            selectedLocationID = String.Empty;
+
+            locationSelector1.SelectedItemChanged += (s, value) =>
+            {
+                selectedLocationID = value;
+                LoadRecurringExportOrders(selectedLocationID);
+            };
         }
 
         private void RecurringExportOrdersPage_Load(object sender, EventArgs e)
         {
-            // Call method to load locations and recurring export orders when the page loads
-            LoadLocations();
+            locationSelector1.LoadLocations();
 
-            // Subscribe to the SelectedItemChanged event from the LocationSelector
-            locationSelector1.SelectedItemChanged += LocationSelector1_SelectedItemChanged;
+            User user = UserSession.Instance.loggedInUser;
+
+            // Check whether the logged-in user is a Warehouse Manager
+            if (user != null && user.LocationID != String.Empty)
+            {
+                selectedLocationID = user.LocationID;
+                locationSelector1.Disable();
+            }
+
+            if (selectedLocationID == String.Empty) return;
+            locationSelector1.SetSelectedLocationId(selectedLocationID);
+
+            LoadRecurringExportOrders(selectedLocationID);
         }
 
-        // Method to load recurring export orders based on selected LocationID
         private void LoadRecurringExportOrders(string locationID)
         {
             try
@@ -36,11 +54,10 @@ namespace CoffeeCompanyMS.UC.Pages.Export
                 {
                     connection.Open();
 
-                    // SQL query to call the function GetActiveRecurringExportOrders, filtering by LocationID
                     string query = "SELECT dbo.GetActiveRecurringExportOrders(@LocationID)";
 
                     SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@LocationID", locationID);  // Using string
+                    command.Parameters.AddWithValue("@LocationID", locationID);
 
                     SqlDataAdapter adapter = new SqlDataAdapter(command);
                     DataTable dt = new DataTable();
@@ -48,9 +65,16 @@ namespace CoffeeCompanyMS.UC.Pages.Export
 
                     // Bind the data to the DataGridView
                     dataGridViewRecurring.DataSource = dt;
-                    dataGridViewRecurring.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                    dataGridViewRecurring.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                    dataGridViewRecurring.ReadOnly = true;
+
+                    if (dataGridViewRecurring.Columns.Count > 0)
+                    {
+                        dataGridViewRecurring.Columns["RecurrenceID"].HeaderText = "Recurrence ID";
+                        dataGridViewRecurring.Columns["DestinationName"].HeaderText = "Destination";
+                        dataGridViewRecurring.Columns["RecurrencePeriod"].HeaderText = "Recurrence Period (days)";
+                        dataGridViewRecurring.Columns["LatestOrderID"].HeaderText = "Latest Order ID";
+                        dataGridViewRecurring.Columns["LatestOrderDate"].HeaderText = "Latest Order Date";
+                        dataGridViewRecurring.Columns["EstimatedNextOrderDate"].HeaderText = "Estimated Next Order Date";
+                    }
                 }
             }
             catch (Exception ex)
@@ -59,65 +83,20 @@ namespace CoffeeCompanyMS.UC.Pages.Export
             }
         }
 
-        // Method to load locations from database into a dropdown or list
-        private void LoadLocations()
-        {
-            try
-            {
-                using (SqlConnection conn = UserSession.Instance.connectionFactory.CreateConnection())
-                {
-                    conn.Open();
-
-                    string query = "SELECT LocationID, LocationName FROM dbo.GetLocations()";
-
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        using (SqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            List<string> locations = new List<string>();
-                            List<string> locationIds = new List<string>();  // Keep as string
-
-                            while (reader.Read())
-                            {
-                                locations.Add(reader["LocationName"].ToString());
-                                locationIds.Add(reader["LocationID"].ToString());  // Keep as string
-                            }
-
-                            // Assuming locationSelector1 is a ComboBox or ListBox that can display the Location names
-                            locationSelector1.SetLocations(locations, locationIds);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error loading locations: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        // Event handler for when a location is selected from the location selector
-        private void LocationSelector1_SelectedItemChanged(object sender, string locationID)
-        {
-            try
-            {
-                // Store selected LocationID
-                selectedLocationID = locationID;
-
-                // Reload the recurring export orders based on the selected LocationID
-                LoadRecurringExportOrders(selectedLocationID);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error when selecting location: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        // Button click event to create a new export order
         private void btnCreate_Click(object sender, EventArgs e)
         {
-            // This opens a dialog to create a new export order (implementation not shown)
             CreateExportOrder createExportOrder = new CreateExportOrder();
             createExportOrder.ShowDialog();
+        }
+
+        private void dataGridViewRecurring_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                var selectedRow = dataGridViewRecurring.Rows[e.RowIndex];
+                string orderID = selectedRow.Cells["LatestOrderID"].Value.ToString();
+                MoveToDetaisPage(orderID);
+            }
         }
     }
 }

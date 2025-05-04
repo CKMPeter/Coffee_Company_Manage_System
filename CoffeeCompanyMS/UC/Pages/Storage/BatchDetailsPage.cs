@@ -36,7 +36,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
             locationSelector1.SelectedItemChanged += (s, value) =>
             {
                 selectedLocationID = value;
-                LoadIngredients();
+                LoadIngredients(selectedLocationID);
             };
         }
 
@@ -66,7 +66,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
             if (selectedLocationID == "") return;
             locationSelector1.SetSelectedLocationId(selectedLocationID);
 
-            LoadIngredients();
+            LoadIngredients(selectedLocationID);
 
             if (selectedIngredientName == "") return;
             comboBoxIngredient.SelectedValue = selectedIngredientName;
@@ -74,7 +74,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
             LoadBatchDetails(selectedIngredientName);
         }
 
-        public void LoadIngredients()
+        public void LoadIngredients(string locationID)
         {
             try
             {
@@ -86,7 +86,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
-                        cmd.Parameters.AddWithValue("@LocationID", selectedLocationID);
+                        cmd.Parameters.AddWithValue("@LocationID", locationID);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {

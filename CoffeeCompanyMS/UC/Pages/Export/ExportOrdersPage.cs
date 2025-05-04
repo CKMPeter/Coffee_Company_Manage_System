@@ -12,69 +12,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Google.Protobuf.Reflection.SourceCodeInfo.Types;
 
 namespace CoffeeCompanyMS.UC.Pages.Export
 {
     public partial class ExportOrdersPage : UserControl
     {
         private string selectedLocationId;
+        public Action<string> MoveToDetaisPage { get; set; }
 
         public ExportOrdersPage()
         {
             InitializeComponent();
+            selectedLocationId = "";
+
             locationSelector1.SelectedItemChanged += (s, value) =>
             {
-                if (Guid.TryParse(value, out Guid locationId))
-                {
-                    selectedLocationId = value;
-                    LoadExportOrders(locationId);
-                }
-                else
-                {
-                    MessageBox.Show("Location ID không hợp lệ.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                selectedLocationId = value;
+                LoadExportOrders();
             };       
         }
 
         private void ExportOrdersPage_Load(object sender, EventArgs e)
         {
-            LoadLocations();
-        }
-        private void LoadLocations()
-        {
-            try
-            {
-                using (SqlConnection conn = UserSession.Instance.connectionFactory.CreateConnection())
-                {
-                    conn.Open();
-
-                    string query = "SELECT LocationID, LocationName FROM dbo.GetLocations()";
-
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        using (SqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            List<string> locations = new List<string>();
-                            List<string> locationIds = new List<string>();
-
-                            while (reader.Read())
-                            {
-                                locations.Add(reader["LocationName"].ToString());
-                                locationIds.Add(reader["LocationID"].ToString());
-                            }
-
-                            locationSelector1.SetLocations(locations, locationIds);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi khi tải dữ liệu Location: " + ex.Message);
-            }
+            locationSelector1.LoadLocations();
         }
 
-        private void LoadExportOrders(Guid locationId)
+        private void LoadExportOrders()
         {
             try
             {
@@ -86,7 +50,7 @@ namespace CoffeeCompanyMS.UC.Pages.Export
 
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@LocationID", locationId);
+                        command.Parameters.AddWithValue("@LocationID", selectedLocationId);
 
                         using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                         {
@@ -95,18 +59,15 @@ namespace CoffeeCompanyMS.UC.Pages.Export
 
                             dataGridViewExportOrder.DataSource = dataTable;
 
-                            // Đổi tên các cột
                             if (dataGridViewExportOrder.Columns.Count > 0)
                             {
                                 dataGridViewExportOrder.Columns["OrderID"].HeaderText = "Order ID";
                                 dataGridViewExportOrder.Columns["RecurrenceID"].HeaderText = "Recurrence ID";
                                 dataGridViewExportOrder.Columns["DestinationName"].HeaderText = "Destination Name";
                                 dataGridViewExportOrder.Columns["OrderDate"].HeaderText = "Order Date";
-                                dataGridViewExportOrder.Columns["EstimatedDeliveryDate"].HeaderText = "Estimated Delivery";
-                                dataGridViewExportOrder.Columns["ActualDeliveryDate"].HeaderText = "Actual Delivery";
-                                dataGridViewExportOrder.Columns["Status"].HeaderText = "Status";
+                                dataGridViewExportOrder.Columns["EstimatedDeliveryDate"].HeaderText = "Estimated Delivery Date";
+                                dataGridViewExportOrder.Columns["ActualDeliveryDate"].HeaderText = "Actual Delivery Date";
 
-                                // Thay thế Status thành ComboBox
                                 ReplaceStatusColumnWithComboBox();
                             }
                         }
@@ -115,25 +76,24 @@ namespace CoffeeCompanyMS.UC.Pages.Export
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error loading import orders: " + ex.Message);
+                MessageBox.Show("Error loading export orders: " + ex.Message);
             }
         }
         private void ReplaceStatusColumnWithComboBox()
         {
             try
             {
+                // Remove current Status column with the combobox column
                 int statusColumnIndex = dataGridViewExportOrder.Columns["Status"].Index;
 
-                // Xóa cột Text cũ
                 dataGridViewExportOrder.Columns.Remove("Status");
 
-                // Tạo ComboBoxColumn mới
                 DataGridViewComboBoxColumn comboBoxColumn = new DataGridViewComboBoxColumn
                 {
                     Name = "Status",
                     HeaderText = "Status",
-                    DataPropertyName = "Status", // để tự động bind data
-                    FlatStyle = FlatStyle.Flat // nhìn combo box đẹp hơn
+                    DataPropertyName = "Status",
+                    FlatStyle = FlatStyle.Flat
                 };
 
                 comboBoxColumn.Items.AddRange(new object[]
@@ -141,10 +101,9 @@ namespace CoffeeCompanyMS.UC.Pages.Export
                     "Pending", "Delayed", "Delivered", "Confirmed"
                 });
 
-                // Thêm lại cột ComboBox vào đúng vị trí
                 dataGridViewExportOrder.Columns.Insert(statusColumnIndex, comboBoxColumn);
 
-                // Set giá trị cho từng dòng
+                // Set the selected values for each comboboxes
                 foreach (DataGridViewRow row in dataGridViewExportOrder.Rows)
                 {
                     if (row.Cells["Status"] is DataGridViewComboBoxCell cell && row.DataBoundItem != null)

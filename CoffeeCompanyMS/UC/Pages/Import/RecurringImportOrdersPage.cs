@@ -9,9 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using CoffeeCompanyMS.Forms.Authentication;
 using CoffeeCompanyMS.Models;
-using CoffeeCompanyMS.UI;
 using CoffeeCompanyMS.UI.Import;
-using static Google.Protobuf.Reflection.SourceCodeInfo.Types;
 
 namespace CoffeeCompanyMS.UC.Pages.Import
 {
@@ -28,7 +26,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
             locationSelector1.SelectedItemChanged += (s, value) =>
             {
                 selectedLocationID = value;
-                LoadRecurringImportOrders();
+                LoadRecurringImportOrders(selectedLocationID);
             };
         }
 
@@ -48,10 +46,10 @@ namespace CoffeeCompanyMS.UC.Pages.Import
             if (selectedLocationID == String.Empty) return;
             locationSelector1.SetSelectedLocationId(selectedLocationID);
 
-            LoadRecurringImportOrders();
+            LoadRecurringImportOrders(selectedLocationID);
         }
 
-        private void LoadRecurringImportOrders()
+        private void LoadRecurringImportOrders(string locationID)
         {
             try
             {
@@ -63,26 +61,23 @@ namespace CoffeeCompanyMS.UC.Pages.Import
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@LocationID", selectedLocationID);
+                        cmd.Parameters.AddWithValue("@LocationID", locationID);
 
                         using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
                         {
                             DataTable dt = new DataTable();
                             adapter.Fill(dt);
 
-                            if (dt != null && dt.Rows.Count > 0)
-                            {
-                                dataGridViewRecurringOrders.DataSource = dt;
+                            dataGridViewRecurringOrders.DataSource = dt;
 
-                                if (dataGridViewRecurringOrders.Columns.Count > 0)
-                                {
-                                    dataGridViewRecurringOrders.Columns["RecurrenceID"].HeaderText = "Recurrence ID";
-                                    dataGridViewRecurringOrders.Columns["SupplierName"].HeaderText = "Supplier";
-                                    dataGridViewRecurringOrders.Columns["RecurrencePeriod"].HeaderText = "Recurrence Period (days)";
-                                    dataGridViewRecurringOrders.Columns["LatestOrderID"].HeaderText = "Latest Order ID";
-                                    dataGridViewRecurringOrders.Columns["LatestOrderDate"].HeaderText = "Latest Order Date";
-                                    dataGridViewRecurringOrders.Columns["EstimatedNextOrderDate"].HeaderText = "Estimated Next Order Date";
-                                }
+                            if (dataGridViewRecurringOrders.Columns.Count > 0)
+                            {
+                                dataGridViewRecurringOrders.Columns["RecurrenceID"].HeaderText = "Recurrence ID";
+                                dataGridViewRecurringOrders.Columns["SupplierName"].HeaderText = "Supplier";
+                                dataGridViewRecurringOrders.Columns["RecurrencePeriod"].HeaderText = "Recurrence Period (days)";
+                                dataGridViewRecurringOrders.Columns["LatestOrderID"].HeaderText = "Latest Order ID";
+                                dataGridViewRecurringOrders.Columns["LatestOrderDate"].HeaderText = "Latest Order Date";
+                                dataGridViewRecurringOrders.Columns["EstimatedNextOrderDate"].HeaderText = "Estimated Next Order Date";
                             }
                         }
                     }
@@ -96,8 +91,8 @@ namespace CoffeeCompanyMS.UC.Pages.Import
 
         private void btnCreate_Click(object sender, EventArgs e)
         {
-            CreateImportOrders createImportOrders = new CreateImportOrders();
-            createImportOrders.ShowDialog();
+            CreateImportOrder createImportOrder = new CreateImportOrder();
+            createImportOrder.ShowDialog();
         }
 
         private void dataGridViewRecurringOrders_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -107,6 +102,35 @@ namespace CoffeeCompanyMS.UC.Pages.Import
                 var selectedRow = dataGridViewRecurringOrders.Rows[e.RowIndex];
                 string orderID = selectedRow.Cells["LatestOrderID"].Value.ToString();
                 MoveToDetaisPage(orderID);
+            }
+        }
+
+        private void CancelRecurringOrder(string orderId)
+        {
+            try
+            {
+                using (SqlConnection connection = UserSession.Instance.connectionFactory.CreateConnection())
+                {
+                    connection.Open();
+
+                    using (SqlCommand command = new SqlCommand("CancelRecurringImportOrder", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddWithValue("@ImportOrderID", orderId);
+
+                        command.ExecuteNonQuery();
+                    }
+                }
+
+                MessageBox.Show("Recurring order cancelled successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("SQL Error: " + ex.Message, "Cancel Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error canceling recurring order: " + ex.Message, "Cancel Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
