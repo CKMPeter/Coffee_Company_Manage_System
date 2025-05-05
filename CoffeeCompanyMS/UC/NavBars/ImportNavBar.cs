@@ -41,6 +41,7 @@ namespace CoffeeCompanyMS.UC
 
         private void ImportNavBar_Load(object sender, EventArgs e)
         {
+            LoadPages();
             NavigationManager.ShowPage(_importOrderPage);
         }
 
@@ -65,11 +66,7 @@ namespace CoffeeCompanyMS.UC
 
         private void pbReload_Click(object sender, EventArgs e)
         {
-            _importOrderPage = new ImportOrdersPage();
-            _recurringImportOrdersPage = new RecurringImportOrdersPage();
-
-            _importOrderPage.MoveToDetaisPage += DoubleClick_ToDetailsPage;
-            _recurringImportOrdersPage.MoveToDetaisPage += DoubleClick_ToDetailsPage;
+            LoadPages();
         }
 
         private void DoubleClick_ToDetailsPage(string orderID)

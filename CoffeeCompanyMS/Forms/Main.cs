@@ -43,9 +43,9 @@ namespace CoffeeCompanyMS.UI
                     mainNav = new WarehouseNavBar();
                     break;
                 case "CompanyOwner":
+                case "Admin":
                     mainNav = new CompanyOwnerNavBar();
                     break;
-                case "Admin":
                 default:
                     throw new Exception("Page Not Found");
             }
