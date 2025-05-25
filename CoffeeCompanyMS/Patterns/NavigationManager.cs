@@ -9,6 +9,11 @@ using CoffeeCompanyMS.UC.Pages.Storage;
 
 namespace CoffeeCompanyMS.Navigations
 {
+    // NavigationManager is a static class
+    // that manages the navigation between different user controls.
+    // It uses the Facade Pattern,
+    // which provides a central access point for managing navigation panels,
+    // abstracting away how UI switching is done.
     public static class NavigationManager
     {
         private static Panel _subNavPanel;

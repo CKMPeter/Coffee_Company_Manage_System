@@ -114,17 +114,32 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Forms\Authentication\ConnectionFactory.cs" />
-    <Compile Include="Forms\Authentication\UserSession.cs" />
+    <Compile Include="Patterns\BaseDAO.cs" />
+    <Compile Include="DAOs\BatchDAO.cs" />
+    <Compile Include="DAOs\IngredientDAO.cs" />
+    <Compile Include="DAOs\LocationDAO.cs" />
+    <Compile Include="DAOs\SupplierDAO.cs" />
+    <Compile Include="DAOs\TransferOrderDAO.cs" />
+    <Compile Include="DAOs\TransferOrderItemDAO.cs" />
+    <Compile Include="DAOs\UserDAO.cs" />
+    <Compile Include="Patterns\ConnectionFactory.cs" />
+    <Compile Include="Patterns\DAOManager.cs" />
+    <Compile Include="Patterns\UserSession.cs" />
     <Compile Include="Forms\PopupForms\CreateImportOrder.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\PopupForms\CreateImportOrder.Designer.cs">
       <DependentUpon>CreateImportOrder.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Batch.cs" />
+    <Compile Include="Models\Ingredient.cs" />
+    <Compile Include="Models\Location.cs" />
+    <Compile Include="Models\Supplier.cs" />
+    <Compile Include="Models\TransferOrder.cs" />
+    <Compile Include="Models\TransferOrderItem.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="UC\NavBars\NavButtonStyleUtils.cs" />
-    <Compile Include="UC\NavBars\NavigationManager.cs" />
+    <Compile Include="Patterns\NavigationManager.cs" />
     <Compile Include="UC\NavBars\CompanyOwnerNavBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -239,10 +254,10 @@
     <Compile Include="UC\Pages\Storage\StorageHistoryPage.Designer.cs">
       <DependentUpon>StorageHistoryPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Authentication\Login.cs">
+    <Compile Include="Forms\Login.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Authentication\Login.Designer.cs">
+    <Compile Include="Forms\Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\PopupForms\CreateExportOrder.cs">
@@ -283,7 +298,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Forms\Authentication\Login.resx">
+    <EmbeddedResource Include="Forms\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PopupForms\CreateExportOrder.resx">

@@ -56,7 +56,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
         {
             try
             {
-                using (SqlConnection conn = UserSession.Instance.connectionFactory.CreateConnection())
+                using (SqlConnection conn = UserSession.Instance.ConnectionFactory.CreateConnection())
                 {
                     conn.Open();
 

@@ -53,7 +53,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
         {
             try
             {
-                using (SqlConnection conn = UserSession.Instance.connectionFactory.CreateConnection())
+                using (SqlConnection conn = UserSession.Instance.ConnectionFactory.CreateConnection())
                 {
                     conn.Open();
 
@@ -109,7 +109,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
         {
             try
             {
-                using (SqlConnection connection = UserSession.Instance.connectionFactory.CreateConnection())
+                using (SqlConnection connection = UserSession.Instance.ConnectionFactory.CreateConnection())
                 {
                     connection.Open();
 

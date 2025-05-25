@@ -12,20 +12,91 @@ namespace CoffeeCompanyMS.Models
 {
     internal class User
     {
-        private string _email;
-        private string _name;
-        private string _locationID;
-        private string _role;
+        private Guid id;
+        private string email;
+        private string name;
+        private decimal initialSalary;
+        private decimal currentSalary;
+        private string phoneNumber;
+        private string role;
+        private Location location;
 
-        public User(string email, string name, string locationID, string role) {
-            _email = email;
-            _name = name;
-            _locationID = locationID;
-            _role = role;
+        // Constructor to initialize a User object with specified values
+        public User(Guid id, string email, string name, decimal initialSalary, decimal currentSalary, string phoneNumber, string role, Location location)
+        {
+            this.id = id;
+            this.email = email;
+            this.name = name;
+            this.initialSalary = initialSalary;
+            this.currentSalary = currentSalary;
+            this.phoneNumber = phoneNumber;
+            this.role = role;
+            this.location = location;
         }
 
-        public string LocationID { get { return _locationID; } }
+        // Constructor to create a User object from a SqlDataReader
+        public User(SqlDataReader reader, Func<Guid, Location> getLocationById)
+        {
+            id = Guid.Parse(reader["ID"].ToString());
+            email = reader["Email"].ToString();
+            name = reader["Name"].ToString();
+            initialSalary = Convert.ToDecimal(reader["InitialSalary"]);
+            currentSalary = Convert.ToDecimal(reader["CurrentSalary"]);
+            phoneNumber = reader["PhoneNumber"].ToString();
+            role = reader["UserRole"].ToString();
 
-        public string Role { get { return _role; } }
+            // Retrieve the LocationID from the reader
+            // and use the provided function to get the Location object
+            var locationId = Guid.Parse(reader["LocationID"].ToString());
+            location = getLocationById(locationId);
+        }
+
+        public Guid Id
+        {
+            get => id;
+            set => id = value;
+        }
+
+        public string Email
+        {
+            get => email;
+            set => email = value;
+        }
+
+        public string Name
+        {
+            get => name;
+            set => name = value;
+        }
+
+        public decimal InitialSalary
+        {
+            get => initialSalary;
+            set => initialSalary = value;
+        }
+
+        public decimal CurrentSalary
+        {
+            get => currentSalary;
+            set => currentSalary = value;
+        }
+
+        public string PhoneNumber
+        {
+            get => phoneNumber;
+            set => phoneNumber = value;
+        }
+
+        public string Role
+        {
+            get => role;
+            set => role = value;
+        }
+
+        public Location Location
+        {
+            get => location;
+            set => location = value;
+        }
     }
 }

@@ -1,18 +1,10 @@
 ﻿using CoffeeCompanyMS.Forms.Authentication;
 using CoffeeCompanyMS.Models;
-using CoffeeCompanyMS.UI;
-using Google.Protobuf.WellKnownTypes;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static Google.Protobuf.Reflection.SourceCodeInfo.Types;
 
 namespace CoffeeCompanyMS.UC.Pages.Storage
 {
@@ -78,7 +70,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
         {
             try
             {
-                using (SqlConnection conn = UserSession.Instance.connectionFactory.CreateConnection())
+                using (SqlConnection conn = UserSession.Instance.ConnectionFactory.CreateConnection())
                 {
                     conn.Open();
 
@@ -114,7 +106,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
 
         public void LoadBatchDetails(string ingredientName)
         {
-            using (SqlConnection conn = UserSession.Instance.connectionFactory.CreateConnection())
+            using (SqlConnection conn = UserSession.Instance.ConnectionFactory.CreateConnection())
             {
                 string query = "SELECT * FROM dbo.GetBatches(@IngredientName)";
                 SqlCommand command = new SqlCommand(query, conn);

@@ -39,7 +39,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
         {
             try
             {
-                using (SqlConnection conn = UserSession.Instance.connectionFactory.CreateConnection())
+                using (SqlConnection conn = UserSession.Instance.ConnectionFactory.CreateConnection())
                 {
                     conn.Open();
                     string query = @"SELECT * FROM dbo.GetImportOrderSummary(@OrderID)";
@@ -70,7 +70,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
         {
             try
             {
-                using (SqlConnection conn = UserSession.Instance.connectionFactory.CreateConnection())
+                using (SqlConnection conn = UserSession.Instance.ConnectionFactory.CreateConnection())
                 {
                     conn.Open();
                     string query = "SELECT * FROM dbo.GetImportItemList(@OrderID)";

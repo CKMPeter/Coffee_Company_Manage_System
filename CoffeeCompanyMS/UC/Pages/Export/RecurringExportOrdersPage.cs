@@ -50,7 +50,7 @@ namespace CoffeeCompanyMS.UC.Pages.Export
         {
             try
             {
-                using (SqlConnection connection = UserSession.Instance.connectionFactory.CreateConnection())
+                using (SqlConnection connection = UserSession.Instance.ConnectionFactory.CreateConnection())
                 {
                     connection.Open();
 
@@ -103,7 +103,7 @@ namespace CoffeeCompanyMS.UC.Pages.Export
         {
             try
             {
-                using (SqlConnection connection = UserSession.Instance.connectionFactory.CreateConnection())
+                using (SqlConnection connection = UserSession.Instance.ConnectionFactory.CreateConnection())
                 {
                     connection.Open();
 
