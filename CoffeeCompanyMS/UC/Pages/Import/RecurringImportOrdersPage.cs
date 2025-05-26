@@ -1,91 +1,116 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 using System.Windows.Forms;
-using CoffeeCompanyMS.Forms.Authentication;
+using CoffeeCompanyMS.DTOs;
 using CoffeeCompanyMS.Models;
+using CoffeeCompanyMS.Patterns;
 using CoffeeCompanyMS.UI.Import;
 
 namespace CoffeeCompanyMS.UC.Pages.Import
 {
     public partial class RecurringImportOrdersPage : UserControl
     {
-        private string selectedLocationID;
-        public Action<string> MoveToDetaisPage { get; set; }
+        private Guid selectedLocationID;
+        public Action<Guid> MoveToDetaisPage { get; set; }
 
         public RecurringImportOrdersPage()
         {
             InitializeComponent();
-            selectedLocationID = string.Empty;
 
             locationSelector1.SelectedItemChanged += (s, value) =>
             {
                 selectedLocationID = value;
-                LoadRecurringImportOrders(selectedLocationID);
+                LoadRecurringImportOrders();
             };
         }
 
         private void RecurringImportOrders_Load(object sender, EventArgs e)
         {
-            locationSelector1.LoadLocations();
-
-            User user = UserSession.Instance.loggedInUser;
-
-            // Check whether the logged-in user is a Warehouse Manager
-            if (user != null && user.LocationID != String.Empty)
+            selectedLocationID = locationSelector1.SelectedValue;
+            if (selectedLocationID != Guid.Empty)
             {
-                selectedLocationID = user.LocationID;
-                locationSelector1.Disable();
+                LoadRecurringImportOrders();
             }
-
-            if (selectedLocationID == String.Empty) return;
-            locationSelector1.SetSelectedLocationId(selectedLocationID);
-
-            LoadRecurringImportOrders(selectedLocationID);
         }
 
-        private void LoadRecurringImportOrders(string locationID)
+        private void LoadRecurringImportOrders()
         {
             try
             {
-                using (SqlConnection conn = UserSession.Instance.ConnectionFactory.CreateConnection())
+                var transferOrderDAO = DAOManager.Instance.TransferOrderDAO;
+
+                var orders = transferOrderDAO.GetActiveRecurringImportOrders(selectedLocationID);
+
+                dataGridViewRecurringOrders.DataSource = new BindingList<RecurringImportOrderDTO>(orders);
+
+                if (dataGridViewRecurringOrders.Columns.Count > 0)
                 {
-                    conn.Open();
-
-                    string query = "SELECT * FROM dbo.GetActiveRecurringImportOrders(@LocationID)";
-
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@LocationID", locationID);
-
-                        using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
-                        {
-                            DataTable dt = new DataTable();
-                            adapter.Fill(dt);
-
-                            dataGridViewRecurringOrders.DataSource = dt;
-
-                            if (dataGridViewRecurringOrders.Columns.Count > 0)
-                            {
-                                dataGridViewRecurringOrders.Columns["RecurrenceID"].HeaderText = "Recurrence ID";
-                                dataGridViewRecurringOrders.Columns["SupplierName"].HeaderText = "Supplier";
-                                dataGridViewRecurringOrders.Columns["RecurrencePeriod"].HeaderText = "Recurrence Period (days)";
-                                dataGridViewRecurringOrders.Columns["LatestOrderID"].HeaderText = "Latest Order ID";
-                                dataGridViewRecurringOrders.Columns["LatestOrderDate"].HeaderText = "Latest Order Date";
-                                dataGridViewRecurringOrders.Columns["EstimatedNextOrderDate"].HeaderText = "Estimated Next Order Date";
-                            }
-                        }
-                    }
+                    dataGridViewRecurringOrders.Columns["RecurrenceID"].HeaderText = "Recurrence ID";
+                    dataGridViewRecurringOrders.Columns["SupplierName"].HeaderText = "Supplier";
+                    dataGridViewRecurringOrders.Columns["RecurrencePeriod"].HeaderText = "Recurrence Period (days)";
+                    dataGridViewRecurringOrders.Columns["LatestOrderID"].HeaderText = "Latest Order ID";
+                    dataGridViewRecurringOrders.Columns["LatestOrderDate"].HeaderText = "Latest Order Date";
+                    dataGridViewRecurringOrders.Columns["EstimatedNextOrderDate"].HeaderText = "Estimated Next Order Date";
+                    AddCancelBtnColumn();
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error getting Recurring Import Orders: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void AddCancelBtnColumn()
+        {
+            if (!dataGridViewRecurringOrders.Columns.Contains("Cancel"))
+            {
+                DataGridViewButtonColumn cancelButtonColumn = new DataGridViewButtonColumn
+                {
+                    Name = "Cancel",
+                    HeaderText = "",
+                    Text = "Cancel",
+                    UseColumnTextForButtonValue = true
+                };
+                dataGridViewRecurringOrders.Columns.Add(cancelButtonColumn);
+            }
+        }
+
+        private void dataGridViewRecurringOrders_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex == dataGridViewRecurringOrders.Columns["Cancel"].Index)
+            {
+                var selectedRow = dataGridViewRecurringOrders.Rows[e.RowIndex];
+                Guid orderId = Guid.Parse(selectedRow.Cells["LatestOrderID"].Value.ToString());
+                if (MessageBox.Show("Are you sure you want to cancel this recurring order?", "Confirm Cancel", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                {
+                    CancelRecurringOrder(orderId);
+                    LoadRecurringImportOrders();
+                }
+            }
+        }
+
+        private void CancelRecurringOrder(Guid orderId)
+        {
+            try
+            {
+                var transferOrderDAO = DAOManager.Instance.TransferOrderDAO;
+
+                TransferOrder order = transferOrderDAO.GetTransferOrderById(orderId);
+
+                if (order == null)
+                    throw new Exception("Transfer order not found.");
+
+                if (order.Status == "RecurringStopped" || order.Status == "Canceled")
+                    throw new Exception("This transfer order is already canceled or recurrence already stopped.");
+
+                order.Status = "RecurringStopped";
+                transferOrderDAO.UpdateTransferOrder(order);
+
+                MessageBox.Show("Recurring order cancelled successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error canceling recurring order: " + ex.Message, "Cancel Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -100,37 +125,8 @@ namespace CoffeeCompanyMS.UC.Pages.Import
             if (e.RowIndex >= 0)
             {
                 var selectedRow = dataGridViewRecurringOrders.Rows[e.RowIndex];
-                string orderID = selectedRow.Cells["LatestOrderID"].Value.ToString();
+                Guid orderID = Guid.Parse(selectedRow.Cells["LatestOrderID"].Value.ToString());
                 MoveToDetaisPage(orderID);
-            }
-        }
-
-        private void CancelRecurringOrder(string orderId)
-        {
-            try
-            {
-                using (SqlConnection connection = UserSession.Instance.ConnectionFactory.CreateConnection())
-                {
-                    connection.Open();
-
-                    using (SqlCommand command = new SqlCommand("CancelRecurringImportOrder", connection))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@ImportOrderID", orderId);
-
-                        command.ExecuteNonQuery();
-                    }
-                }
-
-                MessageBox.Show("Recurring order cancelled successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show("SQL Error: " + ex.Message, "Cancel Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error canceling recurring order: " + ex.Message, "Cancel Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

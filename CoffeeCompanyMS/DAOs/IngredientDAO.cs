@@ -110,5 +110,22 @@ namespace CoffeeCompanyMS.DAOs
 
             return ExecuteNonQuery(query, parameters);
         }
+
+        // Get the SupplierID in Ingredient table with a given IngredientID
+        public Guid? GetSupplierIdByIngredientId(Guid ingredientId)
+        {
+            string query = "SELECT SupplierID FROM Ingredient WHERE ID = @ID";
+            var parameters = new Dictionary<string, object>
+            {
+                { "@ID", ingredientId }
+            };
+
+            var results = ExecuteQuery(query, reader =>
+            {
+                return Guid.Parse(reader["SupplierID"].ToString());
+            }, parameters);
+
+            return results.FirstOrDefault(); // returns Guid? (or null if not found)
+        }
     }
 }

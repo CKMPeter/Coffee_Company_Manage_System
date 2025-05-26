@@ -16,8 +16,6 @@ namespace CoffeeCompanyMS.UI
 {
     public partial class Main : Form
     {
-        public static string locationID = null;
-
         public Main()
         {
             InitializeComponent();
@@ -33,7 +31,7 @@ namespace CoffeeCompanyMS.UI
         private void LoadMainNav()
         {
             UserControl mainNav;
-            User user = UserSession.Instance.loggedInUser;
+            User user = UserSession.Instance.LoggedInUser;
 
             if (user == null) return;
 

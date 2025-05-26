@@ -13,15 +13,17 @@ namespace CoffeeCompanyMS.Models
         private int locationIndex;
         private string address;
         private decimal maintenanceCost;
+        private string name;
         private List<Batch> batches;
 
         // Constructor to create a Location object with specified values
-        public Location(Guid id, int locationIndex, string address, decimal maintenanceCost, List<Batch> batches)
+        public Location(Guid id, int locationIndex, string address, decimal maintenanceCost, string name, List<Batch> batches)
         {
             this.id = id;
             this.locationIndex = locationIndex;
             this.address = address;
             this.maintenanceCost = maintenanceCost;
+            this.name = name ?? string.Empty;
             this.batches = batches ?? new List<Batch>();
         }
 
@@ -32,6 +34,9 @@ namespace CoffeeCompanyMS.Models
             this.locationIndex = Convert.ToInt32(reader["LocationIndex"]);
             this.address = reader["Address"].ToString() ?? string.Empty;
             this.maintenanceCost = Convert.ToDecimal(reader["MaintenanceCost"]);
+
+            // Set the name based on the location index
+            this.name = locationIndex == 0 ? "Warehouse" : $"Store Branch {locationIndex}";
 
             // Load batches using the delegate
             this.batches = loadBatches(id) ?? new List<Batch>();
@@ -59,6 +64,12 @@ namespace CoffeeCompanyMS.Models
         {
             get => maintenanceCost;
             set => maintenanceCost = value;
+        }
+
+        public string Name
+        {
+            get => name;
+            set => name = value ?? string.Empty;
         }
 
         public List<Batch> Batches

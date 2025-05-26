@@ -1,5 +1,7 @@
-﻿using CoffeeCompanyMS.Forms.Authentication;
+﻿using CoffeeCompanyMS.DAOs;
+using CoffeeCompanyMS.Forms.Authentication;
 using CoffeeCompanyMS.Navigations;
+using CoffeeCompanyMS.Patterns;
 using CoffeeCompanyMS.UC.Pages.Import;
 using CoffeeCompanyMS.UI;
 using System;
@@ -18,13 +20,12 @@ namespace CoffeeCompanyMS.UC.Pages.Export
 {
     public partial class ExportOrdersPage : UserControl
     {
-        private string selectedLocationId;
-        public Action<string> MoveToDetaisPage { get; set; }
+        private Guid selectedLocationId;
+        public Action<Guid> MoveToDetaisPage { get; set; }
 
         public ExportOrdersPage()
         {
             InitializeComponent();
-            selectedLocationId = "";
 
             locationSelector1.SelectedItemChanged += (s, value) =>
             {
@@ -35,43 +36,31 @@ namespace CoffeeCompanyMS.UC.Pages.Export
 
         private void ExportOrdersPage_Load(object sender, EventArgs e)
         {
-            locationSelector1.LoadLocations();
+            selectedLocationId = locationSelector1.SelectedValue;
+            if (selectedLocationId != Guid.Empty)
+            {
+                LoadExportOrders();
+            }
         }
 
         private void LoadExportOrders()
         {
             try
             {
-                using (SqlConnection connection = UserSession.Instance.ConnectionFactory.CreateConnection())
+                var transferOrderDAO = DAOManager.Instance.TransferOrderDAO;
+                var exportOrders = transferOrderDAO.GetExportOrderSummariesByLocationId(selectedLocationId);
+
+                dataGridViewExportOrder.DataSource = exportOrders;
+
+                if (dataGridViewExportOrder.Columns.Count > 0)
                 {
-                    connection.Open();
-
-                    string query = "SELECT * FROM dbo.GetExportOrders(@LocationID)";
-
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-                        command.Parameters.AddWithValue("@LocationID", selectedLocationId);
-
-                        using (SqlDataAdapter adapter = new SqlDataAdapter(command))
-                        {
-                            DataTable dataTable = new DataTable();
-                            adapter.Fill(dataTable);
-
-                            dataGridViewExportOrder.DataSource = dataTable;
-
-                            if (dataGridViewExportOrder.Columns.Count > 0)
-                            {
-                                dataGridViewExportOrder.Columns["OrderID"].HeaderText = "Order ID";
-                                dataGridViewExportOrder.Columns["RecurrenceID"].HeaderText = "Recurrence ID";
-                                dataGridViewExportOrder.Columns["DestinationName"].HeaderText = "Destination Name";
-                                dataGridViewExportOrder.Columns["OrderDate"].HeaderText = "Order Date";
-                                dataGridViewExportOrder.Columns["EstimatedDeliveryDate"].HeaderText = "Estimated Delivery Date";
-                                dataGridViewExportOrder.Columns["ActualDeliveryDate"].HeaderText = "Actual Delivery Date";
-
-                                ReplaceStatusColumnWithComboBox();
-                            }
-                        }
-                    }
+                    dataGridViewExportOrder.Columns["OrderID"].HeaderText = "Order ID";
+                    dataGridViewExportOrder.Columns["RecurrenceID"].HeaderText = "Recurrence ID";
+                    dataGridViewExportOrder.Columns["DestinationName"].HeaderText = "Destination Name";
+                    dataGridViewExportOrder.Columns["OrderDate"].HeaderText = "Order Date";
+                    dataGridViewExportOrder.Columns["EstimatedDeliveryDate"].HeaderText = "Estimated Delivery Date";
+                    dataGridViewExportOrder.Columns["ActualDeliveryDate"].HeaderText = "Actual Delivery Date";
+                    dataGridViewExportOrder.Columns["Status"].HeaderText = "Status";
                 }
             }
             catch (Exception ex)
@@ -79,123 +68,15 @@ namespace CoffeeCompanyMS.UC.Pages.Export
                 MessageBox.Show("Error loading export orders: " + ex.Message);
             }
         }
-        private void ReplaceStatusColumnWithComboBox()
-        {
-            try
-            {
-                // Remove current Status column with the combobox column
-                int statusColumnIndex = dataGridViewExportOrder.Columns["Status"].Index;
 
-                dataGridViewExportOrder.Columns.Remove("Status");
-
-                DataGridViewComboBoxColumn comboBoxColumn = new DataGridViewComboBoxColumn
-                {
-                    Name = "Status",
-                    HeaderText = "Status",
-                    DataPropertyName = "Status",
-                    FlatStyle = FlatStyle.Flat
-                };
-
-                comboBoxColumn.Items.AddRange(new object[]
-                {
-                    "Pending", "Delayed", "Delivered", "Confirmed"
-                });
-
-                dataGridViewExportOrder.Columns.Insert(statusColumnIndex, comboBoxColumn);
-
-                // Set the selected values for each comboboxes
-                foreach (DataGridViewRow row in dataGridViewExportOrder.Rows)
-                {
-                    if (row.Cells["Status"] is DataGridViewComboBoxCell cell && row.DataBoundItem != null)
-                    {
-                        DataRowView dataRowView = row.DataBoundItem as DataRowView;
-                        if (dataRowView != null)
-                        {
-                            string currentStatus = dataRowView["Status"].ToString();
-                            if (!string.IsNullOrEmpty(currentStatus))
-                            {
-                                cell.Value = currentStatus;
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error setting up Status ComboBox: " + ex.Message);
-            }
-        }
-
-        private void dataGridViewExportOrder_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {
-            try
-            {
-                if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
-                {
-                    DataGridView dgv = sender as DataGridView;
-                    string columnName = dgv.Columns[e.ColumnIndex].Name;
-
-                    if (columnName == "Status")
-                    {
-                        DataGridViewRow row = dgv.Rows[e.RowIndex];
-
-                        object orderIdObj = row.Cells["OrderID"].Value;
-                        object newStatusObj = row.Cells["Status"].Value;
-
-                        if (orderIdObj != null && newStatusObj != null)
-                        {
-                            if (Guid.TryParse(orderIdObj.ToString(), out Guid orderId))
-                            {
-                                string newStatus = newStatusObj.ToString();
-                                UpdateOrderStatus(orderId, newStatus);
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error while changing status: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void UpdateOrderStatus(Guid orderId, string newStatus)
-        {
-            try
-            {
-                using (SqlConnection connection = UserSession.Instance.ConnectionFactory.CreateConnection())
-                {
-                    connection.Open();
-
-                    using (SqlCommand command = new SqlCommand("UpdateTransferOrderStatus", connection))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@TransferOrderID", orderId);
-                        command.Parameters.AddWithValue("@NewStatus", newStatus);
-
-                        command.ExecuteNonQuery();
-                    }
-                }
-
-                MessageBox.Show("Status updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show("SQL Error: " + ex.Message, "Update Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error updating status: " + ex.Message, "Update Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         private void dataGridViewExportOrder_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
                 var selectedRow = dataGridViewExportOrder.Rows[e.RowIndex];
-                string orderID = selectedRow.Cells["OrderID"].Value.ToString();
-                NavigationManager.ShowPage(new ExportOrderDetailsPage(orderID));
+                Guid orderID = Guid.Parse(selectedRow.Cells["OrderID"].Value.ToString());
+                MoveToDetaisPage(orderID);
             }
         }
     }

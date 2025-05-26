@@ -79,7 +79,6 @@
             this.dataGridViewExportOrder.Size = new System.Drawing.Size(704, 384);
             this.dataGridViewExportOrder.TabIndex = 3;
             this.dataGridViewExportOrder.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewExportOrder_CellDoubleClick);
-            this.dataGridViewExportOrder.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewExportOrder_CellValueChanged);
             // 
             // ExportOrdersPage
             // 

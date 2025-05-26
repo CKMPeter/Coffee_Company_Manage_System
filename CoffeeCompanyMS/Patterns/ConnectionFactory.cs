@@ -8,11 +8,13 @@ using System.Windows.Forms;
 
 namespace CoffeeCompanyMS.Forms.Authentication
 {
-    // ConnectionFactory is a class that creates SQL connections 
-    // It uses the Factory Method Pattern,
-    // which provides a way to create SQLConnection object
-    // without exposing the instantiation logic
-    // or what connection string is used.
+    /// <summary>
+    /// ConnectionFactory is a class that creates SQL connections. 
+    /// It uses the Factory Method Pattern,
+    /// which provides a way to create SQLConnection object
+    /// without exposing the instantiation logic
+    /// or what connection string is used.
+    /// </summary>
     internal class ConnectionFactory
     {
         private readonly string connectionString = null;

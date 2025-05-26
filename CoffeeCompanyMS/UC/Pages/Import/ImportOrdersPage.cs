@@ -1,92 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using CoffeeCompanyMS.DAOs;
+using CoffeeCompanyMS.DTOs;
 using CoffeeCompanyMS.Forms.Authentication;
 using CoffeeCompanyMS.Models;
-using CoffeeCompanyMS.Navigations;
-using CoffeeCompanyMS.UC.Pages.Storage;
-using CoffeeCompanyMS.UI;
-using static Google.Protobuf.Reflection.SourceCodeInfo.Types;
+using CoffeeCompanyMS.Patterns;
 
 namespace CoffeeCompanyMS.UC.Pages.Import
 {
     public partial class ImportOrdersPage : UserControl
     {
-        private string selectedLocationID;
-        public Action<string> MoveToDetaisPage { get; set; }
+        private Guid selectedLocationID;
+        public Action<Guid> MoveToDetaisPage { get; set; }
 
         public ImportOrdersPage()
         {
             InitializeComponent();
-            selectedLocationID = "";
 
             locationSelector1.SelectedItemChanged += (s, value) =>
             {
                 selectedLocationID = value;
-                LoadImportOrders(selectedLocationID);
+                LoadImportOrders();
             };
         }
 
         private void ImportOrdersPage_Load(object sender, EventArgs e)
         {
-            locationSelector1.LoadLocations();
-
-            User user = UserSession.Instance.loggedInUser;
-
-            // Check whether the logged-in user is a Warehouse Manager
-            if (user != null && user.LocationID != String.Empty)
+            selectedLocationID = locationSelector1.SelectedValue;
+            if (selectedLocationID != Guid.Empty)
             {
-                selectedLocationID = user.LocationID;
-                locationSelector1.Disable();
+                LoadImportOrders();
             }
-
-            if (selectedLocationID == String.Empty) return;
-            locationSelector1.SetSelectedLocationId(selectedLocationID);
-
-            LoadImportOrders(selectedLocationID);
         }
 
-        private void LoadImportOrders(string locationID)
+        private void LoadImportOrders()
         {
             try
             {
-                using (SqlConnection connection = UserSession.Instance.ConnectionFactory.CreateConnection())
+                TransferOrderDAO dao = DAOManager.Instance.TransferOrderDAO;
+                List<ImportOrderDTO> orders = dao.GetImportOrdersByLocation(selectedLocationID);
+
+                dataGridViewImportOrder.DataSource = orders;
+
+                if (dataGridViewImportOrder.Columns.Count > 0)
                 {
-                    connection.Open();
+                    dataGridViewImportOrder.Columns["OrderID"].HeaderText = "Order ID";
+                    dataGridViewImportOrder.Columns["RecurrenceID"].HeaderText = "Recurrence ID";
+                    dataGridViewImportOrder.Columns["SupplierName"].HeaderText = "Supplier Name";
+                    dataGridViewImportOrder.Columns["OrderDate"].HeaderText = "Order Date";
+                    dataGridViewImportOrder.Columns["EstimatedDeliveryDate"].HeaderText = "Estimated Delivery";
+                    dataGridViewImportOrder.Columns["ActualDeliveryDate"].HeaderText = "Actual Delivery";
 
-                    string query = "SELECT * FROM dbo.GetImportOrders(@LocationID)";
-
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-                        command.Parameters.AddWithValue("@LocationID", locationID);
-
-                        using (SqlDataAdapter adapter = new SqlDataAdapter(command))
-                        {
-                            DataTable dataTable = new DataTable();
-                            adapter.Fill(dataTable);
-
-                            dataGridViewImportOrder.DataSource = dataTable;
-
-                            if (dataGridViewImportOrder.Columns.Count > 0)
-                            {
-                                dataGridViewImportOrder.Columns["OrderID"].HeaderText = "Order ID";
-                                dataGridViewImportOrder.Columns["RecurrenceID"].HeaderText = "Recurrence ID";
-                                dataGridViewImportOrder.Columns["SupplierName"].HeaderText = "Supplier Name";
-                                dataGridViewImportOrder.Columns["OrderDate"].HeaderText = "Order Date";
-                                dataGridViewImportOrder.Columns["EstimatedDeliveryDate"].HeaderText = "Estimated Delivery";
-                                dataGridViewImportOrder.Columns["ActualDeliveryDate"].HeaderText = "Actual Delivery";
-
-                                ReplaceStatusColumnWithComboBox();
-                            }
-                        }
-                    }
+                    ReplaceStatusColumnWithComboBox();
                 }
             }
             catch (Exception ex)
@@ -94,6 +62,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
                 MessageBox.Show("Error loading import orders: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private void ReplaceStatusColumnWithComboBox()
         {
@@ -143,30 +112,47 @@ namespace CoffeeCompanyMS.UC.Pages.Import
             }
         }
 
+        /// <summary>
+        /// Handles the CellValueChanged event of the dataGridViewImportOrder control,
+        /// in order to change the status of the order when the user selects a new status from the ComboBox.
+        /// </summary>
         private void dataGridViewImportOrder_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
-                if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+                if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+
+                // Ensure the sender is a DataGridView
+                DataGridView dgv = sender as DataGridView;
+
+                // Check if the column is the Status column
+                string columnName = dgv.Columns[e.ColumnIndex].Name;
+                if (columnName != "Status") return;
+
+                DataGridViewRow row = dgv.Rows[e.RowIndex];
+
+                object orderIdObj = row.Cells["OrderID"].Value;
+                object newStatusObj = row.Cells["Status"].Value;
+
+                // Validate that orderIdObj and newStatusObj are not null
+                if (orderIdObj == null || newStatusObj == null)
                 {
-                    DataGridView dgv = sender as DataGridView;
-                    string columnName = dgv.Columns[e.ColumnIndex].Name;
-
-                    if (columnName == "Status")
-                    {
-                        DataGridViewRow row = dgv.Rows[e.RowIndex];
-
-                        object orderIdObj = row.Cells["OrderID"].Value;
-                        object newStatusObj = row.Cells["Status"].Value;
-
-                        if (orderIdObj != null && newStatusObj != null)
-                        {
-                            string orderId = orderIdObj.ToString();
-                            string newStatus = newStatusObj.ToString();
-                            UpdateOrderStatus(orderId, newStatus);
-                        }
-                    }
+                    MessageBox.Show("Order ID or new status is null.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
+                Guid orderId = Guid.Parse(orderIdObj.ToString());
+                string newStatus = newStatusObj.ToString();
+
+                // Update the order status
+                if (!UpdateOrderStatus(orderId, newStatus))
+                {
+                    MessageBox.Show("Failed to update order status.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                MessageBox.Show("Order status updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // Update the DataGridView to reflect the change
+                LoadImportOrders();
             }
             catch (Exception ex)
             {
@@ -174,42 +160,52 @@ namespace CoffeeCompanyMS.UC.Pages.Import
             }
         }
 
-        private void UpdateOrderStatus(string orderId, string newStatus)
+        public bool UpdateOrderStatus(Guid transferOrderId, string newStatus)
         {
-            try
+            var transferOrderDAO = DAOManager.Instance.TransferOrderDAO;
+            var batchDAO = DAOManager.Instance.BatchDAO;
+            var destinationLocationId = selectedLocationID;
+
+            // Step 1: Retrieve the transfer order
+            var transferOrder = transferOrderDAO.GetTransferOrderById(transferOrderId);
+            if (transferOrder == null)
+                return false;
+
+            // Step 2: Update status
+            transferOrder.Status = newStatus;
+            bool updateSuccess = transferOrderDAO.UpdateTransferOrder(transferOrder);
+            if (!updateSuccess)
+                return false;
+
+            // Step 3: If status is "Delivered", insert batches from transfer order items
+            if (newStatus == "Delivered")
             {
-                using (SqlConnection connection = UserSession.Instance.ConnectionFactory.CreateConnection())
+                DateTime receiptDate = DateTime.Now;
+                foreach (var item in transferOrder.Items)
                 {
-                    connection.Open();
+                    bool insertSuccess = batchDAO.InsertBatch(
+                        quantity: item.Quantity,
+                        receiptDate: receiptDate,
+                        expirationDate: item.ExpirationDate,
+                        ingredientId: item.Ingredient.Id,
+                        locationId: destinationLocationId
+                    );
 
-                    using (SqlCommand command = new SqlCommand("UpdateTransferOrderStatus", connection))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@TransferOrderID", orderId);
-                        command.Parameters.AddWithValue("@NewStatus", newStatus);
-
-                        command.ExecuteNonQuery();
-                    }
+                    if (!insertSuccess)
+                        return false; // Exit on first failure
                 }
+            }
 
-                MessageBox.Show("Status updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show("SQL Error: " + ex.Message, "Update Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error updating status: " + ex.Message, "Update Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            return true;
         }
-        
+
+
         private void dataGridViewImportOrder_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
                 var selectedRow = dataGridViewImportOrder.Rows[e.RowIndex];
-                string orderID = selectedRow.Cells["OrderID"].Value.ToString();
+                Guid orderID = Guid.Parse(selectedRow.Cells["OrderID"].Value.ToString());
                 MoveToDetaisPage(orderID);
             }
         }

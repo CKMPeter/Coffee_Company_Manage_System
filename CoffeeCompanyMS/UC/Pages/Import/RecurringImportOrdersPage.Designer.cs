@@ -82,6 +82,7 @@
             this.dataGridViewRecurringOrders.RowTemplate.Height = 24;
             this.dataGridViewRecurringOrders.Size = new System.Drawing.Size(712, 371);
             this.dataGridViewRecurringOrders.TabIndex = 4;
+            this.dataGridViewRecurringOrders.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRecurringOrders_CellContentClick);
             this.dataGridViewRecurringOrders.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRecurringOrders_CellDoubleClick);
             // 
             // locationSelector1

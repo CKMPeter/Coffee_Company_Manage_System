@@ -1,5 +1,6 @@
 ﻿using CoffeeCompanyMS.Forms.Authentication;
 using CoffeeCompanyMS.Models;
+using CoffeeCompanyMS.Patterns;
 using CoffeeCompanyMS.UI;
 using CoffeeCompanyMS.UI.Export;
 using System;
@@ -12,41 +13,30 @@ namespace CoffeeCompanyMS.UC.Pages.Export
 {
     public partial class RecurringExportOrdersPage : UserControl
     {
-        private string selectedLocationID;
-        public Action<string> MoveToDetaisPage { get; set; }
+        private Guid selectedLocationID;
+        public Action<Guid> MoveToDetaisPage { get; set; }
 
         public RecurringExportOrdersPage()
         {
             InitializeComponent();
-            selectedLocationID = String.Empty;
 
             locationSelector1.SelectedItemChanged += (s, value) =>
             {
                 selectedLocationID = value;
-                LoadRecurringExportOrders(selectedLocationID);
+                LoadRecurringExportOrders();
             };
         }
 
         private void RecurringExportOrdersPage_Load(object sender, EventArgs e)
         {
-            locationSelector1.LoadLocations();
-
-            User user = UserSession.Instance.loggedInUser;
-
-            // Check whether the logged-in user is a Warehouse Manager
-            if (user != null && user.LocationID != String.Empty)
+            selectedLocationID = locationSelector1.SelectedValue;
+            if (selectedLocationID != Guid.Empty)
             {
-                selectedLocationID = user.LocationID;
-                locationSelector1.Disable();
+                LoadRecurringExportOrders();
             }
-
-            if (selectedLocationID == String.Empty) return;
-            locationSelector1.SetSelectedLocationId(selectedLocationID);
-
-            LoadRecurringExportOrders(selectedLocationID);
         }
 
-        private void LoadRecurringExportOrders(string locationID)
+        private void LoadRecurringExportOrders()
         {
             try
             {
@@ -57,7 +47,7 @@ namespace CoffeeCompanyMS.UC.Pages.Export
                     string query = "SELECT * FROM dbo.GetActiveRecurringExportOrders(@LocationID)";
 
                     SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@LocationID", locationID);
+                    command.Parameters.AddWithValue("@LocationID", selectedLocationID);
 
                     SqlDataAdapter adapter = new SqlDataAdapter(command);
                     DataTable dt = new DataTable();
@@ -74,12 +64,68 @@ namespace CoffeeCompanyMS.UC.Pages.Export
                         dataGridViewRecurring.Columns["LatestOrderID"].HeaderText = "Latest Order ID";
                         dataGridViewRecurring.Columns["LatestOrderDate"].HeaderText = "Latest Order Date";
                         dataGridViewRecurring.Columns["EstimatedNextOrderDate"].HeaderText = "Estimated Next Order Date";
+                        AddCancelBtnColumn();
                     }
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error loading recurring export orders: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void AddCancelBtnColumn()
+        {
+            if (!dataGridViewRecurring.Columns.Contains("Cancel"))
+            {
+                DataGridViewButtonColumn cancelButtonColumn = new DataGridViewButtonColumn
+                {
+                    Name = "Cancel",
+                    HeaderText = "",
+                    Text = "Cancel",
+                    UseColumnTextForButtonValue = true
+                };
+                dataGridViewRecurring.Columns.Add(cancelButtonColumn);
+            }
+        }
+
+        private void dataGridViewRecurring_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex == dataGridViewRecurring.Columns["Cancel"].Index)
+            {
+                var selectedRow = dataGridViewRecurring.Rows[e.RowIndex];
+                Guid orderID = Guid.Parse(selectedRow.Cells["LatestOrderID"].Value.ToString());
+                DialogResult result = MessageBox.Show("Are you sure you want to cancel this recurring order?", "Confirm Cancel", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (result == DialogResult.Yes)
+                {
+                    CancelRecurringOrder(orderID);
+                    LoadRecurringExportOrders(); // Refresh the list after cancellation
+                }
+            }
+        }
+
+        private void CancelRecurringOrder(Guid orderId)
+        {
+            try
+            {
+                var transferOrderDAO = DAOManager.Instance.TransferOrderDAO;
+
+                TransferOrder order = transferOrderDAO.GetTransferOrderById(orderId);
+
+                if (order == null)
+                    throw new Exception("Transfer order not found.");
+
+                if (order.Status == "RecurringStopped" || order.Status == "Canceled")
+                    throw new Exception("This transfer order is already canceled or recurrence already stopped.");
+
+                order.Status = "RecurringStopped";
+                transferOrderDAO.UpdateTransferOrder(order);
+
+                MessageBox.Show("Recurring order cancelled successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error canceling recurring order: " + ex.Message, "Cancel Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -94,37 +140,8 @@ namespace CoffeeCompanyMS.UC.Pages.Export
             if (e.RowIndex >= 0)
             {
                 var selectedRow = dataGridViewRecurring.Rows[e.RowIndex];
-                string orderID = selectedRow.Cells["LatestOrderID"].Value.ToString();
+                Guid orderID = Guid.Parse(selectedRow.Cells["LatestOrderID"].Value.ToString());
                 MoveToDetaisPage(orderID);
-            }
-        }
-
-        private void CancelRecurringOrder(string orderId)
-        {
-            try
-            {
-                using (SqlConnection connection = UserSession.Instance.ConnectionFactory.CreateConnection())
-                {
-                    connection.Open();
-
-                    using (SqlCommand command = new SqlCommand("CancelRecurringExportOrder", connection))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@ExportOrderID", orderId);
-
-                        command.ExecuteNonQuery();
-                    }
-                }
-
-                MessageBox.Show("Recurring order cancelled successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show("SQL Error: " + ex.Message, "Cancel Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error canceling recurring order: " + ex.Message, "Cancel Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

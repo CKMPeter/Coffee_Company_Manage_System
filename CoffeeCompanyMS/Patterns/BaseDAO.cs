@@ -9,10 +9,12 @@ using System.Windows.Forms;
 
 namespace CoffeeCompanyMS.DAOs
 {
-    // BaseDAO is an abstract class that provides common database access methods.
-    // It uses the Template Method Pattern,
-    // which defines the skeleton of general algorithm for executing queries:
-    // Getting a connection, executing a command, and handling exceptions.
+    /// <summary>
+    /// BaseDAO is an abstract class that provides common database access methods.
+    /// It uses the Template Method Pattern,
+    /// which defines the skeleton of general algorithm for executing queries:
+    /// Getting a connection, executing a command, and handling exceptions.
+    /// </summary>
     internal abstract class BaseDAO
     {
         protected SqlConnection GetConnection()

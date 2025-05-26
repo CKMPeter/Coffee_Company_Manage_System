@@ -1,88 +1,81 @@
-﻿using CoffeeCompanyMS.Forms.Authentication;
+﻿using CoffeeCompanyMS.DAOs;
+using CoffeeCompanyMS.DTOs;
+using CoffeeCompanyMS.Forms.Authentication;
 using CoffeeCompanyMS.Models;
-using CoffeeCompanyMS.UI;
+using CoffeeCompanyMS.Patterns;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static Google.Protobuf.Reflection.SourceCodeInfo.Types;
 
 namespace CoffeeCompanyMS.UC.Pages.Storage
 {
     public partial class StorageHistoryPage : UserControl
     {
-        private string selectedLocationID;
+        private Guid selectedLocationID;
 
         public StorageHistoryPage()
         {
             InitializeComponent();
-            selectedLocationID = "";
 
             locationSelector1.SelectedItemChanged += (s, value) =>
             {
                 selectedLocationID = value;
-                LoadStorageHistory(selectedLocationID);
+                LoadStorageHistory();
             };
         }
 
         private void StorageHistoryPage_Load(object sender, EventArgs e)
         {
-            locationSelector1.LoadLocations();
-
-            User user = UserSession.Instance.loggedInUser;
-
-            // Check whether the logged-in user is a Warehouse Manager
-            if (user != null && user.LocationID != String.Empty)
+            selectedLocationID = locationSelector1.SelectedValue;
+            if (selectedLocationID != Guid.Empty)
             {
-                selectedLocationID = user.LocationID;
-                locationSelector1.Disable();
+                LoadStorageHistory();
             }
-
-            if (selectedLocationID == "") return;
-            locationSelector1.SetSelectedLocationId(selectedLocationID);
-
-            LoadStorageHistory(selectedLocationID);
         }
 
-        private void LoadStorageHistory(string locationID)
+        private void LoadStorageHistory()
         {
             try
             {
-                using (SqlConnection conn = UserSession.Instance.ConnectionFactory.CreateConnection())
+                TransferOrderDAO transferOrderDAO = DAOManager.Instance.TransferOrderDAO;
+                BatchDAO batchDAO = DAOManager.Instance.BatchDAO;
+
+                List<IngredientEventDTO> events = new List<IngredientEventDTO>();
+
+                events.AddRange(transferOrderDAO.GetImportEventsByLocationId(selectedLocationID));
+                events.AddRange(transferOrderDAO.GetExportEventsByLocationId(selectedLocationID));
+                events.AddRange(batchDAO.GetWastageEventsByLocationId(selectedLocationID));
+
+                // Sort by date descending
+                var sortedEvents = events.OrderByDescending(e => e.Date).ToList();
+
+                // Convert to DataTable for binding
+                DataTable table = new DataTable();
+                table.Columns.Add("Date", typeof(DateTime));
+                table.Columns.Add("EventType", typeof(string));
+                table.Columns.Add("Ingredient", typeof(string));
+                table.Columns.Add("Quantity", typeof(int));
+                table.Columns.Add("Unit", typeof(string));
+
+                foreach (var e in sortedEvents)
                 {
-                    conn.Open();
-
-                    using (SqlCommand cmd = new SqlCommand("GetIngredientEvents", conn))
-                    {
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@LocationID", locationID);
-
-                        using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
-                        {
-                            DataTable dataTable = new DataTable();
-                            adapter.Fill(dataTable);
-
-                            dataGridViewStorageHistory.DataSource = dataTable;
-
-                            dataGridViewStorageHistory.Columns["EventType"].HeaderText = "Event Type";
-                        }
-                    }
+                    table.Rows.Add(e.Date, e.EventType, e.Ingredient, e.Quantity, e.Unit);
                 }
+
+                dataGridViewStorageHistory.DataSource = table;
+
+                // Set column headers
+                dataGridViewStorageHistory.Columns["EventType"].HeaderText = "Event Type";
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error loading Storage History: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
     }
-
-
-
 }
 

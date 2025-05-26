@@ -1,15 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.SqlClient;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using CoffeeCompanyMS.Forms.Authentication;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace CoffeeCompanyMS.UI.Authentication
 {
@@ -19,10 +12,11 @@ namespace CoffeeCompanyMS.UI.Authentication
 
         Dictionary<string, string> serversMap = new Dictionary<string, string>
             {
-                { "Server Khoa", "LAPTOP-VM3SPQFB\\ASUSSQL" },
-                { "Server Duong", "" },
+                { "Server Khoa", "DESKTOP-2S48EVN" },
+                { "Server Huy", "" },
                 { "Server Kien", "" },
-                { "Server Manh", "LAPTOP-CRUATNF8" },
+                { "Server Minh", "" },
+                { "Server Luan", "" },
             };
 
         public Login()

@@ -1,101 +1,112 @@
-﻿using CoffeeCompanyMS.Forms.Authentication;
+﻿using CoffeeCompanyMS.DAOs;
+using CoffeeCompanyMS.DTOs;
+using CoffeeCompanyMS.Forms.Authentication;
 using CoffeeCompanyMS.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Windows.Forms;
+using CoffeeCompanyMS.Patterns;
 
 namespace CoffeeCompanyMS.UC.Pages.Storage
 {
     public partial class BatchDetailsPage : UserControl
     {
-        private string selectedLocationID;
+        private Guid selectedLocationID;
         private string selectedIngredientName;
 
-        public BatchDetailsPage(string locationID, string ingredientName)
+        public BatchDetailsPage(Guid locationID, string ingredientName)
         {
             InitializeComponent();
             this.selectedLocationID = locationID;
             this.selectedIngredientName = ingredientName;
+
+            // Subscribe to the SelectedItemChanged event of the location selector
+            locationSelector1.SelectedItemChanged += (s, value) =>
+            {
+                selectedLocationID = value;
+
+                // Reload comboBoxIngredient and batch details when the location changes
+                comboBoxIngredient.SelectedIndex = -1; // Reset selection
+                selectedIngredientName = "";
+                LoadIngredients();
+                LoadBatchDetails();
+            };
         }
 
         public BatchDetailsPage()
         {
             InitializeComponent();
-            this.selectedLocationID = "";
+            this.selectedLocationID = Guid.Empty;
             this.selectedIngredientName = "";
+
+            // Subscribe to the SelectedItemChanged event of the location selector
             locationSelector1.SelectedItemChanged += (s, value) =>
             {
                 selectedLocationID = value;
-                LoadIngredients(selectedLocationID);
+
+                // Reload comboBoxIngredient and batch details when the location changes
+                comboBoxIngredient.SelectedIndex = -1; // Reset selection
+                selectedIngredientName = "";
+                LoadIngredients();
+                LoadBatchDetails();
             };
         }
 
         private void comboBoxIngredient_SelectedIndexChanged(object sender, EventArgs e)
         {
-
             if (comboBoxIngredient.SelectedIndex >= 0)
             {
                 selectedIngredientName = comboBoxIngredient.SelectedItem.ToString();
-                LoadBatchDetails(selectedIngredientName);
+                LoadBatchDetails();
             }
         }
 
         private void BatchDetailsPage_Load(object sender, EventArgs e)
         {
-            locationSelector1.LoadLocations();
-
-            User user = UserSession.Instance.loggedInUser;
-
-            // Check whether the logged-in user is a Warehouse Manager
-            if (user != null && user.LocationID != String.Empty)
+            // Load ingredients for the selected location when the page loads
+            // If a specific location ID was provided, set it in the location selector
+            if (selectedLocationID != Guid.Empty)
             {
-                selectedLocationID = user.LocationID;
-                locationSelector1.Disable();
+                locationSelector1.SetSelectedLocationId(selectedLocationID);
+                LoadIngredients();
+            }
+            else
+            {
+                // If no location ID was provided, use the logged-in user's location
+                selectedLocationID = locationSelector1.SelectedValue;
+                if (selectedLocationID != Guid.Empty) LoadIngredients();
             }
 
-            if (selectedLocationID == "") return;
-            locationSelector1.SetSelectedLocationId(selectedLocationID);
-
-            LoadIngredients(selectedLocationID);
-
+            // If an ingredient name was provided, select it in the combo box
             if (selectedIngredientName == "") return;
             comboBoxIngredient.SelectedValue = selectedIngredientName;
 
-            LoadBatchDetails(selectedIngredientName);
+            // Load batch details for the selected ingredient
+            LoadBatchDetails();
         }
 
-        public void LoadIngredients(string locationID)
+        public void LoadIngredients()
         {
             try
             {
-                using (SqlConnection conn = UserSession.Instance.ConnectionFactory.CreateConnection())
+                var batchDAO = DAOManager.Instance.BatchDAO;
+                List<BatchSummaryDTO> summaries = batchDAO.GetIngredientSummariesByLocation(selectedLocationID);
+
+                List<string> ingredients = summaries.Select(s => s.IngredientName).ToList();
+
+                comboBoxIngredient.Items.Clear();
+                comboBoxIngredient.Items.AddRange(ingredients.ToArray());
+
+                if (ingredients.Count > 0)
+                    comboBoxIngredient.SelectedIndex = 0;
+                else
                 {
-                    conn.Open();
-
-                    using (SqlCommand cmd = new SqlCommand("GetIngredients", conn))
-                    {
-                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-                        cmd.Parameters.AddWithValue("@LocationID", locationID);
-
-                        using (SqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            List<string> ingredients = new List<string>();
-
-                            while (reader.Read())
-                            {
-                                ingredients.Add(reader["IngredientName"].ToString());
-                            }
-
-                            comboBoxIngredient.Items.Clear();
-                            comboBoxIngredient.Items.AddRange(ingredients.ToArray());
-
-                            if (ingredients.Count > 0)
-                                comboBoxIngredient.SelectedIndex = 0;
-                        }
-                    }
+                    comboBoxIngredient.SelectedIndex = -1; // No ingredients available
+                    selectedIngredientName = String.Empty; // Reset selected ingredient name
+                    MessageBox.Show("No ingredients found for the selected location.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
@@ -104,37 +115,33 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
             }
         }
 
-        public void LoadBatchDetails(string ingredientName)
+
+        public void LoadBatchDetails()
         {
-            using (SqlConnection conn = UserSession.Instance.ConnectionFactory.CreateConnection())
+            try
             {
-                string query = "SELECT * FROM dbo.GetBatches(@IngredientName)";
-                SqlCommand command = new SqlCommand(query, conn);
-                
-                command.Parameters.AddWithValue("@IngredientName", ingredientName);
-
-                try
+                if (selectedLocationID == Guid.Empty || selectedIngredientName == String.Empty)
                 {
-                    conn.Open();
-
-                    using (SqlDataAdapter dataAdapter = new SqlDataAdapter(command))
-                    {
-                        DataTable dataTable = new DataTable();
-
-                        dataAdapter.Fill(dataTable);
-                        dataGridViewBatchDetails.DataSource = dataTable;
-
-                        dataGridViewBatchDetails.Columns["BatchID"].HeaderText = "Batch ID";
-                        dataGridViewBatchDetails.Columns["IngredientName"].HeaderText = "Ingredient Name";
-                        dataGridViewBatchDetails.Columns["ReceiptDate"].HeaderText = "Receipt Date";
-                        dataGridViewBatchDetails.Columns["ExpirationDate"].HeaderText = "Expiration Date";
-                    }
+                    dataGridViewBatchDetails.DataSource = new List<BatchDetailsDTO>();
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show("Error: " + ex.Message);
+                    var batchDAO = DAOManager.Instance.BatchDAO;
+                    List<BatchDetailsDTO> batchViews = batchDAO.GetBatchViewsByIngredientName(selectedIngredientName);
+                    dataGridViewBatchDetails.DataSource = batchViews;
                 }
+
+                dataGridViewBatchDetails.Columns["BatchID"].HeaderText = "Batch ID";
+                dataGridViewBatchDetails.Columns["IngredientName"].HeaderText = "Ingredient Name";
+                dataGridViewBatchDetails.Columns["ReceiptDate"].HeaderText = "Receipt Date";
+                dataGridViewBatchDetails.Columns["ExpirationDate"].HeaderText = "Expiration Date";
+                dataGridViewBatchDetails.Columns["Status"].HeaderText = "Status";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading batch details: " + ex.Message);
             }
         }
+
     }
 }

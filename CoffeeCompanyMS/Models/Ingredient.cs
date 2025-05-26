@@ -65,5 +65,4 @@ namespace CoffeeCompanyMS.Models
             set => expirySpan = value;
         }
     }
-
 }

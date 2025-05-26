@@ -15,33 +15,26 @@ namespace CoffeeCompanyMS.UC.Pages.Export
 {
     public partial class ExportOrderDetailsPage : UserControl
     {
-        private string orderID;
+        private Guid orderID;
 
         // Constructor with Order ID parameter
-        public ExportOrderDetailsPage(string orderID)
+        public ExportOrderDetailsPage(Guid orderID)
         {
             InitializeComponent();
             this.orderID = orderID;
         }
 
-        // Constructor without Order ID (to be used for default loading)
-        public ExportOrderDetailsPage()
-        {
-            InitializeComponent();
-            this.orderID = "";  // Default constructor
-        }
-
         // Event handler for Load event of the UserControl
         private void ExportOrderDetailsPage_Load(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(orderID))
+            // Debug: Check if orderID is valid
+            if (orderID == Guid.Empty)
             {
-                LoadOrderDetails();  // Load the order details if orderID is valid
+                MessageBox.Show("Invalid Order ID provided.");
+                return;
             }
-            else
-            {
-                MessageBox.Show("Order ID is empty. Please provide a valid Order ID.");
-            }
+            // Load the export order details
+            LoadOrderDetails();
         }
 
         // Function to load the export order details (destination and items)
@@ -59,7 +52,7 @@ namespace CoffeeCompanyMS.UC.Pages.Export
                     // Retrieve destination information using the stored function 'GetExportDestinationInfo'
                     string destinationQuery = "SELECT DestinationName, DestinationAddress FROM dbo.GetExportDestinationInfo(@OrderID)";
                     SqlCommand destinationCommand = new SqlCommand(destinationQuery, connection);
-                    destinationCommand.Parameters.AddWithValue("@OrderID", new Guid(orderID));  // Ensure GUID is used
+                    destinationCommand.Parameters.AddWithValue("@OrderID", orderID);  // Ensure GUID is used
 
                     using (SqlDataReader reader = destinationCommand.ExecuteReader())
                     {
@@ -79,7 +72,7 @@ namespace CoffeeCompanyMS.UC.Pages.Export
                     // Retrieve the export order items using the stored function 'GetExportItemList'
                     string itemsQuery = "SELECT IngredientName, Quantity, Unit, UnitPrice, ExpirationDate FROM dbo.GetExportItemList(@OrderID)";
                     SqlDataAdapter adapter = new SqlDataAdapter(itemsQuery, connection);
-                    adapter.SelectCommand.Parameters.AddWithValue("@OrderID", new Guid(orderID));
+                    adapter.SelectCommand.Parameters.AddWithValue("@OrderID", orderID);
 
                     DataTable itemsTable = new DataTable();
                     adapter.Fill(itemsTable);  // Load data into the DataTable

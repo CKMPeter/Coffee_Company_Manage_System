@@ -61,6 +61,7 @@
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "LocationSelector";
             this.Size = new System.Drawing.Size(411, 63);
+            this.Load += new System.EventHandler(this.LocationSelector_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

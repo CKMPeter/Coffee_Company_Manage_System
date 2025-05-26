@@ -77,7 +77,7 @@ namespace CoffeeCompanyMS.UC
             _batchSummaryPage.MoveToDetaisPage = DoubleClick_ToDetailsPage;
         }
 
-        private void DoubleClick_ToDetailsPage(string locationID, string ingredientName)
+        private void DoubleClick_ToDetailsPage(Guid locationID, string ingredientName)
         {
             resetStyle();
             NavButtonStyleUtils.SetChosenButtonStyle(btnBatchDetails);

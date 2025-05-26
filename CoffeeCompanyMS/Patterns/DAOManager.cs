@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace CoffeeCompanyMS.Patterns
 {
-    // DAOManager is a singleton class
-    // that manages the Data Access Objects (DAOs) in the application.
+    /// <summary>
+    /// DAOManager is a singleton class
+    /// that manages the Data Access Objects (DAOs) in the application.
+    /// </summary>
     internal class DAOManager
     {
         public static DAOManager Instance { get; private set; }

@@ -71,7 +71,7 @@ namespace CoffeeCompanyMS.UC
             LoadPages();
         }
 
-        private void DoubleClick_ToDetailsPage(string orderID)
+        private void DoubleClick_ToDetailsPage(Guid orderID)
         {
             resetStyle();
             NavButtonStyleUtils.SetChosenButtonStyle(btnOrderDetails);

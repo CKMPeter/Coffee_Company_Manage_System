@@ -41,7 +41,10 @@ namespace CoffeeCompanyMS.Models
                 ? (DateTime?)null
                 : Convert.ToDateTime(reader["ActualDeliveryDate"]);
             status = reader["Status"].ToString();
-            recurrenceID = Guid.Parse(reader["RecurrenceID"].ToString());
+            if (!Guid.TryParse(reader["RecurrenceID"].ToString(), out Guid recurrenceID))
+            {
+                recurrenceID = Guid.Empty; // Handle case where RecurrenceID is not present or invalid
+            }
             recurrencePeriod = Convert.ToInt32(reader["RecurrencePeriod"]);
 
             // Load the list of TransferOrderItem objects for this TransferOrder

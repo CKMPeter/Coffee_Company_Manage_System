@@ -1,29 +1,17 @@
-﻿using CoffeeCompanyMS.Forms.Authentication;
-using CoffeeCompanyMS.UI;
+﻿using CoffeeCompanyMS.Models;
+using CoffeeCompanyMS.Patterns;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CoffeeCompanyMS.UC.Pages.Import
 {
     public partial class ImportOrderDetailsPage : UserControl
     {
-        private string selectedOrderID;
+        private Guid selectedOrderID;
 
-        public ImportOrderDetailsPage()
-        {
-            InitializeComponent();
-            selectedOrderID = string.Empty;
-        }
-
-        public ImportOrderDetailsPage(string orderID)
+        public ImportOrderDetailsPage(Guid orderID)
         {
             InitializeComponent();
             this.selectedOrderID = orderID;
@@ -31,34 +19,38 @@ namespace CoffeeCompanyMS.UC.Pages.Import
 
         private void ImportOrderDetailsPage_Load(object sender, EventArgs e)
         {
-            LoadOrderSummary(selectedOrderID);
-            LoadOrderItems(selectedOrderID);
+            LoadOrderSummary();
+            LoadOrderItems();
         }
 
-        private void LoadOrderSummary(string orderID)
+        private void LoadOrderSummary()
         {
             try
             {
-                using (SqlConnection conn = UserSession.Instance.ConnectionFactory.CreateConnection())
+                var itemDAO = DAOManager.Instance.TransferOrderItemDAO;
+                var ingredientDAO = DAOManager.Instance.IngredientDAO;
+                var supplierDAO = DAOManager.Instance.SupplierDAO;
+
+                List<TransferOrderItem> items = itemDAO.GetItemsByTransferOrderId(selectedOrderID);
+                int itemCount = items.Count;
+
+                string supplierName = "Unknown";
+
+                if (itemCount > 0)
                 {
-                    conn.Open();
-                    string query = @"SELECT * FROM dbo.GetImportOrderSummary(@OrderID)";
+                    Guid ingredientId = items[0].Ingredient.Id;
 
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    Guid? supplierId = ingredientDAO.GetSupplierIdByIngredientId(ingredientId);
+                    if (supplierId.HasValue)
                     {
-                        cmd.Parameters.AddWithValue("@OrderID", orderID);
-
-                        using (SqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                label2.Text = reader["OrderID"].ToString();
-                                label4.Text = reader["SupplierName"].ToString();
-                                label6.Text = reader["ItemCount"].ToString();
-                            }
-                        }
+                        Supplier supplier = supplierDAO.GetSupplierById(supplierId.Value);
+                        supplierName = supplier?.Name ?? "Unknown";
                     }
                 }
+
+                label2.Text = selectedOrderID.ToString();
+                label4.Text = supplierName;
+                label6.Text = itemCount.ToString();
             }
             catch (Exception ex)
             {
@@ -66,39 +58,40 @@ namespace CoffeeCompanyMS.UC.Pages.Import
             }
         }
 
-        private void LoadOrderItems(string orderID)
+        private void LoadOrderItems()
         {
             try
             {
-                using (SqlConnection conn = UserSession.Instance.ConnectionFactory.CreateConnection())
+                var transferOrderItemDAO = DAOManager.Instance.TransferOrderItemDAO;
+                var items = transferOrderItemDAO.GetItemsByTransferOrderId(selectedOrderID);
+
+                var table = new DataTable();
+                table.Columns.Add("IngredientName", typeof(string));
+                table.Columns.Add("Quantity", typeof(int));
+                table.Columns.Add("Unit", typeof(string));
+                table.Columns.Add("UnitPrice", typeof(decimal));
+                table.Columns.Add("ExpirationDate", typeof(DateTime));
+
+                foreach (var item in items)
                 {
-                    conn.Open();
-                    string query = "SELECT * FROM dbo.GetImportItemList(@OrderID)";
+                    var ing = item.Ingredient;
+                    table.Rows.Add(ing.Name, item.Quantity, ing.Unit, ing.UnitPrice, item.ExpirationDate);
+                }
 
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@OrderID", orderID);
+                dataGridViewItems.DataSource = table;
 
-                        using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
-                        {
-                            DataTable table = new DataTable();
-                            adapter.Fill(table);
-                            dataGridViewItems.DataSource = table;
-
-                            if (dataGridViewItems.Columns.Count > 0)
-                            {
-                                dataGridViewItems.Columns["IngredientName"].HeaderText = "Ingredient Name";
-                                dataGridViewItems.Columns["UnitPrice"].HeaderText = "Unit Price ($)";
-                                dataGridViewItems.Columns["ExpirationDate"].HeaderText = "Expiration Date";
-                            }
-                        }
-                    }
+                if (dataGridViewItems.Columns.Count > 0)
+                {
+                    dataGridViewItems.Columns["IngredientName"].HeaderText = "Ingredient Name";
+                    dataGridViewItems.Columns["UnitPrice"].HeaderText = "Unit Price ($)";
+                    dataGridViewItems.Columns["ExpirationDate"].HeaderText = "Expiration Date";
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error getting order summary: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error getting order items: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
     }
 }

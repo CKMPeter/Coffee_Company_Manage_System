@@ -2,11 +2,14 @@
 using System.Windows.Forms;
 using CoffeeCompanyMS.DAOs;
 using CoffeeCompanyMS.Models;
+using CoffeeCompanyMS.Patterns;
 
 namespace CoffeeCompanyMS.Forms.Authentication
 {
-    // UserSession is a singleton class
-    // that manages the current user session.
+    /// <summary>
+    /// UserSession is a Singleton class
+    /// that manages the current user session.
+    /// </summary>
     internal class UserSession
     {
         public static UserSession Instance { get; } = new UserSession();
@@ -21,8 +24,7 @@ namespace CoffeeCompanyMS.Forms.Authentication
         {
             try
             {
-                var locationDAO = new LocationDAO();
-                var userDAO = new UserDAO(locationDAO);
+                var userDAO = DAOManager.Instance.UserDAO;
 
                 LoggedInUser = userDAO.GetUserByEmail(email);
 
@@ -47,6 +49,7 @@ namespace CoffeeCompanyMS.Forms.Authentication
         public bool Start(string serverName, string email, string password)
         {
             ConnectionFactory = new ConnectionFactory(serverName, email, password);
+            DAOManager.Initialize();
             return SetLoggedInUser(email);
         }
 

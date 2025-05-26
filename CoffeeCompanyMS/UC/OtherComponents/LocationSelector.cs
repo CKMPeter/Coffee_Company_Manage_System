@@ -1,56 +1,63 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.SqlClient;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using CoffeeCompanyMS.Forms.Authentication;
-using CoffeeCompanyMS.UI;
+using CoffeeCompanyMS.Patterns;
+using CoffeeCompanyMS.Models;
+using System.Data.SqlClient;
 
 namespace CoffeeCompanyMS.UC
 {
     public partial class LocationSelector : UserControl
     {
-        public event EventHandler<string> SelectedItemChanged;
-        private string[] locationids;
+        public event EventHandler<Guid> SelectedItemChanged;
 
-        public byte[] SelectedValue { get; internal set; }
+        private List<Guid> locationIds;
+
+        public Guid SelectedValue { get; private set; }
 
         public LocationSelector()
         {
             InitializeComponent();
         }
 
-        public void LoadLocations()
+        private void LocationSelector_Load(object sender, EventArgs e)
+        {
+            LoadLocations();
+            SelectedValue = Guid.Empty;
+
+            User user = UserSession.Instance.LoggedInUser;
+
+            // Check whether the logged-in user is a Warehouse Manager
+            if (user != null && user.Location != null)
+            {
+                SetSelectedLocationId(user.Location.Id);
+                Disable();
+            }
+        }
+
+        private void LoadLocations()
         {
             try
             {
-                using (SqlConnection conn = UserSession.Instance.ConnectionFactory.CreateConnection())
+                var locations = DAOManager.Instance.LocationDAO.GetAllLocations();
+                if (locations == null || locations.Count == 0)
                 {
-                    conn.Open();
-
-
-                    string query = "SELECT LocationID, LocationName FROM dbo.GetLocations()";
-
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        using (SqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            List<string> locations = new List<string>();
-                            List<string> locationids = new List<string>();
-                            while (reader.Read())
-                            {
-                                locations.Add(reader["LocationName"].ToString());
-                                locationids.Add(reader["LocationID"].ToString());
-                            }
-                            SetLocations(locations, locationids);
-                        }
-                    }
+                    MessageBox.Show("No locations found.");
+                    return;
                 }
+
+                List<string> locationNames = new List<string>();
+                locationIds = new List<Guid>();
+
+                foreach (var location in locations)
+                {
+                    locationNames.Add(location.Name);
+                    locationIds.Add(location.Id);
+                }
+
+                SetLocations(locationNames, locationIds);
             }
             catch (Exception ex)
             {
@@ -58,31 +65,33 @@ namespace CoffeeCompanyMS.UC
             }
         }
 
-        private void cbbLocation_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (cbbLocation.SelectedIndex >= 0 && locationids != null && locationids.Length > cbbLocation.SelectedIndex)
-            {
-                string selectedLocationId = locationids[cbbLocation.SelectedIndex];
-                SelectedItemChanged?.Invoke(this, selectedLocationId);
-            }
-        }
-
-        public void SetLocations(IEnumerable<string> locations, IEnumerable<string> locationids)
+        public void SetLocations(IEnumerable<string> locations, IEnumerable<Guid> locationids)
         {
             cbbLocation.Items.Clear();
             cbbLocation.Items.AddRange(locations.ToArray());
-            this.locationids = locationids.ToArray();
+            this.locationIds = locationids.ToList();
         }
 
-        public void SetSelectedLocationId(string locationId)
+        public void SetSelectedLocationId(Guid locationId)
         {
-            if (locationids != null)
+            if (locationIds != null)
             {
-                int index = Array.IndexOf(locationids, locationId);
+                int index = locationIds.IndexOf(locationId);
                 if (index >= 0 && index < cbbLocation.Items.Count)
                 {
                     cbbLocation.SelectedIndex = index;
+                    SelectedValue = locationId;
                 }
+            }
+        }
+
+        private void cbbLocation_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbbLocation.SelectedIndex >= 0 && locationIds != null && cbbLocation.SelectedIndex < locationIds.Count)
+            {
+                var selectedLocationId = locationIds[cbbLocation.SelectedIndex];
+                SelectedValue = selectedLocationId;
+                SelectedItemChanged?.Invoke(this, selectedLocationId);
             }
         }
 
@@ -91,4 +100,5 @@ namespace CoffeeCompanyMS.UC
             cbbLocation.Enabled = false;
         }
     }
+
 }

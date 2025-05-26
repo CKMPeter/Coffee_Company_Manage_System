@@ -47,7 +47,10 @@ namespace CoffeeCompanyMS.Models
 
             // Retrieve the LocationID from the reader
             // and use the provided function to get the Location object
-            var locationId = Guid.Parse(reader["LocationID"].ToString());
+            if (!Guid.TryParse(reader["LocationID"].ToString(), out Guid locationId))
+            {
+                locationId = Guid.Empty; // Handle case where LocationID is not present or invalid
+            }
             location = getLocationById(locationId);
         }
 

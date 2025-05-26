@@ -114,6 +114,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTOs\ExportOrderSummary.cs" />
+    <Compile Include="DTOs\RecurringImportOrderDTO.cs" />
+    <Compile Include="DTOs\BatchDetailsDTO.cs" />
+    <Compile Include="DTOs\BatchSummaryDTO.cs" />
+    <Compile Include="DTOs\ImportOrderDTO.cs" />
+    <Compile Include="DTOs\IngredientEventDTO.cs" />
     <Compile Include="Patterns\BaseDAO.cs" />
     <Compile Include="DAOs\BatchDAO.cs" />
     <Compile Include="DAOs\IngredientDAO.cs" />
